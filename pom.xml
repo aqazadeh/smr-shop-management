@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.11</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>smr.shop</groupId>
+    <artifactId>management</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+    </properties>
+
+    <modules>
+        <module>discovery-service</module>
+        <module>gateway-service</module>
+        <module>config-service</module>
+        <module>auth-service</module>
+        <module>shop-service</module>
+        <module>product-service</module>
+        <module>delivery-service</module>
+        <module>ticket-service</module>
+        <module>payment-service</module>
+        <module>order-service</module>
+        <module>upload-service</module>
+        <module>notification-service</module>
+        <module>coupon-service</module>
+        <module>flash-service</module>
+        <module>product-stock-service</module>
+        <module>product-review-service</module>
+        <module>wishlist-service</module>
+        <module>courier-service</module>
+        <module>discount-service</module>
+        <module>brand-service</module>
+        <module>common</module>
+    </modules>
+    <dependencies>
+
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
