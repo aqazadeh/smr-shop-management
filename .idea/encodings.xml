@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/auth-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/brand-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/rpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/coupon-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/courier-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/delivery-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/discount-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/discovery-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flash-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gateway-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notification-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/order-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/payment-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product-review-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product-stock-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shop-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticket-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/upload-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wishlist-service/src/main/java" charset="UTF-8" />
+  </component>
+</project>

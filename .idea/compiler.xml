@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="delivery-service" />
+        <module name="brand-service" />
+        <module name="config-service" />
+        <module name="rpc" />
+        <module name="coupon-service" />
+        <module name="shop-service" />
+        <module name="product-service" />
+        <module name="flash-service" />
+        <module name="product-stock-service" />
+        <module name="wishlist-service" />
+        <module name="notification-service" />
+        <module name="courier-service" />
+        <module name="discovery-service" />
+        <module name="ticket-service" />
+        <module name="auth-service" />
+        <module name="payment-service" />
+        <module name="discount-service" />
+        <module name="gateway-service" />
+        <module name="kafka" />
+        <module name="product-review-service" />
+        <module name="upload-service" />
+        <module name="order-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service" options="-parameters" />
+      <module name="brand-service" options="-parameters" />
+      <module name="common" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="coupon-service" options="-parameters" />
+      <module name="courier-service" options="-parameters" />
+      <module name="delivery-service" options="-parameters" />
+      <module name="discount-service" options="-parameters" />
+      <module name="discovery-service" options="-parameters" />
+      <module name="flash-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="kafka" options="-parameters" />
+      <module name="management" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+      <module name="payment-service" options="-parameters" />
+      <module name="product-review-service" options="-parameters" />
+      <module name="product-service" options="-parameters" />
+      <module name="product-stock-service" options="-parameters" />
+      <module name="rpc" options="-parameters" />
+      <module name="shop-service" options="-parameters" />
+      <module name="ticket-service" options="-parameters" />
+      <module name="upload-service" options="-parameters" />
+      <module name="wishlist-service" options="-parameters" />
+    </option>
+  </component>
+</project>
