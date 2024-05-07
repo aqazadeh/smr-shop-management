@@ -1,1 +1,1 @@
-# smr-shop-management
+# smr-shop-manageme
