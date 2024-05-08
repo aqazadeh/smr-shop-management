@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9000/authorization?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9000/authorizationDb?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:

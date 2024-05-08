@@ -1,4 +1,29 @@
+server:
+  port: 2207
+
 spring:
   cloud:
     config:
       enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:9007/notificationDB?binaryTransfer=true&reWriteBatchedInserts=true
+    username: postgres
+    password: admin
+  application:
+    name: notification-service
+
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
