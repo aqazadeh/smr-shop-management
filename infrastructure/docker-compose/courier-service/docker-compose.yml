@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  courier-service-postgres:
+    container_name: courier-service-postgres
+    image: postgres:16
+    ports:
+      - "9003:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=courierDB
+    expose:
+      - 9003
+    volumes:
+      - courier-volume:/var/lib/postgresql/data
+volumes:
+  courier-volume:

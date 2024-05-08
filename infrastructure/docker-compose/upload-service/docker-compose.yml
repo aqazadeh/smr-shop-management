@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  upload-service-postgres:
+    container_name: upload-service-postgres
+    image: postgres:16
+    ports:
+      - "9015:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=uploadDB
+    expose:
+      - 9015
+    volumes:
+      - upload-volume:/var/lib/postgresql/data
+
+
+  minio:
+    image: docker.io/bitnami/minio
+    ports:
+      - '9050:9000'
+      - '9051:9001'
+    networks:
+      - minio-network
+    volumes:
+      - 'minio-data:/bitnami/minio/data'
+    environment:
+      - MINIO_ROOT_USER=minio-admin
+      - MINIO_ROOT_PASSWORD=minio-admin
+      - MINIO_DEFAULT_BUCKETS=image-bucket
+
+networks:
+  minio-network:
+    driver: bridge
+
+volumes:
+  upload-volume:
+  minio-data:
+    driver: local

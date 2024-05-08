@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  notification-service-postgres:
+    container_name: notification-service-postgres
+    image: postgres:16
+    ports:
+      - "9007:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=notificationDB
+    expose:
+      - 9007
+    volumes:
+      - notification-volume:/var/lib/postgresql/data
+volumes:
+  notification-volume:

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  payment-service-postgres:
+    container_name: payment-service-postgres
+    image: postgres:16
+    ports:
+      - "9009:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=paymentDB
+    expose:
+      - 9009
+    volumes:
+      - payment-volume:/var/lib/postgresql/data
+volumes:
+  payment-volume:
