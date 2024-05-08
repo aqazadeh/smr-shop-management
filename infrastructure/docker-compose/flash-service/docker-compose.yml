@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  flash-service-postgres:
+    container_name: flash-service-postgres
+    image: postgres:16
+    ports:
+      - "9006:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=flashDB
+    expose:
+      - 9006
+    volumes:
+      - flash-volume:/var/lib/postgresql/data
+volumes:
+  flash-volume:

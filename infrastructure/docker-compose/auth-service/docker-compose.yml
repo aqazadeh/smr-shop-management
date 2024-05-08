@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  auth-service-postgres:
+    container_name: auth-service-postgres
+    image: postgres:16
+    ports:
+      - "9000:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=authorizationDb
+    expose:
+      - 9000
+    volumes:
+      - auth-volume:/var/lib/postgresql/data
+volumes:
+  auth-volume:

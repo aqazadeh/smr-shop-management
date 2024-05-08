@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  delivery-service-postgres:
+    container_name: delivery-service-postgres
+    image: postgres:16
+    ports:
+      - "9004:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=deliveryDB
+    expose:
+      - 9004
+    volumes:
+      - delivery-volume:/var/lib/postgresql/data
+volumes:
+  delivery-volume:
