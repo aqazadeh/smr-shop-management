@@ -1,0 +1,1 @@
+package smr.shop.wishlist.service.service.grpc;

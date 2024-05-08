@@ -1,0 +1,1 @@
+package smr.shop.flash.service.configuration;
