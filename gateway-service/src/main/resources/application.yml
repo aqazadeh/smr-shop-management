@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    discovery:
+      locator:
+        enabled: true
+    config:
+      enabled: false
+    #    gateway:
+    #      mvc:
+    #        routes:
+    #          - id: auth-service
+    #            uri: lb://auth-service
+    #            predicates:
+    #              - Path=/api/v1/user/**
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
