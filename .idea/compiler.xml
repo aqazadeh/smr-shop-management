@@ -30,6 +30,9 @@
         <module name="order-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="infrastructure" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -44,6 +47,7 @@
       <module name="discovery-service" options="-parameters" />
       <module name="flash-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
+      <module name="infrastructure" options="-parameters" />
       <module name="kafka" options="-parameters" />
       <module name="management" options="-parameters" />
       <module name="notification-service" options="-parameters" />
