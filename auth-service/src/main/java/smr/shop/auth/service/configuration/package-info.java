@@ -1,0 +1,1 @@
+package smr.shop.auth.service.configuration;
