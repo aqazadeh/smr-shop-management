@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.coupon.service.dto.response.UserCouponResponse;
-import smr.shop.coupon.service.exception.CouponUsageException;
 import smr.shop.coupon.service.exception.UserCouponException;
 import smr.shop.coupon.service.mapper.CouponServiceMapper;
 import smr.shop.coupon.service.model.UserCouponEntity;
@@ -55,6 +54,7 @@ public class UserCouponServiceImpl implements UserCouponService {
     public void deleteUserCoupon(UUID userCouponId) {
         UserCouponEntity userCouponEntity = findById(userCouponId);
         userCouponRepository.delete(userCouponEntity);
+        // TODO if need send kafka event
     }
 
     @Override

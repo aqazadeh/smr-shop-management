@@ -13,7 +13,6 @@ import smr.shop.coupon.service.model.CouponEntity;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.libs.common.constant.ServiceConstants;
-import smr.shop.libs.common.exception.GlobalException;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +43,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public CouponResponse updateCoupon(UUID couponId, CouponUpdateRequest request) {
+
+        // TODO SEND KAFKA EVENT
+
         CouponEntity couponEntity = findById(couponId);
         CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
         couponEntity = couponRepository.save(couponEntityUpdated);
@@ -54,6 +56,7 @@ public class CouponServiceImpl implements CouponService {
     public void deleteCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
         couponRepository.delete(couponEntity);
+        // TODO if need send kafka event
     }
 
     @Override

@@ -1,7 +1,6 @@
 package smr.shop.coupon.service.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import smr.shop.coupon.service.model.CouponUsageEntity;
 import smr.shop.coupon.service.model.UserCouponEntity;
 
 import java.util.Optional;

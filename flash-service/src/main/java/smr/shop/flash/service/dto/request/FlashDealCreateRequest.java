@@ -9,7 +9,7 @@ import lombok.Value;
 import java.time.ZonedDateTime;
 
 @Value
-public class FLashDealCreateRequest {
+public class FlashDealCreateRequest {
     @NotBlank
     @Size(min = 5)
     String title;
