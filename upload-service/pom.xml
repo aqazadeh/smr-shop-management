@@ -59,6 +59,11 @@
             <groupId>smr.shop.libs</groupId>
             <artifactId>grpc-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 
