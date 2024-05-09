@@ -8,6 +8,7 @@ import smr.shop.brand.service.dto.request.BrandCreateRequest;
 import smr.shop.brand.service.dto.request.BrandUpdateRequest;
 import smr.shop.brand.service.dto.response.BrandResponse;
 import smr.shop.brand.service.exception.BrandException;
+import smr.shop.brand.service.grpc.BrandGrpcClientService;
 import smr.shop.brand.service.mapper.BrandMapper;
 import smr.shop.brand.service.model.BrandEntity;
 import smr.shop.brand.service.repository.BrandRepository;
@@ -21,18 +22,20 @@ import java.util.UUID;
 public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
     private final BrandMapper brandMapper;
-
-    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper) {
+    private final BrandGrpcClientService brandGrpcClientService;
+    public BrandServiceImpl(BrandRepository brandRepository,
+                            BrandMapper brandMapper,
+                            BrandGrpcClientService brandGrpcClientService) {
         this.brandRepository = brandRepository;
         this.brandMapper = brandMapper;
+        this.brandGrpcClientService = brandGrpcClientService;
     }
 
     @Override
     public BrandResponse create(BrandCreateRequest request) {
         BrandEntity brandEntity = brandMapper.brandCreateResponseToBrandEntity(request);
-//        request.getImageId()  check ad add brandEntity
+        brandGrpcClientService.getImage(request.getImageId().toString());
         brandEntity = brandRepository.save(brandEntity);
-
         return brandMapper.brandEntityToBrandResponse(brandEntity);
     }
 

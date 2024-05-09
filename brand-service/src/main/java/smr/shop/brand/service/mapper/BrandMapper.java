@@ -6,12 +6,9 @@ import smr.shop.brand.service.dto.request.BrandUpdateRequest;
 import smr.shop.brand.service.dto.response.BrandResponse;
 import smr.shop.brand.service.model.BrandEntity;
 
-import java.util.UUID;
-
 @Component
 public class BrandMapper {
     public BrandEntity brandCreateResponseToBrandEntity(BrandCreateRequest request) {
-        // check image id is exists
         BrandEntity.BrandEntityBuilder builder = BrandEntity.builder();
         builder.name(request.getName());
         builder.description(request.getDescription());
