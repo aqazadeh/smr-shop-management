@@ -5,8 +5,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
 import smr.shop.coupon.service.model.valueobject.CouponType;
 
@@ -19,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Coupon {
+public class CouponEntity {
     @Id
     private UUID id;
 
@@ -45,10 +43,8 @@ public class Coupon {
 
     private Boolean isActive = true;
 
-    @CreatedDate
     private ZonedDateTime createdAt;
 
-    @LastModifiedDate
     private ZonedDateTime updatedAt;
 
 }
