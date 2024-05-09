@@ -23,7 +23,7 @@ public class BrandServiceApplication  implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UploadGrpcResponse brand = brandGrpcClientServiceImpl.getImage();
+        UploadGrpcResponse brand = brandGrpcClientServiceImpl.getImage("ggfh");
         System.out.println(brand.getUrl());
     }
 }

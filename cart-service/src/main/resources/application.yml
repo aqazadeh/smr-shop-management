@@ -1,0 +1,42 @@
+server:
+  port: 2218
+
+spring:
+  cloud:
+    config:
+      enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:9001/brandDB?binaryTransfer=true&reWriteBatchedInserts=true
+    username: postgres
+    password: admin
+  application:
+    name: brand-service
+
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+
+
+grpc:
+  server:
+    port: 3021
+
+  client:
+    upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
