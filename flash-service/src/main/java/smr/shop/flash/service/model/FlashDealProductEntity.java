@@ -1,14 +1,15 @@
 package smr.shop.flash.service.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -16,20 +17,15 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class FlashDeal {
+public class FlashDealProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "flash_deal_id")
+    private FlashDealEntity flashDealEntity;
 
-    private Integer startDate;
-
-    private Integer endDate;
-
-    private Integer status;
-
-    private String slug;
+    private Long productId;
 
     @CreatedDate
     private ZonedDateTime createdAt;

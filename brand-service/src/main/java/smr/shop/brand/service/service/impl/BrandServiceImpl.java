@@ -8,7 +8,8 @@ import smr.shop.brand.service.dto.request.BrandCreateRequest;
 import smr.shop.brand.service.dto.request.BrandUpdateRequest;
 import smr.shop.brand.service.dto.response.BrandResponse;
 import smr.shop.brand.service.exception.BrandException;
-import smr.shop.brand.service.mapper.BrandMapper;
+import smr.shop.brand.service.grpc.BrandGrpcClientService;
+import smr.shop.brand.service.mapper.BrandServiceMapper;
 import smr.shop.brand.service.model.BrandEntity;
 import smr.shop.brand.service.repository.BrandRepository;
 import smr.shop.brand.service.service.BrandService;
@@ -20,28 +21,30 @@ import java.util.UUID;
 @Service
 public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
-    private final BrandMapper brandMapper;
-
-    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper) {
+    private final BrandServiceMapper brandServiceMapper;
+    private final BrandGrpcClientService brandGrpcClientService;
+    public BrandServiceImpl(BrandRepository brandRepository,
+                            BrandServiceMapper brandServiceMapper,
+                            BrandGrpcClientService brandGrpcClientService) {
         this.brandRepository = brandRepository;
-        this.brandMapper = brandMapper;
+        this.brandServiceMapper = brandServiceMapper;
+        this.brandGrpcClientService = brandGrpcClientService;
     }
 
     @Override
     public BrandResponse create(BrandCreateRequest request) {
-        BrandEntity brandEntity = brandMapper.brandCreateResponseToBrandEntity(request);
-//        request.getImageId()  check ad add brandEntity
+        BrandEntity brandEntity = brandServiceMapper.brandCreateResponseToBrandEntity(request);
+        brandGrpcClientService.getImage(request.getImageId().toString());
         brandEntity = brandRepository.save(brandEntity);
-
-        return brandMapper.brandEntityToBrandResponse(brandEntity);
+        return brandServiceMapper.brandEntityToBrandResponse(brandEntity);
     }
 
     @Override
     public BrandResponse updateBrand(Long id, BrandUpdateRequest request) {
         BrandEntity brandEntity = findById(id);
-        BrandEntity brandEntityUpdated = brandMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
+        BrandEntity brandEntityUpdated = brandServiceMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
         brandEntity = brandRepository.save(brandEntityUpdated);
-        return brandMapper.brandEntityToBrandResponse(brandEntity);
+        return brandServiceMapper.brandEntityToBrandResponse(brandEntity);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class BrandServiceImpl implements BrandService {
         // grpc find image has
         brandEntity.setImageId(imageId.toString());
         brandEntity = brandRepository.save(brandEntity);
-        return brandMapper.brandEntityToBrandResponse(brandEntity);
+        return brandServiceMapper.brandEntityToBrandResponse(brandEntity);
     }
 
     @Override
@@ -73,13 +76,13 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<BrandResponse> getAllBrands(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-        return brandRepository.findAll(pageable).map(brandMapper::brandEntityToBrandResponse).toList();
+        return brandRepository.findAll(pageable).map(brandServiceMapper::brandEntityToBrandResponse).toList();
     }
 
     @Override
     public BrandResponse getBrand(Long id) {
         BrandEntity brandEntity = findById(id);
-        return brandMapper.brandEntityToBrandResponse(brandEntity);
+        return brandServiceMapper.brandEntityToBrandResponse(brandEntity);
     }
 
     @Override

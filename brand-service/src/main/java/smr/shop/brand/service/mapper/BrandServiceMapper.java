@@ -7,9 +7,8 @@ import smr.shop.brand.service.dto.response.BrandResponse;
 import smr.shop.brand.service.model.BrandEntity;
 
 @Component
-public class BrandMapper {
+public class BrandServiceMapper {
     public BrandEntity brandCreateResponseToBrandEntity(BrandCreateRequest request) {
-        // check image id is exists
         BrandEntity.BrandEntityBuilder builder = BrandEntity.builder();
         builder.name(request.getName());
         builder.description(request.getDescription());

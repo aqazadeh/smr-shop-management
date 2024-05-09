@@ -1,4 +1,4 @@
-package smr.shop.delivery.service.model;
+package smr.shop.flash.service.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,10 +7,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import smr.shop.delivery.service.model.valueobject.DeliveryStatus;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Entity
 @Builder
@@ -18,18 +16,22 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Delivery {
+public class FlashDealEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long courierId;
+    private String title;
 
-    private UUID orderId;
+    private String imageId;
 
-    @Builder.Default
-    private DeliveryStatus status = DeliveryStatus.STARTED;
+    private ZonedDateTime startDate;
 
+    private ZonedDateTime endDate;
+
+    private String slug;
+
+    private Boolean isActive;
     @CreatedDate
     private ZonedDateTime createdAt;
 
@@ -37,9 +39,3 @@ public class Delivery {
     private ZonedDateTime updatedAt;
 
 }
-
-/*
-kuryer bir sifarisi aldiqda bu table de tutulur,
-kuryer sifarisi qebul etdikde status stared olur, kuryer yolda olarken qeza ve
-diger hadiseler oldugu halda failed, tamamlandiqda ise complated statusuna kecir
- */
