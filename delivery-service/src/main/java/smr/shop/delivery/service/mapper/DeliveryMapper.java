@@ -3,7 +3,6 @@ package smr.shop.delivery.service.mapper;
 import org.springframework.stereotype.Component;
 import smr.shop.delivery.service.dto.request.DeliveryCreateRequest;
 import smr.shop.delivery.service.dto.request.DeliveryUpdateRequest;
-import smr.shop.delivery.service.dto.request.UpdateDeliveryStatusRequest;
 import smr.shop.delivery.service.dto.response.DeliveryResponse;
 import smr.shop.delivery.service.model.Delivery;
 

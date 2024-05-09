@@ -6,8 +6,6 @@ import smr.shop.libs.grpc.upload.UploadGrpcRequest;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadServiceGrpc;
 
-import java.util.UUID;
-
 @GrpcService
 public class GrpcServerService extends UploadServiceGrpc.UploadServiceImplBase {
 

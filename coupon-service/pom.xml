@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>annotationProcessor</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>smr.shop.libs</groupId>
