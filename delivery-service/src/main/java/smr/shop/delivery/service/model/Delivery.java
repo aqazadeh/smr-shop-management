@@ -27,7 +27,8 @@ public class Delivery {
 
     private UUID orderId;
 
-    private DeliveryStatus status;
+    @Builder.Default
+    private DeliveryStatus status = DeliveryStatus.STARTED;
 
     @CreatedDate
     private ZonedDateTime createdAt;
