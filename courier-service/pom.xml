@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.courier.service</groupId>
     <artifactId>courier-service</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

@@ -9,9 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.product.stock.service</groupId>
     <artifactId>product-stock-service</artifactId>
-
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

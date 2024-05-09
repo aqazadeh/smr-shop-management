@@ -9,9 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.wishlist.service</groupId>
     <artifactId>wishlist-service</artifactId>
-
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

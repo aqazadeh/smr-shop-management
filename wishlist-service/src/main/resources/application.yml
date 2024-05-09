@@ -1,5 +1,5 @@
 server:
-  port: 2216
+  port: 2217
 
 spring:
   cloud:
@@ -10,11 +10,11 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9016/wishlistDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9017/cartDB?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
-    name: wishlist-service
+    name: cart-service
 
 
 eureka:

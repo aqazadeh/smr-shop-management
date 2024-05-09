@@ -43,6 +43,7 @@
         <module>discount-service</module>
         <module>brand-service</module>
         <module>libs</module>
+        <module>cart-service</module>
     </modules>
     <dependencies>
 

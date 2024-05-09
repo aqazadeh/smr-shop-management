@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.ticket.service</groupId>
     <artifactId>payment-service</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

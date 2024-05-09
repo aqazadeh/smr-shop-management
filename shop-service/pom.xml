@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.management.shop.service</groupId>
     <artifactId>shop-service</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

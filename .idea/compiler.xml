@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="delivery-service" />
         <module name="brand-service" />
+        <module name="cart-service" />
         <module name="config-service" />
         <module name="coupon-service" />
         <module name="flash-service" />
@@ -41,6 +42,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
       <module name="brand-service" options="-parameters" />
+      <module name="cart-service" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="coupon-service" options="-parameters" />

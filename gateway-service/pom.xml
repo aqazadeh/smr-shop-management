@@ -9,11 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>smr.shop.gateway.service</groupId>
     <artifactId>gateway-service</artifactId>
-    <properties>
-        <spring-cloud.version>2023.0.1</spring-cloud.version>
-    </properties>
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
