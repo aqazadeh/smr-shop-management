@@ -6,5 +6,6 @@ import smr.shop.courier.service.model.valueobject.CourierActiveType;
 
 @Value
 public class UpdateCourierActiveTypeRequest {
-    @NotBlank CourierActiveType status;
+    @NotBlank
+    CourierActiveType status;
 }

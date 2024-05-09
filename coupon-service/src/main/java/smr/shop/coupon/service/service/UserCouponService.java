@@ -15,8 +15,12 @@ import java.util.UUID;
 
 public interface UserCouponService {
     UserCouponResponse createUserCoupon(UUID couponId);
-   void deleteUserCoupon(UUID id);
+
+    void deleteUserCoupon(UUID id);
+
     List<UserCouponResponse> getAllUserCoupons(Integer page);
+
     UserCouponResponse getUserCoupon(UUID id);
+
     UserCouponEntity findById(UUID id);
 }

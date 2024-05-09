@@ -34,11 +34,13 @@ public class UserCouponController {
         userCouponService.deleteUserCoupon(userCouponId);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping
     public ResponseEntity<List<UserCouponResponse>> getAllUserCoupon(Integer page) {
         List<UserCouponResponse> allUserCoupon = userCouponService.getAllUserCoupons(page);
         return ResponseEntity.ok(allUserCoupon);
     }
+
     @GetMapping("/{userCouponId}")
     public ResponseEntity<UserCouponResponse> getUserCoupon(@PathVariable UUID userCouponId) {
         UserCouponResponse userCouponResponse = userCouponService.getUserCoupon(userCouponId);

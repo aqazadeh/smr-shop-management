@@ -10,7 +10,6 @@ import java.util.List;
 public interface FlashDealService {
 
 
-
     FlashDealResponse createFlashDeal(FlashDealCreateRequest request);
 
     FlashDealResponse updateFlashDeal(Long id, FlashDealUpdateRequest request);

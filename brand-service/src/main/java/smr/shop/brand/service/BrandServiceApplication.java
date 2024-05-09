@@ -10,7 +10,7 @@ import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class BrandServiceApplication  implements CommandLineRunner {
+public class BrandServiceApplication implements CommandLineRunner {
     private final BrandGrpcClientServiceImpl brandGrpcClientServiceImpl;
 
     public BrandServiceApplication(BrandGrpcClientServiceImpl brandGrpcClientServiceImpl) {

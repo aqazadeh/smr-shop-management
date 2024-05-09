@@ -21,7 +21,7 @@ public class CourierController {
     }
 
     @PostMapping
-    public ResponseEntity<CourierResponse> createCourier(@RequestBody  CourierCreateRequest request) {
+    public ResponseEntity<CourierResponse> createCourier(@RequestBody CourierCreateRequest request) {
         CourierResponse courierResponse = courierService.createCourier(request);
         return ResponseEntity.ok(courierResponse);
     }

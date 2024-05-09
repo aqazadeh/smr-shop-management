@@ -37,7 +37,7 @@ public class UserCouponServiceImpl implements UserCouponService {
     public UserCouponResponse createUserCoupon(UUID couponId) {
 
 
-        if (userCouponRepository.findUserCouponByCouponId(couponId).isPresent()){
+        if (userCouponRepository.findUserCouponByCouponId(couponId).isPresent()) {
             throw new UserCouponException("This coupon already exist", HttpStatus.BAD_REQUEST);
         }
 

@@ -30,7 +30,7 @@ public class FlashDealProductServiceImpl implements FlashDealProductService {
     private final FlashServiceMapper flashServiceMapper;
 
     public FlashDealProductServiceImpl(FlashDealProductRepository flashDealProductRepository,
-                                FlashServiceMapper flashServiceMapper) {
+                                       FlashServiceMapper flashServiceMapper) {
         this.flashDealProductRepository = flashDealProductRepository;
         this.flashServiceMapper = flashServiceMapper;
     }

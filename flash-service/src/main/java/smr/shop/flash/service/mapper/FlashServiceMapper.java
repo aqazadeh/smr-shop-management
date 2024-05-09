@@ -64,9 +64,9 @@ public class FlashServiceMapper {
 
     public FlashDealProductEntity flashDealProductCreateRequestToFlashDealProductEntity(FlashDealProductCreateRequest request) {
         return FlashDealProductEntity.builder()
-                    .flashDealEntityId(request.getFlashDealEntityId())
-                    .productId(request.getProductId())
-                    .build();
+                .flashDealEntityId(request.getFlashDealEntityId())
+                .productId(request.getProductId())
+                .build();
     }
 
     public FlashDealProductEntity flashDealProductUpdateRequestToFlashDealProductEntity(FlashDealProductUpdateRequest request, FlashDealProductEntity entity) {

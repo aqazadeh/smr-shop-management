@@ -55,5 +55,5 @@ public class FlashDealController {
         FlashDealResponse flashDealResponse = flashDealService.getFlashDealById(flashDealId);
         return ResponseEntity.ok(flashDealResponse);
     }
-    
+
 }

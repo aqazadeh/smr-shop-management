@@ -32,7 +32,7 @@ public class CouponUsageServiceImpl implements CouponUsageService {
     public CouponUsageResponse createCouponUsage(UUID couponId) {
 
 
-        if (couponUsageRepository.findCouponUsageByCouponId(couponId).isPresent()){
+        if (couponUsageRepository.findCouponUsageByCouponId(couponId).isPresent()) {
             throw new CouponUsageException("This coupon already exist", HttpStatus.BAD_REQUEST);
         }
 

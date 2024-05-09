@@ -15,7 +15,7 @@ public class BrandServiceMapper {
         return builder.build();
     }
 
-    public BrandEntity brandUpdateRequestToBrandEntity(BrandUpdateRequest request,  BrandEntity entity) {
+    public BrandEntity brandUpdateRequestToBrandEntity(BrandUpdateRequest request, BrandEntity entity) {
         entity.setName(request.getName());
         entity.setSlug(request.getSlug());
         entity.setDescription(request.getDescription());

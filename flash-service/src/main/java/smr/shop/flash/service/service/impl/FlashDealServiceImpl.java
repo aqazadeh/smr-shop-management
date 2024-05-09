@@ -15,6 +15,7 @@ import smr.shop.flash.service.service.FlashDealService;
 import smr.shop.libs.common.constant.ServiceConstants;
 
 import java.util.List;
+
 @Service
 public class FlashDealServiceImpl implements FlashDealService {
     private final FlashDealRepository flashDealRepository;

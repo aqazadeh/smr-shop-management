@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.cart";
+option java_multiple_files = true;
+
+message CartGrpcRequest {
+  int64 userId = 1;
+}
+
+message CartGrpcResponse {
+  int64 id = 1;
+  repeated string coupons = 2;
+  repeated CartGrpcResponse response = 3;
+}
+
+message CartItemsGrpcResponse {
+  string couponItemId = 1;
+  int64 productId = 2;
+  string  attributeId = 3;
+  int32 quantity = 4;
+}
+
+service CartService {
+  rpc GetCart(CartGrpcRequest) returns (CartGrpcResponse);
+}

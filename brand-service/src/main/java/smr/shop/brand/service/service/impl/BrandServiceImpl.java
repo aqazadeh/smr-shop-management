@@ -23,6 +23,7 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
     private final BrandServiceMapper brandServiceMapper;
     private final BrandGrpcClientService brandGrpcClientService;
+
     public BrandServiceImpl(BrandRepository brandRepository,
                             BrandServiceMapper brandServiceMapper,
                             BrandGrpcClientService brandGrpcClientService) {

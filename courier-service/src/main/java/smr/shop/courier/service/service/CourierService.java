@@ -10,10 +10,15 @@ import java.util.List;
 
 public interface CourierService {
     CourierResponse createCourier(CourierCreateRequest request);
+
     CourierResponse updateCourier(Long id, CourierUpdateRequest request);
+
     void deleteCourier(Long id);
+
     List<CourierResponse> getAllCourier(Integer page);
+
     CourierResponse getCourierById(Long id);
+
     CourierResponse updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request);
 
     Courier findById(Long id);
