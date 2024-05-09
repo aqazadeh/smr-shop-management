@@ -5,8 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
 
@@ -32,10 +30,9 @@ public class FlashDealEntity {
     private String slug;
 
     private Boolean isActive;
-    @CreatedDate
+
     private ZonedDateTime createdAt;
 
-    @LastModifiedDate
     private ZonedDateTime updatedAt;
 
 }
