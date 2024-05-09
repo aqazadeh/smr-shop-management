@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -9,7 +10,6 @@
         <module name="delivery-service" />
         <module name="brand-service" />
         <module name="config-service" />
-        <module name="rpc" />
         <module name="coupon-service" />
         <module name="flash-service" />
         <module name="product-service" />
@@ -19,9 +19,11 @@
         <module name="courier-service" />
         <module name="discovery-service" />
         <module name="notification-service" />
+        <module name="grpc-common" />
         <module name="ticket-service" />
         <module name="auth-service" />
         <module name="payment-service" />
+        <module name="common" />
         <module name="discount-service" />
         <module name="gateway-service" />
         <module name="kafka" />
@@ -47,8 +49,10 @@
       <module name="discovery-service" options="-parameters" />
       <module name="flash-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
+      <module name="grpc-common" options="-parameters" />
       <module name="infrastructure" options="-parameters" />
       <module name="kafka" options="-parameters" />
+      <module name="libs" options="-parameters" />
       <module name="management" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
@@ -56,7 +60,6 @@
       <module name="product-review-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="product-stock-service" options="-parameters" />
-      <module name="rpc" options="-parameters" />
       <module name="shop-service" options="-parameters" />
       <module name="ticket-service" options="-parameters" />
       <module name="upload-service" options="-parameters" />

@@ -17,6 +17,8 @@
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <grpc.version>1.65.0-SNAPSHOT</grpc.version>
+        <protoc.version>3.25.1</protoc.version>
     </properties>
 
     <modules>
@@ -40,7 +42,7 @@
         <module>courier-service</module>
         <module>discount-service</module>
         <module>brand-service</module>
-        <module>common</module>
+        <module>libs</module>
     </modules>
     <dependencies>
 
@@ -53,6 +55,16 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>smr.shop.libs</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>smr.shop.libs</groupId>
+                <artifactId>grpc-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -27,3 +27,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+grpc:
+  server:
+    port: 3215

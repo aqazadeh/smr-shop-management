@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.brand";
+option java_multiple_files = true;
+
+message BrandGrpcRequest {
+  int64 id = 1;
+}
+
+message BrandGrpcResponse {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  string imageUrl = 5;
+}
+
+service BrandService {
+  rpc GetBrand(BrandGrpcRequest) returns (BrandGrpcResponse);
+}

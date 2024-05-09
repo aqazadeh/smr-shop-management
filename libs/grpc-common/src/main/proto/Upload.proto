@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.upload";
+option java_multiple_files = true;
+
+message UploadGrpcRequest {
+  // a name to greet, default is "World"
+  string id = 1;
+}
+
+message UploadGrpcResponse {
+  string url = 1;
+}
+
+service UploadService {
+  rpc GetUpload(UploadGrpcRequest) returns (UploadGrpcResponse);
+}
