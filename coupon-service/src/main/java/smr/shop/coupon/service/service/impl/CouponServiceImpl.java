@@ -13,9 +13,11 @@ import smr.shop.coupon.service.model.CouponEntity;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.common.exception.GlobalException;
 
 import java.util.List;
 import java.util.UUID;
+
 
 /**
  * Author: Ali Gadashov
@@ -34,10 +36,9 @@ public class CouponServiceImpl implements CouponService {
         this.couponMapper = couponMapper;
     }
     @Override
-    public CouponResponse create(CouponCreateRequest request) {
+    public CouponResponse createCoupon(CouponCreateRequest request) {
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
         couponEntity = couponRepository.save(couponEntity);
-
         return couponMapper.couponEntityToCouponResponse(couponEntity);
     }
 
@@ -53,14 +54,12 @@ public class CouponServiceImpl implements CouponService {
     public void deleteCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
         couponRepository.delete(couponEntity);
-
     }
 
     @Override
     public List<CouponResponse> getAllCoupons(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         return couponRepository.findAll(pageable).map(couponMapper::couponEntityToCouponResponse).toList();
-
     }
 
     @Override
@@ -70,7 +69,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponEntity findById(UUID couponId) {
+    public CouponEntity findById(UUID couponId){
         return couponRepository.findById(couponId).orElseThrow(() -> new CouponException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
     }
 }
