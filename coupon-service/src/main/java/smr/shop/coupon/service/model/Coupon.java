@@ -36,6 +36,8 @@ public class Coupon {
 
     private Float percentage;
 
+    private Double maxDiscountPrice;
+
     private ZonedDateTime endDate;
 
     private Boolean isActive = true;
