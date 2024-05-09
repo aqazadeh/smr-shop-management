@@ -27,10 +27,7 @@ public class Discount {
 
     private Double amount;
 
-    @CreatedDate
     private ZonedDateTime createdAt;
-
-    @LastModifiedDate
     private ZonedDateTime updatedAt;
 }
 
