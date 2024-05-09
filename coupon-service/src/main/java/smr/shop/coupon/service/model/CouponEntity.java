@@ -5,8 +5,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
-import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
-import smr.shop.coupon.service.model.valueobject.CouponType;
+import smr.shop.coupon.service.model.valueObject.CouponDiscountType;
+import smr.shop.coupon.service.model.valueObject.CouponType;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

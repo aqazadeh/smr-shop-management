@@ -11,7 +11,6 @@ import smr.shop.delivery.service.dto.response.DeliveryResponse;
 import smr.shop.delivery.service.exception.DeliveryException;
 import smr.shop.delivery.service.mapper.DeliveryMapper;
 import smr.shop.delivery.service.model.Delivery;
-import smr.shop.delivery.service.model.valueobject.DeliveryStatus;
 import smr.shop.delivery.service.repository.DeliveryRepository;
 import smr.shop.delivery.service.service.DeliveryService;
 import smr.shop.libs.common.constant.ServiceConstants;

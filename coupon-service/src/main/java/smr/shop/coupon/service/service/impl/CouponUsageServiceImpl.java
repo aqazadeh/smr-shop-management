@@ -9,7 +9,9 @@ import smr.shop.coupon.service.model.CouponUsageEntity;
 import smr.shop.coupon.service.repository.CouponUsageRepository;
 import smr.shop.coupon.service.service.CouponUsageService;
 
+
 import java.util.UUID;
+
 
 /**
  * Author: Ali Gadashov
@@ -29,6 +31,12 @@ public class CouponUsageServiceImpl implements CouponUsageService {
 
     @Override
     public CouponUsageResponse createCouponUsage(UUID couponId) {
+
+
+        if (couponUsageRepository.findCouponUsageByCouponId(couponId).isPresent()){
+            throw new CouponUsageException("This coupon already exist", HttpStatus.BAD_REQUEST);
+        }
+
         CouponUsageEntity couponUsageEntity = couponUsageRepository.save(CouponUsageEntity.builder()
                 .id(UUID.randomUUID())
 // TODO : add user id

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.coupon.service.dto.response.UserCouponResponse;
+import smr.shop.coupon.service.exception.CouponUsageException;
 import smr.shop.coupon.service.exception.UserCouponException;
 import smr.shop.coupon.service.mapper.CouponServiceMapper;
 import smr.shop.coupon.service.model.UserCouponEntity;
@@ -35,6 +36,12 @@ public class UserCouponServiceImpl implements UserCouponService {
 
     @Override
     public UserCouponResponse createUserCoupon(UUID couponId) {
+
+
+        if (userCouponRepository.findUserCouponByCouponId(couponId).isPresent()){
+            throw new UserCouponException("This coupon already exist", HttpStatus.BAD_REQUEST);
+        }
+
         UserCouponEntity userCouponEntity = userCouponRepository.save(UserCouponEntity.builder()
                 .id(UUID.randomUUID())
 // TODO : add user id
@@ -46,17 +53,14 @@ public class UserCouponServiceImpl implements UserCouponService {
 
     @Override
     public void deleteUserCoupon(UUID userCouponId) {
-
         UserCouponEntity userCouponEntity = findById(userCouponId);
         userCouponRepository.delete(userCouponEntity);
-
     }
 
     @Override
     public List<UserCouponResponse> getAllUserCoupons(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         return userCouponRepository.findAll(pageable).map(couponMapper::userCouponEntityToUserCouponResponse).toList();
-
     }
 
     @Override
@@ -68,6 +72,5 @@ public class UserCouponServiceImpl implements UserCouponService {
     @Override
     public UserCouponEntity findById(UUID userCouponId) {
         return userCouponRepository.findById(userCouponId).orElseThrow(() -> new UserCouponException("Coupon Not found With id : " + userCouponId, HttpStatus.NOT_FOUND));
-
     }
 }

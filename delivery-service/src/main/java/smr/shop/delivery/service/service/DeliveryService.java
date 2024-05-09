@@ -5,7 +5,6 @@ import smr.shop.delivery.service.dto.request.DeliveryUpdateRequest;
 import smr.shop.delivery.service.dto.request.UpdateDeliveryStatusRequest;
 import smr.shop.delivery.service.dto.response.DeliveryResponse;
 import smr.shop.delivery.service.model.Delivery;
-import smr.shop.delivery.service.model.valueobject.DeliveryStatus;
 
 import java.util.List;
 
