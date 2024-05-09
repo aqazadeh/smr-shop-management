@@ -1,9 +1,8 @@
 package smr.shop.upload.service.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import smr.shop.upload.service.model.valueobject.UploadStatus;
 
 import java.time.ZonedDateTime;

@@ -2,8 +2,6 @@ package smr.shop.product.service.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import smr.shop.product.service.model.valueobject.ProductStatus;
 
 import java.time.ZonedDateTime;
