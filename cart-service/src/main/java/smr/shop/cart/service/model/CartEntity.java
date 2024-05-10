@@ -26,5 +26,6 @@ public class CartEntity {
     private CartStatus status;
 
     private ZonedDateTime createdAt;
+
     private ZonedDateTime updatedAt;
 }
