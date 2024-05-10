@@ -9,13 +9,19 @@ spring:
         enabled: true
     config:
       enabled: false
-    #    gateway:
-    #      mvc:
-    #        routes:
-    #          - id: auth-service
-    #            uri: lb://auth-service
-    #            predicates:
-    #              - Path=/api/v1/user/**
+
+    gateway:
+      mvc:
+        routes:
+          - id: brand-service
+            uri: lb://brand-service
+            predicates:
+              - Path=/api/1.0/brands/**
+
+#          - id: brand-service
+#            uri: lb://brand-service
+#            predicates:
+#              - Path=/api/1.0/brands/**
 
 eureka:
   instance:

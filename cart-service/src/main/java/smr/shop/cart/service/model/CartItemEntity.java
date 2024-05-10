@@ -17,10 +17,6 @@ public class CartItemEntity {
     @Id
     private UUID id;
 
-    private Long cartId;
-
-    private Long userId;
-
     private Long productId;
 
     private UUID attributeId;

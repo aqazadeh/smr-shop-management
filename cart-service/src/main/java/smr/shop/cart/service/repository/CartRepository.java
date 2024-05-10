@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import smr.shop.cart.service.model.CartEntity;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Author: Ali Gadashov
@@ -12,7 +13,9 @@ import java.util.Optional;
  * Time: 1:26 PM
  */
 
-public interface CartRepository extends JpaRepository<CartEntity, Long> {
+public interface CartRepository extends JpaRepository<CartEntity, UUID> {
 
     Optional<CartEntity> findCartEntitiesByUserId(Long userId);
+
+    void deleteByCartId(UUID cartId);
 }

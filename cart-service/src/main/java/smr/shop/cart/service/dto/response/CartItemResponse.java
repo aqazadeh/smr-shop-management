@@ -3,8 +3,6 @@ package smr.shop.cart.service.dto.response;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.UUID;
-
 /**
  * Author: Ali Gadashov
  * Version: v1.0
@@ -14,16 +12,21 @@ import java.util.UUID;
 @Value
 @Builder
 public class CartItemResponse {
-    UUID id;
-
-    Long cartId;
-
-    Long userId;
 
     Long productId;
 
-    UUID attributeId;
+    String name;
 
     Integer quantity;
+
+    Double unitPrice;
+
+    Double totalPrice;
+
+    Double discountPrice;
+
+    String attributeName;
+
+    String thumbnail;
 
 }
