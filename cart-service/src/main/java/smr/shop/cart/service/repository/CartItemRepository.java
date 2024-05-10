@@ -3,6 +3,8 @@ package smr.shop.cart.service.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import smr.shop.cart.service.model.CartItemEntity;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -13,6 +15,14 @@ import java.util.UUID;
  */
 
 public interface CartItemRepository extends JpaRepository<CartItemEntity, UUID> {
-    void deleteByProductId(Long productId);
+    void deleteByUserIdAndProductId(Long userId, Long productId);
 
+
+    Optional<CartItemEntity> findByUserIdAndAttributeId(Long userId, UUID attributeId);
+
+    void deleteByUserIdAndProductIdAndAttributeId(Long userId, Long productId, UUID attributeId);
+
+    Optional<CartItemEntity> findByUserIdAndProductIdAndAttributeId(Long userId, Long productId, UUID attributeId);
+
+    List<CartItemEntity> findByCartId(UUID cartId);
 }

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.coupon";
+option java_multiple_files = true;
+import "helper/DateTime.proto";
+
+enum CouponType {
+  SHOP = 0;
+  ALL = 1;
+}
+
+enum CouponDiscountType {
+  PERCENT = 0;
+  AMOUNT = 1;
+}
+
+message CouponCodeGrpcRequest {
+  string code = 1;
+}
+
+message CouponIdGrpcRequest {
+  string id = 1;
+}
+
+message CouponGrpcResponse {
+  string id = 1;
+  string code = 2;
+  int64 shopId = 3;
+  CouponType couponType = 4;
+  double amount  = 5;
+  sint32 percentage = 6;
+  double maxDiscountPrice = 7;
+  google.type.DateTime expireDatetime = 8;
+  bool isUsed = 9;
+}
+
+service CouponService {
+  rpc getCouponDetailWithCode(CouponCodeGrpcRequest) returns (CouponGrpcResponse);
+  rpc getCouponDetailWithId(CouponIdGrpcRequest) returns (CouponGrpcResponse);
+}

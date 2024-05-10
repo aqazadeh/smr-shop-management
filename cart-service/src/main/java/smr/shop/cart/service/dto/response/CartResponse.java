@@ -16,11 +16,13 @@ import java.util.UUID;
 @Value
 @Builder
 public class CartResponse {
-    Long id;
+    UUID id;
 
-    List<UUID> coupons;
+    String couponCode;
 
-    BigDecimal price;
-    BigDecimal discountedPrice;
-    List<CartItemResponse> cartItems;
+    Double price;
+
+    Double discountPrice;
+
+    List<CartItemResponse> items;
 }
