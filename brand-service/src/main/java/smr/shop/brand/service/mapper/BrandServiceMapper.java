@@ -5,6 +5,8 @@ import smr.shop.brand.service.dto.request.BrandCreateRequest;
 import smr.shop.brand.service.dto.request.BrandUpdateRequest;
 import smr.shop.brand.service.dto.response.BrandResponse;
 import smr.shop.brand.service.model.BrandEntity;
+import smr.shop.libs.common.dto.message.BrandDeleteMessageModel;
+import smr.shop.libs.common.dto.message.BrandImageDeleteMessageModel;
 
 @Component
 public class BrandServiceMapper {
@@ -15,7 +17,7 @@ public class BrandServiceMapper {
         return builder.build();
     }
 
-    public BrandEntity brandUpdateRequestToBrandEntity(BrandUpdateRequest request,  BrandEntity entity) {
+    public BrandEntity brandUpdateRequestToBrandEntity(BrandUpdateRequest request, BrandEntity entity) {
         entity.setName(request.getName());
         entity.setSlug(request.getSlug());
         entity.setDescription(request.getDescription());
@@ -29,6 +31,19 @@ public class BrandServiceMapper {
                 .name(brandEntity.getName())
                 .slug(brandEntity.getSlug())
                 .description(brandEntity.getDescription())
+                .build();
+    }
+
+
+    public BrandImageDeleteMessageModel brandEntityToBrandImageDeleteMessageModel(BrandEntity brandEntity) {
+        return BrandImageDeleteMessageModel.builder()
+                .imageId(brandEntity.getImageId())
+                .build();
+    }
+
+    public BrandDeleteMessageModel brandEntityToBrandDeleteMessageModel(BrandEntity brandEntity){
+        return BrandDeleteMessageModel.builder()
+                .id(brandEntity.getId())
                 .build();
     }
 }

@@ -34,6 +34,7 @@ public class CouponServiceImpl implements CouponService {
         this.couponRepository = couponRepository;
         this.couponMapper = couponMapper;
     }
+
     @Override
     public CouponResponse createCoupon(CouponCreateRequest request) {
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
@@ -72,7 +73,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponEntity findById(UUID couponId){
+    public CouponEntity findById(UUID couponId) {
         return couponRepository.findById(couponId).orElseThrow(() -> new CouponException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
     }
 }

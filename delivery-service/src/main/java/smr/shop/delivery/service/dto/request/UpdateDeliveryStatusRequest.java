@@ -6,5 +6,6 @@ import smr.shop.delivery.service.model.valueobject.DeliveryStatus;
 
 @Value
 public class UpdateDeliveryStatusRequest {
-    @NotBlank DeliveryStatus status;
+    @NotBlank
+    DeliveryStatus status;
 }

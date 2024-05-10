@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class WishlistServiceMapper {
-    public WishlistResponse wishlistEntityToWishlistResponse(WishlistEntity entity){
+    public WishlistResponse wishlistEntityToWishlistResponse(WishlistEntity entity) {
         return WishlistResponse.builder()
                 .id(entity.getId())
                 .userId(entity.getUserId())
@@ -17,7 +17,7 @@ public class WishlistServiceMapper {
                 .build();
     }
 
-    public List<WishlistResponse> wishlistEntityListToWishlistResponse(List<WishlistEntity> entityList){
+    public List<WishlistResponse> wishlistEntityListToWishlistResponse(List<WishlistEntity> entityList) {
         return entityList.stream().map(this::wishlistEntityToWishlistResponse).toList();
     }
 

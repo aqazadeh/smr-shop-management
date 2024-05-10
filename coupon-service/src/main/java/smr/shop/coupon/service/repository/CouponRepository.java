@@ -12,5 +12,5 @@ import java.util.UUID;
  * Time: 3:11 PM
  */
 
-public interface CouponRepository  extends JpaRepository<CouponEntity, UUID> {
+public interface CouponRepository extends JpaRepository<CouponEntity, UUID> {
 }

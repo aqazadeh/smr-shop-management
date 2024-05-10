@@ -17,8 +17,6 @@ public class ProductAttribute {
     @Id
     private UUID id;
 
-    private String name;
-
     private Long productId;
 
     private ZonedDateTime createdAt;

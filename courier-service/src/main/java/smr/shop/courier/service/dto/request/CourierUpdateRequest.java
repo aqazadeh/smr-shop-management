@@ -7,8 +7,11 @@ import smr.shop.courier.service.model.valueobject.CourierActiveType;
 
 @Value
 public class CourierUpdateRequest {
-    @NotBlank @Size(min = 4) String name;
-    @NotBlank String surname;
+    @NotBlank
+    @Size(min = 4)
+    String name;
+    @NotBlank
+    String surname;
     Float rating;
     CourierActiveType activeType;
     Boolean isAccepted;

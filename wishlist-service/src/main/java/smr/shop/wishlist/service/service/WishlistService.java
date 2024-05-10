@@ -17,6 +17,7 @@ public interface WishlistService {
     List<WishlistResponse> getAllWishlistProducts(Integer page);
 
     WishlistEntity findById(Long wishlistId);
+
     WishlistResponse findProductById(Long productId);
 
 }

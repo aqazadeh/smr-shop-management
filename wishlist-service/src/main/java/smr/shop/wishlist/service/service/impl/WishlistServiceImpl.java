@@ -1,4 +1,5 @@
 package smr.shop.wishlist.service.service.impl;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public List<WishlistResponse> getAllWishlistProducts(Integer page) {
-        Pageable pageable =  PageRequest.of(page, ServiceConstants.pageSize);
+        Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<WishlistEntity> wishlistResponseList = wishlistRepository.findAll(pageable).stream().toList();
         return wishlistServiceMapper.wishlistEntityListToWishlistResponse(wishlistResponseList);
     }
@@ -53,7 +54,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public WishlistResponse findProductById(Long productId){
+    public WishlistResponse findProductById(Long productId) {
         WishlistEntity wishlistEntity = findById(productId);
         return wishlistServiceMapper.wishlistEntityToWishlistResponse(wishlistEntity);
 

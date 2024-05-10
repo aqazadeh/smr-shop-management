@@ -17,12 +17,11 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class ProductStock {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private Long productId;
 
-    private UUID attributeId;
+    private String attributeName;
 
     private Integer quantity;
 
