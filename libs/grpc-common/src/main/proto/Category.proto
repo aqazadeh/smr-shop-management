@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.category";
+option java_multiple_files = true;
+
+message CategoryGrpcRequest {
+  int64 categoryId = 1;
+}
+
+message CategoryGrpcResponse {
+  int64 id = 1;
+  string slug = 2;
+  string name = 3;
+}
+
+service CategoryService {
+  rpc GetCategory(CategoryGrpcRequest) returns (CategoryGrpcResponse);
+}

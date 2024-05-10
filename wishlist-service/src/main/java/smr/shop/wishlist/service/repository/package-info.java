@@ -1,1 +1,0 @@
-package smr.shop.wishlist.service.repository;

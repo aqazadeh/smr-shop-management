@@ -15,5 +15,5 @@ message ProductStockGrpcResponse {
 }
 
 service ProductStockService {
-  rpc GetProductAttribute(ProductStockGrpcRequest) returns  (stream ProductStockGrpcResponse);
+  rpc GetProductStock(ProductStockGrpcRequest) returns  (stream ProductStockGrpcResponse);
 }

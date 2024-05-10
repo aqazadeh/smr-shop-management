@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.product.shop";
+option java_multiple_files = true;
+
+message ShopGrpcRequest {
+  int64 shopId = 1;
+}
+
+message ShopGrpcResponse {
+  int64 shopId = 1;
+  string slug = 2;
+  string name = 3;
+  string thumbnail = 4;
+
+}
+
+service ShopService {
+  rpc GetShop(ShopGrpcRequest) returns  (ShopGrpcResponse);
+}

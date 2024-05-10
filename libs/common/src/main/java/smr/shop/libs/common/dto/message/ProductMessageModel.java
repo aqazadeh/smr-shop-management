@@ -1,6 +1,9 @@
 package smr.shop.libs.common.dto.message;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
 import java.util.UUID;
