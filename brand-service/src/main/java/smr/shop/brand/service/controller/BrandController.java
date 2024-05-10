@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/1.0/brands", headers = "application/vnd.api+json")
+@RequestMapping(value = "/api/1.0/brands")
 @Slf4j
 public class BrandController {
 
