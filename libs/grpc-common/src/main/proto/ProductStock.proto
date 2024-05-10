@@ -7,7 +7,7 @@ message ProductStockGrpcRequest {
   int64 productId = 1;
 }
 
-message ProductAttributeGrpcResponse {
+message ProductStockGrpcResponse {
   int64 id = 1;
   string attributeName = 2;
   int32 quantity = 3;
@@ -15,5 +15,5 @@ message ProductAttributeGrpcResponse {
 }
 
 service ProductStockService {
-  rpc GetProductAttribute(ProductStockGrpcRequest) returns  (stream ProductAttributeGrpcResponse);
+  rpc GetProductStock(ProductStockGrpcRequest) returns  (stream ProductStockGrpcResponse);
 }

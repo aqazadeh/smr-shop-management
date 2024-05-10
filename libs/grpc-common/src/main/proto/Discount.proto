@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_package = "smr.discount.libs.grpc.product.discount";
+option java_multiple_files = true;
+
+enum DiscountType{
+   Percent = 0;
+   Amount = 1;
+}
+
+message DiscountGrpcRequest {
+  int64 productId = 1;
+}
+
+message DiscountGrpcResponse {
+  int64 discountId = 1;
+  DiscountType type = 2;
+  double amount = 3;
+  sint32 percent = 4;
+
+}
+
+service DiscountService {
+  rpc GetDiscount(DiscountGrpcRequest) returns  (DiscountGrpcResponse);
+}

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Product {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +35,8 @@ public class Product {
     @ElementCollection
     private List<String> imageIds;
 
-    private String tags;
+    @ElementCollection
+    private List<String> tags;
 
     private Double price;
 
