@@ -1,1 +1,0 @@
-package smr.shop.product.service.service.grpc;

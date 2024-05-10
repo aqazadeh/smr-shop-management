@@ -15,9 +15,9 @@ public interface BrandService {
 
     void deleteBrand(Long id);
 
-    BrandResponse updateBrandImage(Long id, UUID imageId);
+    void updateBrandImage(Long id, UUID imageId);
 
-    void deleteBrandImage(Long id, UUID imageId);
+    void deleteBrandImage(Long id);
 
     List<BrandResponse> getAllBrands(Integer page);
 

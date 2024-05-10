@@ -1,10 +1,13 @@
 package smr.shop.brand.service.dto.response;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+import java.io.Serializable;
+
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BrandResponse {
     Long id;
     String name;
