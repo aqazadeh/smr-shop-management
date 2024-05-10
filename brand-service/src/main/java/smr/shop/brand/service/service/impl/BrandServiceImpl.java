@@ -20,6 +20,9 @@ import smr.shop.libs.common.dto.message.BrandDeleteMessageModel;
 import smr.shop.libs.common.dto.message.BrandImageDeleteMessageModel;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,10 +47,14 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandResponse create(BrandCreateRequest request) {
-        BrandEntity brandEntity = brandServiceMapper.brandCreateResponseToBrandEntity(request);
         UploadGrpcResponse image = brandGrpcClientService.getImage(request.getImageId().toString());
+
+        BrandEntity brandEntity = brandServiceMapper.brandCreateResponseToBrandEntity(request);
         brandEntity.setImageId(image.getId());
+        brandEntity.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        brandEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         brandEntity = brandRepository.save(brandEntity);
+
         BrandResponse brandResponse = brandServiceMapper.brandEntityToBrandResponse(brandEntity);
         brandResponse.setImageUrl(image.getUrl());
         return brandResponse;
@@ -56,8 +63,11 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandResponse updateBrand(Long id, BrandUpdateRequest request) {
         BrandEntity brandEntity = findById(id);
+
         BrandEntity brandEntityUpdated = brandServiceMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
+        brandEntityUpdated.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         brandEntity = brandRepository.save(brandEntityUpdated);
+
         UploadGrpcResponse image = brandGrpcClientService.getImage(brandEntity.getImageId());
         BrandResponse brandResponse = brandServiceMapper.brandEntityToBrandResponse(brandEntity);
         brandResponse.setImageUrl(image.getUrl());
@@ -81,6 +91,8 @@ public class BrandServiceImpl implements BrandService {
 
         UploadGrpcResponse image = brandGrpcClientService.getImage(imageId.toString());
         brandEntity.setImageId(image.getId());
+        brandEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        brandRepository.save(brandEntity);
         brandImageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }
 
@@ -90,6 +102,7 @@ public class BrandServiceImpl implements BrandService {
         BrandImageDeleteMessageModel brandImageDeleteMessageModel =
                 brandServiceMapper.brandEntityToBrandImageDeleteMessageModel(brandEntity);
         brandEntity.setImageId("");
+        brandEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         brandRepository.save(brandEntity);
         brandImageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }

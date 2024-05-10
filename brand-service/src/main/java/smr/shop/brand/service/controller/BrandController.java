@@ -2,6 +2,7 @@ package smr.shop.brand.service.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.brand.service.dto.request.BrandCreateRequest;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/1.0/brands", headers = "application/vnd.api+json")
+@RequestMapping(value = "/api/1.0/brands")
 @Slf4j
 public class BrandController {
 
