@@ -2,8 +2,8 @@ package smr.shop.coupon.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
-import smr.shop.coupon.service.model.valueObject.CouponDiscountType;
-import smr.shop.coupon.service.model.valueObject.CouponType;
+import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
+import smr.shop.coupon.service.model.valueobject.CouponType;
 
 import java.time.ZonedDateTime;
 

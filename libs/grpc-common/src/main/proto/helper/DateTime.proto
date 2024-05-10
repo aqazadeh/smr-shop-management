@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package google.type;
+
+import "google/protobuf/duration.proto";
+
+option cc_enable_arenas = true;
+option go_package = "google.golang.org/genproto/googleapis/type/datetime;datetime";
+option java_multiple_files = true;
+option java_outer_classname = "DateTimeProto";
+option java_package = "com.google.type";
+option objc_class_prefix = "GTP";
+
+message DateTime {
+  int32 year = 1;
+
+  int32 month = 2;
+  int32 day = 3;
+  int32 hours = 4;
+  int32 minutes = 5;
+  int32 seconds = 6;
+  int32 nanos = 7;
+  oneof time_offset {
+    google.protobuf.Duration utc_offset = 8;
+
+    // Time zone.
+    TimeZone time_zone = 9;
+  }
+}
+
+// Represents a time zone from the
+// [IANA Time Zone Database](https://www.iana.org/time-zones).
+message TimeZone {
+  // IANA Time Zone Database time zone, e.g. "America/New_York".
+  string id = 1;
+
+  // Optional. IANA Time Zone Database version number, e.g. "2019a".
+  string version = 2;
+}

@@ -1,6 +1,5 @@
 package smr.shop.cart.service.service;
 
-import smr.shop.cart.service.dto.response.CartItemResponse;
 import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.model.CartEntity;
 import smr.shop.cart.service.model.CartItemEntity;
@@ -17,14 +16,25 @@ import java.util.UUID;
 
 public interface CartService {
 
-    void deleteCart(Long cartId);
-    List<CartResponse> addCoupon(String couponCode);
+    void addProductToCart(Long productId, UUID attributeId);
+
+    CartResponse addCoupon(String couponCode);
+
     List<CartResponse> removeCoupon(String couponCode);
-    void clearCart(Long userId);
-    void deleteCartItem(Long productId);
-    List<CartItemResponse> getAllCartItems();
-    void increase(Long productId);
-    void decrease(Long productId);
-    CartItemEntity findById(UUID cartItemId);
-    CartEntity findById(Long cartId);
+
+    CartResponse removeCoupon();
+
+    void clearCart();
+
+    void deleteCartItem(Long productId, UUID attributeId);
+
+    CartResponse getAllCartItems();
+
+    void increase(Long productId, UUID attributeId);
+
+    void decrease(Long productId, UUID attributeId);
+
+    CartItemEntity findItemById(UUID cartItemId);
+
+    CartEntity findCartById(UUID cartId);
 }
