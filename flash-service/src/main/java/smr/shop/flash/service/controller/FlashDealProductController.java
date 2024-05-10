@@ -2,14 +2,10 @@ package smr.shop.flash.service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import smr.shop.flash.service.dto.request.FlashDealCreateRequest;
 import smr.shop.flash.service.dto.request.FlashDealProductCreateRequest;
 import smr.shop.flash.service.dto.request.FlashDealProductUpdateRequest;
-import smr.shop.flash.service.dto.request.FlashDealUpdateRequest;
 import smr.shop.flash.service.dto.response.FlashDealProductResponse;
-import smr.shop.flash.service.dto.response.FlashDealResponse;
 import smr.shop.flash.service.service.FlashDealProductService;
-import smr.shop.flash.service.service.FlashDealService;
 
 import java.util.List;
 import java.util.UUID;
