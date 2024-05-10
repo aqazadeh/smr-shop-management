@@ -16,6 +16,22 @@ spring:
   application:
     name: brand-service
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091, localhost:9092, localhost:9093
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091, localhost:9092, localhost:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
 
 eureka:
   instance:
