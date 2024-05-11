@@ -29,4 +29,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Modifying
     @Query("update ProductEntity p set p.status = ?1 where p.categoryId = ?2")
     void updateStatusByCategoryId(ProductStatus productStatus, Long categoryId);
+
+    ProductEntity findBySlug(String slug);
 }

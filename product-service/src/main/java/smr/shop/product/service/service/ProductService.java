@@ -37,7 +37,7 @@ public interface ProductService {
     void removeProductImage(Long productId, String imageId);
 
 //   TODO change status do not delete product:
-void deleteProduct(Long productId);
+    void deleteProduct(Long productId);
 
     void deleteProductsByBrand(Long brandId);
 
