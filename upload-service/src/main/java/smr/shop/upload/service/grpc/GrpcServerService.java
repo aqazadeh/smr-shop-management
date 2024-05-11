@@ -1,4 +1,4 @@
-package smr.shop.upload.service.service.grpc;
+package smr.shop.upload.service.grpc;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;

@@ -12,6 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductMessageModel implements BaseMessageModel {
-    private UUID id;
+public class ProductDeleteMessageModel implements BaseMessageModel {
+    private Long id;
 }

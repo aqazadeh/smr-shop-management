@@ -4,17 +4,21 @@ option java_package = "smr.shop.libs.grpc.product";
 option java_multiple_files = true;
 
 
+
 message ProductGrpcRequest {
   int64 productId = 1;
 }
 
 message ProductGrpcResponse {
   int64 id = 1;
+  string slug = 8;
   int64 shopId = 2;
   double price = 3;
   double shippingPrice = 4;
   string name = 5;
   string thumbnail = 6;
+  double discountPrice = 9;
+
   ProductAttributeGrpcResponse  productAttribute = 7;
 }
 
