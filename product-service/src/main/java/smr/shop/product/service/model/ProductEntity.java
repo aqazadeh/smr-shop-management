@@ -49,7 +49,8 @@ public class ProductEntity {
     private Float rating;
 
     @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    @Builder.Default
+    private ProductStatus status = ProductStatus.PENDING;
 
     private ZonedDateTime createdAt;
 

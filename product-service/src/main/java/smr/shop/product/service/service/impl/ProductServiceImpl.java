@@ -1,13 +1,14 @@
 package smr.shop.product.service.service.impl;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import smr.discount.libs.grpc.product.discount.Discount;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
+import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
-import smr.shop.libs.grpc.product.stock.ProductStockGrpcRequest;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 import smr.shop.product.service.dto.messaging.StockCreateMessageModel;
@@ -215,19 +216,28 @@ public class ProductServiceImpl implements ProductService {
         DiscountGrpcResponse discountGrpcResponse = productGrpcClientService.getDiscount(product.getId());
         List<ProductStockGrpcResponse> productStockGrpcResponse = productGrpcClientService.getStock(product.getId());
 
-        ProductResponse productResponse = productServiceMapper.productEntityToProductResponse(product);
-
-        return productResponse;
+        return productServiceMapper.productEntityToProductResponse(product);
     }
 
     @Override
     public ProductResponse getProductBySlug(String slug) {
-        return null;
+
+        ProductEntity product = productRepository.findBySlug(slug);
+
+        return productServiceMapper.productEntityToProductResponse(product);
+
+
     }
 
     @Override
     public List<ProductResponse> getAllProducts(Integer page) {
-        return null;
+
+        Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
+
+        List<ProductEntity> productEntities = productRepository.findAll(pageable).stream().toList();
+
+        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+
     }
 
     public ProductEntity findById(Long productId){
