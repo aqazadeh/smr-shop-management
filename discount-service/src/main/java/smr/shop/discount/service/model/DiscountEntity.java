@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Discount {
+public class DiscountEntity {
     @Id
     private Long id;
 
