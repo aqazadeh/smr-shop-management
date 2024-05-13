@@ -43,5 +43,9 @@
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>smr.shop.libs</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
     </dependencies>
 </project>

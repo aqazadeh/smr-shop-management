@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import smr.shop.ticket.service.dto.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.request.UpdateTicketRequest;
-import smr.shop.ticket.service.dto.response.GetTicketResponse;
+import smr.shop.ticket.service.dto.request.TicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketMapper;
-import smr.shop.ticket.service.model.Ticket;
+import smr.shop.ticket.service.model.valueobject.TicketStatus;
 import smr.shop.ticket.service.repository.TicketRepository;
 import smr.shop.ticket.service.service.TicketService;
 
@@ -24,34 +24,31 @@ public class TicketServiceImpl implements TicketService {
     TicketMapper ticketMapper;
     TicketServiceHelper ticketServiceHelper;
 
-    @Override
-    public GetTicketResponse getById(UUID id) {
-        return ticketMapper.mapToResponse(ticketServiceHelper.getById(id));
-    }
 
     @Override
-    public List<GetTicketResponse> getAll() {
-        return ticketRepository.findAll().stream()
-                .map(ticketMapper::mapToResponse)
-                .toList();
-    }
-
-    @Override
-    public CreateTicketRequest add(CreateTicketRequest request) {
+    public CreateTicketRequest createTicket(CreateTicketRequest request) {
         ticketRepository.save(ticketMapper.mapToTicket(request));
         return request;
     }
 
     @Override
-    public GetTicketResponse update(UUID id, UpdateTicketRequest request) {
-        Ticket ticket = ticketServiceHelper.getById(id);
-        ticketMapper.mapForUpdate(request, ticket);
-        return ticketMapper.mapToResponse(ticket);
+    public TicketResponse getById(UUID id, Integer page) {
+        return null;
     }
 
     @Override
-    public void deleteById(UUID id) {
-        ticketServiceHelper.getById(id);
-        ticketRepository.deleteById(id);
+    public List<TicketResponse> getAllUserTickets(Integer page) {
+        return List.of();
     }
+
+    @Override
+    public void sendMessage(UUID ticketId, TicketMessageRequest request) {
+
+    }
+
+    @Override
+    public void updateTicketStatus(UUID id, TicketStatus status) {
+
+    }
+
 }
