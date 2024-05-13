@@ -11,10 +11,17 @@
 
     <artifactId>kafka</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>smr.shop.libs</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>

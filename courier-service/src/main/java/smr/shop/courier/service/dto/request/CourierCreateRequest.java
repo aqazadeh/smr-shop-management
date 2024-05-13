@@ -8,8 +8,13 @@ import java.util.UUID;
 
 @Value
 public class CourierCreateRequest {
-    @NotBlank Long userId;
-    @NotBlank UUID imageId;
-    @NotBlank @Size(min = 4) String name;
-    @NotBlank String surname;
+    @NotBlank
+    Long userId;
+    @NotBlank
+    UUID imageId;
+    @NotBlank
+    @Size(min = 4)
+    String name;
+    @NotBlank
+    String surname;
 }

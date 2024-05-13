@@ -1,25 +1,42 @@
 package smr.shop.wishlist.service.mapper;
 
 import org.springframework.stereotype.Component;
+import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.grpc.product.ProductGrpcResponse;
+import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
 import smr.shop.wishlist.service.model.WishlistEntity;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
 public class WishlistServiceMapper {
-    public WishlistResponse wishlistEntityToWishlistResponse(WishlistEntity entity){
+    public WishlistResponse wishlistEntityToWishlistResponse(WishlistEntity entity) {
         return WishlistResponse.builder()
                 .id(entity.getId())
-                .userId(entity.getUserId())
-                .productId(entity.getProductId())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
 
-    public List<WishlistResponse> wishlistEntityListToWishlistResponse(List<WishlistEntity> entityList){
-        return entityList.stream().map(this::wishlistEntityToWishlistResponse).toList();
+
+    public WishlistEntity productIdAndUserIdToWishlist(Long productId, Long userId) {
+        return WishlistEntity.builder()
+                .userId(userId)
+                .productId(productId)
+                .createdAt(ZonedDateTime.now(ZoneId.of(ServiceConstants.UTC)))
+                .build();
     }
 
-
+    public WishlistProductResponse productGrpcResponseToWishlistProductResponse(ProductGrpcResponse productGrpcResponse) {
+        return WishlistProductResponse.builder()
+                .id(productGrpcResponse.getId())
+                .name(productGrpcResponse.getName())
+                .slug(productGrpcResponse.getSlug())
+                .thumbnail(productGrpcResponse.getThumbnail())
+                .price(productGrpcResponse.getPrice())
+                .discountPrice(productGrpcResponse.getDiscountPrice())
+                .build();
+    }
 }

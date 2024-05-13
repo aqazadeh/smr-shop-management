@@ -9,9 +9,11 @@ message UploadGrpcRequest {
 }
 
 message UploadGrpcResponse {
-  string url = 1;
+  string id = 1;
+  string url = 2;
 }
 
 service UploadService {
   rpc GetUpload(UploadGrpcRequest) returns (UploadGrpcResponse);
+
 }

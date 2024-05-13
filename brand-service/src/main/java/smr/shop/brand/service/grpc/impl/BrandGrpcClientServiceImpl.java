@@ -9,14 +9,16 @@ import smr.shop.libs.grpc.upload.UploadServiceGrpc;
 
 
 @Service
-public class BrandGrpcClientServiceImpl  implements BrandGrpcClientService {
+public class BrandGrpcClientServiceImpl implements BrandGrpcClientService {
     @GrpcClient("upload-service")
     private UploadServiceGrpc.UploadServiceBlockingStub blockingStub;
 
+    @Override
     public UploadGrpcResponse getImage(String id) {
         UploadGrpcRequest request = UploadGrpcRequest.newBuilder()
                 .setId(id)
                 .build();
         return blockingStub.getUpload(request);
     }
+
 }

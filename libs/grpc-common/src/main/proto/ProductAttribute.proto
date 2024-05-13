@@ -1,0 +1,12 @@
+syntax = "proto3";
+option java_package = "smr.shop.libs.grpc.product.attribute";
+option java_multiple_files = true;
+import "ProductStock.proto";
+
+
+message ProductAttributeGrpcResponse {
+  string id = 1;
+  int64 productId = 2;
+  string name = 3;
+  ProductStockGrpcResponse stock = 4;
+}

@@ -1,8 +1,6 @@
 package smr.shop.product.stock.service.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -17,12 +15,11 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class ProductStock {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private Long productId;
 
-    private UUID attributeId;
+    private String attributeName;
 
     private Integer quantity;
 

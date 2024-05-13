@@ -9,7 +9,6 @@ import smr.shop.coupon.service.model.CouponUsageEntity;
 import smr.shop.coupon.service.repository.CouponUsageRepository;
 import smr.shop.coupon.service.service.CouponUsageService;
 
-
 import java.util.UUID;
 
 
@@ -33,7 +32,7 @@ public class CouponUsageServiceImpl implements CouponUsageService {
     public CouponUsageResponse createCouponUsage(UUID couponId) {
 
 
-        if (couponUsageRepository.findCouponUsageByCouponId(couponId).isPresent()){
+        if (couponUsageRepository.findCouponUsageByCouponId(couponId).isPresent()) {
             throw new CouponUsageException("This coupon already exist", HttpStatus.BAD_REQUEST);
         }
 
@@ -49,6 +48,7 @@ public class CouponUsageServiceImpl implements CouponUsageService {
     public void deleteCouponUsage(UUID couponUsageId) {
         CouponUsageEntity couponUsageEntity = findById(couponUsageId);
         couponUsageRepository.delete(couponUsageEntity);
+        // TODO if need send kafka event
     }
 
     @Override

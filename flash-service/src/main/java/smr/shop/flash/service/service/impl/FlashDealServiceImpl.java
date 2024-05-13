@@ -3,8 +3,9 @@ package smr.shop.flash.service.service.impl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import smr.shop.flash.service.dto.request.FLashDealCreateRequest;
-import smr.shop.flash.service.dto.request.FLashDealUpdateRequest;
+import org.springframework.stereotype.Service;
+import smr.shop.flash.service.dto.request.FlashDealCreateRequest;
+import smr.shop.flash.service.dto.request.FlashDealUpdateRequest;
 import smr.shop.flash.service.dto.response.FlashDealResponse;
 import smr.shop.flash.service.exception.FlashDealException;
 import smr.shop.flash.service.mapper.FlashServiceMapper;
@@ -15,6 +16,7 @@ import smr.shop.libs.common.constant.ServiceConstants;
 
 import java.util.List;
 
+@Service
 public class FlashDealServiceImpl implements FlashDealService {
     private final FlashDealRepository flashDealRepository;
     private final FlashServiceMapper flashServiceMapper;
@@ -26,7 +28,7 @@ public class FlashDealServiceImpl implements FlashDealService {
     }
 
     @Override
-    public FlashDealResponse createDeal(FLashDealCreateRequest request) {
+    public FlashDealResponse createFlashDeal(FlashDealCreateRequest request) {
         //TODO GRPC get image url
         FlashDealEntity flashDealEntity = flashServiceMapper.flashDealCreateRequestToFlashDealEntity(request);
         FlashDealEntity saveEntity = flashDealRepository.save(flashDealEntity);
@@ -34,7 +36,7 @@ public class FlashDealServiceImpl implements FlashDealService {
     }
 
     @Override
-    public FlashDealResponse updateDeal(Long id, FLashDealUpdateRequest request) {
+    public FlashDealResponse updateFlashDeal(Long id, FlashDealUpdateRequest request) {
         FlashDealEntity flashDeal = findById(id);
         FlashDealEntity flashDealEntity = flashServiceMapper.flashDealUpdateRequestToFlashDealEntity(request, flashDeal);
         FlashDealEntity saveEntity = flashDealRepository.save(flashDealEntity);
@@ -43,21 +45,21 @@ public class FlashDealServiceImpl implements FlashDealService {
     }
 
     @Override
-    public void deleteDeal(Long id) {
+    public void deleteFlashDeal(Long id) {
         FlashDealEntity flashDeal = findById(id);
         // TODO if need send kafka event
         flashDealRepository.delete(flashDeal);
     }
 
     @Override
-    public FlashDealResponse getByIdDeal(Long id) {
+    public FlashDealResponse getFlashDealById(Long id) {
         FlashDealEntity flashDealEntity = findById(id);
         //TODO GRPC GET IMAGE ID
         return flashServiceMapper.flashDealEntityToFlashDealResponse(flashDealEntity);
     }
 
     @Override
-    public List<FlashDealResponse> getAllDeals(Integer page) {
+    public List<FlashDealResponse> getAllFlashDeals(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<FlashDealEntity> flashDealEntityList = flashDealRepository.findAll(pageable).stream().toList();
         // TODO GET IMAGES GRPC
