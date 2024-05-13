@@ -1,9 +1,9 @@
 package smr.shop.wishlist.service.dto.response;
 
-import lombok.*;
-import org.checkerframework.checker.units.qual.N;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

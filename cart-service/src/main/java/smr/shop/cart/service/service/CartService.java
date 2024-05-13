@@ -4,7 +4,6 @@ import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.model.CartEntity;
 import smr.shop.cart.service.model.CartItemEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,8 +18,6 @@ public interface CartService {
     void addProductToCart(Long productId, UUID attributeId);
 
     CartResponse addCoupon(String couponCode);
-
-    List<CartResponse> removeCoupon(String couponCode);
 
     CartResponse removeCoupon();
 

@@ -12,6 +12,7 @@ public class GrpcServerService extends UploadServiceGrpc.UploadServiceImplBase {
     @Override
     public void getUpload(UploadGrpcRequest request, StreamObserver<UploadGrpcResponse> responseObserver) {
         UploadGrpcResponse response = UploadGrpcResponse.newBuilder()
+                .setId("asdasdas")
                 .setUrl("sdhajhkfb").build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();

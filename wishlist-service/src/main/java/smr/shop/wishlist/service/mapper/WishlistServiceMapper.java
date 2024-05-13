@@ -9,7 +9,6 @@ import smr.shop.wishlist.service.model.WishlistEntity;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Component
 public class WishlistServiceMapper {

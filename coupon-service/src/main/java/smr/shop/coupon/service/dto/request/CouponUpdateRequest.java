@@ -5,6 +5,7 @@ import lombok.Value;
 import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
 import smr.shop.coupon.service.model.valueobject.CouponType;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 /**
@@ -30,13 +31,13 @@ public class CouponUpdateRequest {
     CouponDiscountType discountType;
 
     @NotBlank
-    Double amount;
+    BigDecimal amount;
 
     @NotBlank
-    Float percentage;
+    short percentage;
 
     @NotBlank
-    Double maxDiscountPrice;
+    BigDecimal maxDiscountPrice;
 
     @NotBlank
     ZonedDateTime endDate;

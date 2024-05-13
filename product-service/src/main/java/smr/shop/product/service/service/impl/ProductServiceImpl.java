@@ -12,12 +12,12 @@ import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 import smr.shop.product.service.dto.messaging.StockCreateMessageModel;
-import smr.shop.product.service.exception.ProductException;
-import smr.shop.product.service.grpc.ProductGrpcClientService;
-import smr.shop.product.service.mapper.ProductServiceMapper;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
 import smr.shop.product.service.dto.response.ProductResponse;
+import smr.shop.product.service.exception.ProductException;
+import smr.shop.product.service.grpc.ProductGrpcClientService;
+import smr.shop.product.service.mapper.ProductServiceMapper;
 import smr.shop.product.service.messaging.ProductStockCreateMessagePublisher;
 import smr.shop.product.service.model.ProductEntity;
 import smr.shop.product.service.model.valueobject.ProductStatus;
@@ -25,7 +25,6 @@ import smr.shop.product.service.repository.ProductRepository;
 import smr.shop.product.service.service.ProductService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Author: Ali Gadashov
