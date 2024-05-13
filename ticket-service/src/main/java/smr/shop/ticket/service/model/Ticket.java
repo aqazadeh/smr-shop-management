@@ -1,8 +1,12 @@
 package smr.shop.ticket.service.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 
 import java.time.ZonedDateTime;
@@ -14,18 +18,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Ticket {
     @Id
-    private UUID id;
+    UUID id;
 
-    private Long userId;
+    Long userId;
 
-    private String subject;
+    String subject;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    TicketStatus ticketStatus = TicketStatus.ACTIVE;
+    @CreationTimestamp
+    ZonedDateTime createdAt;
 
-    private TicketStatus ticketStatus;
-
-    private ZonedDateTime createdAt;
-
-    private ZonedDateTime updatedAt;
-
+    ZonedDateTime updatedAt;
 }
