@@ -15,6 +15,9 @@ import smr.shop.delivery.service.repository.DeliveryRepository;
 import smr.shop.delivery.service.service.DeliveryService;
 import smr.shop.libs.common.constant.ServiceConstants;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +35,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     public DeliveryResponse createDelivery(DeliveryCreateRequest request) {
         Delivery deliveryResponse = deliveryMapper.toDeliveryResponse(request);
         deliveryResponse = deliveryRepository.save(deliveryResponse);
+        deliveryResponse.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        deliveryResponse.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return deliveryMapper.toDeliveryResponse(deliveryResponse);
     }
 
@@ -40,12 +45,14 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery = findById(id);
         Delivery updateDelivery = deliveryMapper.toUpdateDelivery(request, delivery);
         delivery = deliveryRepository.save(updateDelivery);
+        delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return deliveryMapper.toDeliveryResponse(delivery);
     }
 
     @Override
     public void deleteDelivery(Long id) {
         Delivery delivery = findById(id);
+        delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         deliveryRepository.delete(delivery);
     }
 
@@ -66,6 +73,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery = findById(id);
         delivery.setStatus(request.getStatus());
         delivery = deliveryRepository.save(delivery);
+        delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return deliveryMapper.toDeliveryResponse(delivery);
     }
 

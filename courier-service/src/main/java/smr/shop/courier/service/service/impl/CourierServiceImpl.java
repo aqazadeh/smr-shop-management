@@ -15,6 +15,9 @@ import smr.shop.courier.service.repository.CourierRepository;
 import smr.shop.courier.service.service.CourierService;
 import smr.shop.libs.common.constant.ServiceConstants;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -30,8 +33,10 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     public CourierResponse createCourier(CourierCreateRequest request) {
-        Courier courier = courierMapper.toCourierResponse(request);
+        Courier courier = courierMapper.toCourier(request);
         courier = courierRepository.save(courier);
+        courier.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        courier.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return courierMapper.toCourierResponse(courier);
     }
 
@@ -40,12 +45,14 @@ public class CourierServiceImpl implements CourierService {
         Courier courier = findById(id);
         Courier updateCourier = courierMapper.toUpdateCourier(request, courier);
         courier = courierRepository.save(updateCourier);
+        courier.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return courierMapper.toCourierResponse(courier);
     }
 
     @Override
     public void deleteCourier(Long id) {
         Courier courier = findById(id);
+        courier.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierRepository.delete(courier);
     }
 
@@ -66,6 +73,7 @@ public class CourierServiceImpl implements CourierService {
         Courier courier = findById(id);
         courier.setActiveType(request.getStatus());
         courier = courierRepository.save(courier);
+        courier.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         return courierMapper.toCourierResponse(courier);
     }
 

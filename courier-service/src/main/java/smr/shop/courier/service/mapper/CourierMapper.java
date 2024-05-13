@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Component
 public class CourierMapper {
-    public Courier toCourierResponse(CourierCreateRequest request) {
+    public Courier toCourier(CourierCreateRequest request) {
         // check image id is exists
         Courier.CourierBuilder builder = Courier.builder();
         builder.userId(request.getUserId());
