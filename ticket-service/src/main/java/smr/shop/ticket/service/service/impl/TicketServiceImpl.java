@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.request.TicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketMessageResponse;
 import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketMapper;
@@ -32,8 +33,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketResponse getById(UUID id, Integer page) {
-        return null;
+    public List<TicketMessageResponse> getById(UUID ticketId, Integer page) {
+        return List.of();
     }
 
     @Override
@@ -47,8 +48,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void updateTicketStatus(UUID id, TicketStatus status) {
+    public void updateTicketStatus(UUID ticketId, TicketStatus status) {
 
     }
+
 
 }
