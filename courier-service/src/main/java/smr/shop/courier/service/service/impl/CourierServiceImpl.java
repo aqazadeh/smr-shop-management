@@ -30,7 +30,7 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     public CourierResponse createCourier(CourierCreateRequest request) {
-        Courier courier = courierMapper.toCourierResponse(request);
+        Courier courier = courierMapper.toCourier(request);
         courier = courierRepository.save(courier);
         return courierMapper.toCourierResponse(courier);
     }
