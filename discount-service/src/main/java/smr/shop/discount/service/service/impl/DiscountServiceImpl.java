@@ -27,7 +27,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public DiscountResponse updateDiscount(Long discountId, DiscountUpdateRequest request) {
-        DiscountEntity discountEntity=
         return null;
     }
 
