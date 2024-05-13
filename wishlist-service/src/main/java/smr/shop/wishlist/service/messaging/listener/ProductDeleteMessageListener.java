@@ -7,7 +7,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.MessagingConstants;
-import smr.shop.libs.common.dto.message.BrandDeleteMessageModel;
 import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 import smr.shop.wishlist.service.service.WishlistService;

@@ -20,8 +20,6 @@ public interface CartService {
 
     CartResponse addCoupon(String couponCode);
 
-    List<CartResponse> removeCoupon(String couponCode);
-
     CartResponse removeCoupon();
 
     void clearCart();
