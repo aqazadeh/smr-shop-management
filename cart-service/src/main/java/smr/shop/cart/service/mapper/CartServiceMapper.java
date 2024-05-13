@@ -14,11 +14,7 @@ import smr.shop.cart.service.model.CartItemEntity;
 public class CartServiceMapper {
     public CartItemResponse cartItemEntityToCartItemResponse(CartItemEntity cartItemEntity) {
         return CartItemResponse.builder()
-                .id(cartItemEntity.getId())
-                .cartId(cartItemEntity.getCartId())
-                .userId(cartItemEntity.getUserId())
                 .productId(cartItemEntity.getProductId())
-                .attributeId(cartItemEntity.getAttributeId())
                 .quantity(cartItemEntity.getQuantity())
                 .build();
     }
