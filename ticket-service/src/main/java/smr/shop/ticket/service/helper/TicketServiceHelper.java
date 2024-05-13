@@ -8,8 +8,6 @@ import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.repository.TicketRepository;
 
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
@@ -17,10 +15,6 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class TicketServiceHelper {
     TicketRepository ticketRepository;
-
-    public String dateToString(ZonedDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-    }
 
     public Ticket getById(UUID id) {
         return ticketRepository.findById(id).orElseThrow(() ->
