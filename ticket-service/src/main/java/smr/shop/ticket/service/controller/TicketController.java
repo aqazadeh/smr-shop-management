@@ -6,8 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
-import smr.shop.ticket.service.dto.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
+import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
+import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.ticketMessage.response.GetTicketMessageResponse;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 import smr.shop.ticket.service.service.TicketService;
 
@@ -22,7 +24,8 @@ public class TicketController {
     TicketService ticketService;
 
     @GetMapping("/{id}")
-    public TicketResponse getById(@PathVariable UUID id, @RequestParam(value = "page", defaultValue = "0") Integer page) {
+    public List<GetTicketMessageResponse> getById(@PathVariable UUID id,
+                                                  @RequestParam(value = "page", defaultValue = "0") Integer page) {
         return ticketService.getById(id, page);
     }
 
@@ -39,10 +42,12 @@ public class TicketController {
     @PutMapping("/update/{id}/")
     public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID id, @RequestBody TicketStatus ticketstatus) {
         ticketService.updateTicketStatus(id, ticketstatus);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("updated success")
-                .build();
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(EmptyResponse.builder().message("updated success").build());
     }
 
+    @PostMapping("/send-message/{ticketId}")
+    public void sendMessage(@PathVariable UUID ticketId,
+                            @RequestBody CreateTicketMessageRequest request) {
+        ticketService.sendMessage(ticketId, request);
+    }
 }

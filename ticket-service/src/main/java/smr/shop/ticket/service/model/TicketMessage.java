@@ -14,18 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class TicketMessage {
-
     @Id
     private UUID id;
-
     private Long userId;
-
     private UUID ticketId;
-
     private String message;
-
     private ZonedDateTime createdAt;
-
     private ZonedDateTime updatedAt;
-
 }
