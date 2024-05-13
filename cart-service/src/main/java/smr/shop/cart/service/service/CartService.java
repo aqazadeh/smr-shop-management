@@ -4,7 +4,6 @@ import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.model.CartEntity;
 import smr.shop.cart.service.model.CartItemEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
