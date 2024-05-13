@@ -15,6 +15,7 @@
         <module name="flash-service" />
         <module name="product-service" />
         <module name="shop-service" />
+        <module name="discountEntity-service" />
         <module name="product-stock-service" />
         <module name="wishlist-service" />
         <module name="courier-service" />
@@ -25,7 +26,6 @@
         <module name="auth-service" />
         <module name="payment-service" />
         <module name="common" />
-        <module name="discount-service" />
         <module name="gateway-service" />
         <module name="kafka" />
         <module name="product-review-service" />
@@ -34,6 +34,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="discount-service" target="17" />
       <module name="infrastructure" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>
@@ -49,6 +50,7 @@
       <module name="courier-service" options="-parameters" />
       <module name="delivery-service" options="-parameters" />
       <module name="discount-service" options="-parameters" />
+      <module name="discountEntity-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="flash-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />

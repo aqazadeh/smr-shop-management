@@ -40,7 +40,7 @@
         <module>product-review-service</module>
         <module>wishlist-service</module>
         <module>courier-service</module>
-        <module>discount-service</module>
+        <module>discountEntity-service</module>
         <module>brand-service</module>
         <module>libs</module>
         <module>cart-service</module>
