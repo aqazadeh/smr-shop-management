@@ -8,33 +8,33 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="delivery-service" />
+        <module name="shop-service" />
+        <module name="discountEntity-service" />
+        <module name="product-stock-service" />
+        <module name="courier-service" />
+        <module name="discovery-service" />
+        <module name="notification-service" />
+        <module name="grpc-common" />
+        <module name="auth-service" />
+        <module name="payment-service" />
+        <module name="common" />
+        <module name="discount-service" />
+        <module name="upload-service" />
         <module name="brand-service" />
         <module name="cart-service" />
         <module name="config-service" />
         <module name="coupon-service" />
         <module name="flash-service" />
         <module name="product-service" />
-        <module name="shop-service" />
-        <module name="discountEntity-service" />
-        <module name="product-stock-service" />
         <module name="wishlist-service" />
-        <module name="courier-service" />
-        <module name="discovery-service" />
-        <module name="notification-service" />
-        <module name="grpc-common" />
         <module name="ticket-service" />
-        <module name="auth-service" />
-        <module name="payment-service" />
-        <module name="common" />
         <module name="gateway-service" />
         <module name="kafka" />
         <module name="product-review-service" />
-        <module name="upload-service" />
         <module name="order-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="discount-service" target="17" />
       <module name="infrastructure" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>

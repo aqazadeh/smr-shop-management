@@ -26,6 +26,8 @@ public class Shop {
 
     private String slug;
 
+    private String description;
+
     private String logo;
 
     private String phone;
