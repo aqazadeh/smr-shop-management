@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.request.UpdateTicketRequest;
-import smr.shop.ticket.service.dto.response.GetTicketResponse;
+import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketMapper;
 import smr.shop.ticket.service.model.Ticket;
@@ -21,8 +21,8 @@ public class TicketMapperImpl implements TicketMapper {
     TicketServiceHelper ticketServiceHelper;
 
     @Override
-    public GetTicketResponse mapToResponse(Ticket ticket) {
-        return GetTicketResponse.builder()
+    public TicketResponse mapToResponse(Ticket ticket) {
+        return TicketResponse.builder()
                 .ticketStatus(ticket.getTicketStatus().name())
                 .subject(ticket.getSubject())
                 .createdAt(ticketServiceHelper.dateToString(ticket.getCreatedAt()))

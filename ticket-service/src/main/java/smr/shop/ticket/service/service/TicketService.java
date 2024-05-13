@@ -1,20 +1,22 @@
 package smr.shop.ticket.service.service;
 
 import smr.shop.ticket.service.dto.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.request.UpdateTicketRequest;
-import smr.shop.ticket.service.dto.response.GetTicketResponse;
+import smr.shop.ticket.service.dto.request.TicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.model.valueobject.TicketStatus;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TicketService {
-    GetTicketResponse getById(UUID id);
+    CreateTicketRequest createTicket(CreateTicketRequest request);
 
-    List<GetTicketResponse> getAll();
+    TicketResponse getById(UUID id, Integer page); // check user id
 
-    CreateTicketRequest add(CreateTicketRequest request);
+    List<TicketResponse> getAllUserTickets(Integer page); //check userId
 
-    GetTicketResponse update(UUID id, UpdateTicketRequest request);
+    void sendMessage(UUID ticketId, TicketMessageRequest request); //check ticket is valid user
 
-    void deleteById(UUID id);
+    void updateTicketStatus(UUID id, TicketStatus status);
+
 }
