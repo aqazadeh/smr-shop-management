@@ -11,8 +11,7 @@ import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketMapper;
 import smr.shop.ticket.service.model.Ticket;
 
-
-import static smr.shop.ticket.service.model.valueobject.TicketStatus.*;
+import static smr.shop.ticket.service.model.valueobject.TicketStatus.ACTIVE;
 
 @Service
 @RequiredArgsConstructor

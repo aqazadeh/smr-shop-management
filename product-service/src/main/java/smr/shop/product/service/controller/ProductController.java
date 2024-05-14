@@ -28,49 +28,15 @@ public class ProductController {
         this.productService = productService;
     }
 
+//    ---------------------------------- POST ----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createProduct(@RequestBody ProductCreateRequest request){
         productService.createProduct(request);
         EmptyResponse response = EmptyResponse.builder().message("successfully created product").build();
         return ResponseEntity.ok(response);
-    };
-
-    @PatchMapping("/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateProduct(@PathVariable Long productId,
-                                                       @RequestBody ProductUpdateRequest request){
-        productService.updateProduct(productId, request);
-        EmptyResponse response = EmptyResponse.builder().message("successfully updated product productId:" + productId).build();
-        return ResponseEntity.ok(response);
-    };
-    @PatchMapping("/{productId}/category/{categoryId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse>  updateProductCategory(@PathVariable Long productId,
-                                                                @PathVariable Long categoryId){
-        productService.updateProductCategory(productId, categoryId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully updated product with category productId:" + productId).build();
-        return ResponseEntity.ok(response);
-    };
-
-    @PatchMapping("/{productId}/brand/{brandId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateProductBrand(@PathVariable Long productId,
-                                                            @PathVariable Long brandId){
-        productService.updateProductBrand(productId, brandId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully updated product with brand productId:" + productId).build();
-        return ResponseEntity.ok(response);
-    };
-
-    @PatchMapping("/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateProductStatus(@PathVariable Long productId,
-                                                             @RequestBody ProductStatus productStatus){
-        productService.updateProductStatus(productId, productStatus);
-        EmptyResponse response = EmptyResponse.builder().message("successfully updated product status productId:" + productId).build();
-        return ResponseEntity.ok(response);
-
-    };
+    }
 
     @PostMapping("/{productId}/thumbnail/{imageId}")
     @ResponseStatus(HttpStatus.OK)
@@ -81,14 +47,8 @@ public class ProductController {
         return ResponseEntity.ok(response);
 
 
-    };
-    @DeleteMapping("/{productId}/thumbnail")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> removeProductThumbNail(@PathVariable Long productId){
-        productService.removeProductThumbNail(productId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully removed thumbnail from product productId:" + productId).build();
-        return ResponseEntity.ok(response);
-    };
+    }
+
     @PostMapping("/{productId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmptyResponse> addProductImage(@PathVariable Long productId,
@@ -97,7 +57,57 @@ public class ProductController {
         productService.addProductImage(productId,imageId);
         EmptyResponse response = EmptyResponse.builder().message("successfully added image to product productId:" + productId).build();
         return ResponseEntity.ok(response);
-    };
+    }
+
+//    ---------------------------------- PATCH ----------------------------------
+
+    @PatchMapping("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProduct(@PathVariable Long productId,
+                                                       @RequestBody ProductUpdateRequest request){
+        productService.updateProduct(productId, request);
+        EmptyResponse response = EmptyResponse.builder().message("successfully updated product productId:" + productId).build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{productId}/category/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse>  updateProductCategory(@PathVariable Long productId,
+                                                                @PathVariable Long categoryId){
+        productService.updateProductCategory(productId, categoryId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully updated product with category productId:" + productId).build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{productId}/brand/{brandId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductBrand(@PathVariable Long productId,
+                                                            @PathVariable Long brandId){
+        productService.updateProductBrand(productId, brandId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully updated product with brand productId:" + productId).build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductStatus(@PathVariable Long productId,
+                                                             @RequestBody ProductStatus productStatus){
+        productService.updateProductStatus(productId, productStatus);
+        EmptyResponse response = EmptyResponse.builder().message("successfully updated product status productId:" + productId).build();
+        return ResponseEntity.ok(response);
+
+    }
+
+//    ---------------------------------- DELETE ----------------------------------
+
+    @DeleteMapping("/{productId}/thumbnail")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> removeProductThumbNail(@PathVariable Long productId){
+        productService.removeProductThumbNail(productId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully removed thumbnail from product productId:" + productId).build();
+        return ResponseEntity.ok(response);
+    }
+
 
     @DeleteMapping("/{productId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
@@ -106,7 +116,7 @@ public class ProductController {
         productService.removeProductImage(productId,imageId);
         EmptyResponse response = EmptyResponse.builder().message("successfully removed thumbnail from product productId:" + productId).build();
         return ResponseEntity.ok(response);
-    };
+    }
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
@@ -114,7 +124,33 @@ public class ProductController {
         productService.deleteProduct(productId);
         EmptyResponse response = EmptyResponse.builder().message("successfully deleted product productId:" + productId).build();
         return ResponseEntity.ok(response);
-    };
+    }
+
+    @DeleteMapping("/brand/{brandId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> deleteProductsByBrand(@PathVariable Long brandId){
+        productService.deleteProductsByBrand(brandId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by brand id: " + brandId).build();
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/shop/{shopId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> deleteProductsByShop(@PathVariable Long shopId){
+        productService.deleteProductsByShop(shopId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by shop id: " + shopId).build();
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/category/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> deleteProductsByCategory(@PathVariable Long categoryId){
+        productService.deleteProductsByCategory(categoryId);
+        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by category id: " + categoryId).build();
+        return ResponseEntity.ok(response);
+    }
+
+//    ---------------------------------- GET ----------------------------------
 
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
@@ -122,19 +158,19 @@ public class ProductController {
         ProductResponse productById = productService.getProductById(productId);
         return ResponseEntity.ok(productById);
 
-    };
+    }
 
     @GetMapping("/slug/{slug}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProductResponse> getProductBySlug(@PathVariable String slug){
         ProductResponse productById = productService.getProductBySlug(slug);
         return ResponseEntity.ok(productById);
-    };
+    }
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<ProductResponse>> getAllProducts(@RequestParam Integer page){
         List<ProductResponse> productProducts = productService.getAllProducts(page);
         return ResponseEntity.ok(productProducts);
-    };
+    }
 
 }
