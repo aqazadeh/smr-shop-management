@@ -1,6 +1,6 @@
 package smr.shop.ticket.service.dto.ticketMessage.request;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,6 @@ import java.util.UUID;
 public class CreateTicketMessageRequest {
     @NotNull(message = "Ticket ID is required!")
     private UUID ticketId;
-    @NotEmpty(message = "Message is required!")
+    @NotBlank(message = "Message is required!")
     private String message;
 }

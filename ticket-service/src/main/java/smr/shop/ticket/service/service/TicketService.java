@@ -11,13 +11,8 @@ import java.util.UUID;
 
 public interface TicketService {
     CreateTicketRequest createTicket(CreateTicketRequest request);
-
     List<GetTicketMessageResponse> getById(UUID ticketId, Integer page); // check user id
-
     List<TicketResponse> getAllUserTickets(Integer page); //check userId
-
     void sendMessage(UUID ticketId, CreateTicketMessageRequest request); //check ticket is valid user
-
     void updateTicketStatus(UUID ticketId, TicketStatus status);
-
 }
