@@ -19,9 +19,9 @@ public class DeliveryMapper {
     }
 
     public Delivery toUpdateDelivery(DeliveryUpdateRequest request, Delivery delivery) {
-        delivery.setCourierId(request.getCourierId());
-        delivery.setOrderId(request.getOrderId());
-        delivery.setStatus(request.getStatus());
+        if (request.getCourierId() != null) delivery.setCourierId(request.getCourierId());
+        if (request.getOrderId() != null) delivery.setOrderId(request.getOrderId());
+        if (request.getStatus() != null) delivery.setStatus(request.getStatus());
         return delivery;
     }
 
