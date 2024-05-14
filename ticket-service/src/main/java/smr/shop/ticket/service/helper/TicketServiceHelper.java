@@ -1,20 +1,17 @@
 package smr.shop.ticket.service.helper;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.repository.TicketRepository;
 
 
 import java.util.UUID;
 
-@Service
+@Component
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class TicketServiceHelper {
-    TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
 
     public Ticket getById(UUID id) {
         return ticketRepository.findById(id).orElseThrow(() ->
