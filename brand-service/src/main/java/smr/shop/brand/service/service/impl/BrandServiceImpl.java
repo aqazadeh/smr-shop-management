@@ -11,7 +11,7 @@ import smr.shop.brand.service.exception.BrandException;
 import smr.shop.brand.service.grpc.BrandGrpcClientService;
 import smr.shop.brand.service.mapper.BrandServiceMapper;
 import smr.shop.brand.service.messaging.publisher.BrandDeleteMessagePublisher;
-import smr.shop.brand.service.messaging.publisher.BrandImageDeleteMessagePublisher;
+import smr.shop.brand.service.messaging.publisher.ImageDeleteMessagePublisher;
 import smr.shop.brand.service.model.BrandEntity;
 import smr.shop.brand.service.repository.BrandRepository;
 import smr.shop.brand.service.service.BrandService;
@@ -31,17 +31,17 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
     private final BrandServiceMapper brandServiceMapper;
     private final BrandGrpcClientService brandGrpcClientService;
-    private final BrandImageDeleteMessagePublisher brandImageDeleteMessagePublisher;
+    private final ImageDeleteMessagePublisher imageDeleteMessagePublisher;
     private final BrandDeleteMessagePublisher brandDeleteMessagePublisher;
 
     public BrandServiceImpl(BrandRepository brandRepository,
                             BrandServiceMapper brandServiceMapper,
                             BrandGrpcClientService brandGrpcClientService,
-                            BrandImageDeleteMessagePublisher brandImageDeleteMessagePublisher, BrandDeleteMessagePublisher brandDeleteMessagePublisher) {
+                            ImageDeleteMessagePublisher imageDeleteMessagePublisher, BrandDeleteMessagePublisher brandDeleteMessagePublisher) {
         this.brandRepository = brandRepository;
         this.brandServiceMapper = brandServiceMapper;
         this.brandGrpcClientService = brandGrpcClientService;
-        this.brandImageDeleteMessagePublisher = brandImageDeleteMessagePublisher;
+        this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
         this.brandDeleteMessagePublisher = brandDeleteMessagePublisher;
     }
 
@@ -93,7 +93,7 @@ public class BrandServiceImpl implements BrandService {
         brandEntity.setImageId(image.getId());
         brandEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         brandRepository.save(brandEntity);
-        brandImageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
+        imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class BrandServiceImpl implements BrandService {
         brandEntity.setImageId("");
         brandEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         brandRepository.save(brandEntity);
-        brandImageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
+        imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }
 
     @Override

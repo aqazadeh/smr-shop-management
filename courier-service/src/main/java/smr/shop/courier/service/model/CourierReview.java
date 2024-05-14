@@ -27,7 +27,7 @@ public class CourierReview {
 
     @ManyToOne
     @JoinColumn(name = "courier_id")
-    private Courier courier;
+    private CourierEntity courierEntity;
 
     private Byte reviewScore;
 

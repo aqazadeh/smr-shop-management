@@ -9,16 +9,16 @@ import smr.shop.libs.common.messaging.publisher.MessagePublisher;
 import java.util.UUID;
 
 @Component
-public class BrandImageDeleteMessagePublisher implements MessagePublisher<BrandImageDeleteMessageModel> {
+public class ImageDeleteMessagePublisher implements MessagePublisher<BrandImageDeleteMessageModel> {
 
     private final KafkaTemplate<String, BrandImageDeleteMessageModel> kafkaTemplate;
 
-    public BrandImageDeleteMessagePublisher(KafkaTemplate<String, BrandImageDeleteMessageModel> kafkaTemplate) {
+    public ImageDeleteMessagePublisher(KafkaTemplate<String, BrandImageDeleteMessageModel> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
     public void publish(BrandImageDeleteMessageModel messageModel) {
-        kafkaTemplate.send(MessagingConstants.brandImageDeleteTopic, UUID.randomUUID().toString(), messageModel);
+        kafkaTemplate.send(MessagingConstants.IMAGE_DELETE_TOPIC, UUID.randomUUID().toString(), messageModel);
     }
 }

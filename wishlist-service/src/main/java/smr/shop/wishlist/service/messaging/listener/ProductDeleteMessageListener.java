@@ -22,7 +22,7 @@ public class ProductDeleteMessageListener implements MessageListener<ProductDele
     }
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC }, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP_ID)
+    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC }, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP)
     public void receive(@Payload ProductDeleteMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
@@ -33,6 +33,6 @@ public class ProductDeleteMessageListener implements MessageListener<ProductDele
                 partition.toString(),
                 offset.toString());
 
-        wishlistService.deleteProductsInWishlist(message.getId());
+        wishlistService.deleteProductsInWishlist(message);
     }
 }

@@ -4,41 +4,40 @@ import org.springframework.stereotype.Component;
 import smr.shop.courier.service.dto.request.CourierCreateRequest;
 import smr.shop.courier.service.dto.request.CourierUpdateRequest;
 import smr.shop.courier.service.dto.response.CourierResponse;
-import smr.shop.courier.service.model.Courier;
+import smr.shop.courier.service.model.CourierEntity;
 
 import java.util.UUID;
 
 @Component
 public class CourierMapper {
-    public Courier toCourier(CourierCreateRequest request) {
-        // check image id is exists
-        Courier.CourierBuilder builder = Courier.builder();
-        builder.userId(request.getUserId());
-        builder.imageId(UUID.randomUUID());
-        builder.name(request.getName());
-        builder.surname(request.getSurname());
-        return builder.build();
+    public CourierEntity courierCreateRequestToCourier(CourierCreateRequest request) {
+        return CourierEntity.builder()
+                .userId(request.getUserId())
+                .imageId(UUID.randomUUID())
+                .name(request.getName())
+                .surname(request.getSurname())
+                .build();
     }
 
-    public Courier toUpdateCourier(CourierUpdateRequest request, Courier courier) {
-        courier.setName(request.getName());
-        courier.setSurname(request.getSurname());
-        courier.setRating(request.getRating());
-        courier.setActiveType(request.getActiveType());
-        courier.setIsAccepted(request.getIsAccepted());
-        return courier;
+    public CourierEntity courierUpdateRequestToUpdateCourier(CourierUpdateRequest request, CourierEntity courierEntity) {
+        courierEntity.setName(request.getName());
+        courierEntity.setSurname(request.getSurname());
+        courierEntity.setRating(request.getRating());
+        courierEntity.setActiveType(request.getActiveType());
+        courierEntity.setIsAccepted(request.getIsAccepted());
+        return courierEntity;
     }
 
-    public CourierResponse toCourierResponse(Courier courier) {
+    public CourierResponse courierEntitytoCourierResponse(CourierEntity courierEntity) {
         return CourierResponse.builder()
-                .id(courier.getId())
-                .userId(courier.getUserId())
-                .imageId(courier.getImageId())
-                .name(courier.getName())
-                .surname(courier.getSurname())
-                .rating(courier.getRating())
-                .activeType(courier.getActiveType())
-                .isAccepted(courier.getIsAccepted())
+                .id(courierEntity.getId())
+                .userId(courierEntity.getUserId())
+                .imageId(courierEntity.getImageId())
+                .name(courierEntity.getName())
+                .surname(courierEntity.getSurname())
+                .rating(courierEntity.getRating())
+                .activeType(courierEntity.getActiveType())
+                .isAccepted(courierEntity.getIsAccepted())
                 .build();
     }
 }

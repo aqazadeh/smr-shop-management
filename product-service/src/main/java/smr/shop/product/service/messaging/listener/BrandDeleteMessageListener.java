@@ -24,8 +24,8 @@ public class BrandDeleteMessageListener implements MessageListener<BrandDeleteMe
 
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.brandDeleteTopic},
-            groupId = MessagingConstants.brandDeleteGroupId)
+    @KafkaListener(topics = {MessagingConstants.BRAND_DELETE_TOPIC},
+            groupId = MessagingConstants.PRODUCT_BRAND_DELETE_GROUP)
     public void receive(@Payload BrandDeleteMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

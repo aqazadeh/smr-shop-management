@@ -19,6 +19,6 @@ public class BrandDeleteMessagePublisher implements MessagePublisher<BrandDelete
 
     @Override
     public void publish(BrandDeleteMessageModel messageModel) {
-        kafkaTemplate.send(MessagingConstants.brandDeleteTopic, UUID.randomUUID().toString(), messageModel);
+        kafkaTemplate.send(MessagingConstants.BRAND_DELETE_TOPIC, UUID.randomUUID().toString(), messageModel);
     }
 }

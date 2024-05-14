@@ -4,7 +4,7 @@ import smr.shop.courier.service.dto.request.CourierCreateRequest;
 import smr.shop.courier.service.dto.request.CourierUpdateRequest;
 import smr.shop.courier.service.dto.request.UpdateCourierActiveTypeRequest;
 import smr.shop.courier.service.dto.response.CourierResponse;
-import smr.shop.courier.service.model.Courier;
+import smr.shop.courier.service.model.CourierEntity;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public interface CourierService {
 
     CourierResponse updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request);
 
-    Courier findById(Long id);
+    CourierEntity findById(Long id);
 }
