@@ -18,4 +18,5 @@ public class ProductShopResponse {
     String shopName;
 
     String shopThumbNail;
+
 }

@@ -21,11 +21,10 @@ public class CourierMapper {
     }
 
     public Courier toUpdateCourier(CourierUpdateRequest request, Courier courier) {
-        courier.setName(request.getName());
-        courier.setSurname(request.getSurname());
-        courier.setRating(request.getRating());
-        courier.setActiveType(request.getActiveType());
-        courier.setIsAccepted(request.getIsAccepted());
+        if (request.getName() != null) courier.setName(request.getName());
+        if (request.getSurname() != null) courier.setSurname(request.getSurname());
+        if (request.getRating() != null) courier.setRating(request.getRating());
+        if (request.getIsAccepted() != null) courier.setIsAccepted(request.getIsAccepted());
         return courier;
     }
 

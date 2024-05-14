@@ -17,9 +17,13 @@ public class CartItemEntity {
     @Id
     private UUID id;
 
+    private UUID cartId;
+
+    private Long userId;
+
     private Long productId;
 
-    private UUID attributeId;
+    private UUID stockId;
 
     private Integer quantity;
 

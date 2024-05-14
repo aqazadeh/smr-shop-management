@@ -41,6 +41,8 @@ public interface ProductService {
 
     void deleteProductsByBrand(Long brandId);
 
+    void deleteProductsByShop(Long shopId);
+
     void deleteProductsByCategory(Long categoryId);
 
     ProductResponse getProductById(Long productId);
@@ -48,5 +50,4 @@ public interface ProductService {
     ProductResponse getProductBySlug(String slug);
 
     List<ProductResponse> getAllProducts(Integer page);
-
 }

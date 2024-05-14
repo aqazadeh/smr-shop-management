@@ -3,6 +3,8 @@ package smr.shop.cart.service.service;
 import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.model.CartEntity;
 import smr.shop.cart.service.model.CartItemEntity;
+import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
+import smr.shop.libs.common.dto.message.ProductStockMessageModel;
 
 import java.util.UUID;
 
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 public interface CartService {
 
-    void addProductToCart(Long productId, UUID attributeId);
+    void addProductToCart(Long productId, UUID stockId);
 
     CartResponse addCoupon(String couponCode);
 
@@ -23,13 +25,18 @@ public interface CartService {
 
     void clearCart();
 
-    void deleteCartItem(Long productId, UUID attributeId);
+    void deleteCartItem(UUID cartItemId);
 
     CartResponse getAllCartItems();
 
-    void increase(Long productId, UUID attributeId);
+    void increase(UUID cartItemId);
 
-    void decrease(Long productId, UUID attributeId);
+    void decrease(UUID cartItemId);
+
+
+    void removeItemByProduct(ProductDeleteMessageModel productDeleteMessageModel);
+
+    void removeItemByStock(ProductStockMessageModel productStockMessageModel);
 
     CartItemEntity findItemById(UUID cartItemId);
 

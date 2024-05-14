@@ -64,12 +64,12 @@ public class ShopMapper {
     }
 
     public ShopAddress toUpdateShopAddress(UpdateShopAddressRequest request, ShopAddress shopAddress) {
-        shopAddress.setName(request.getName());
-        shopAddress.setStreet(request.getStreet());
-        shopAddress.setCity(request.getCity());
-        shopAddress.setState(request.getState());
-        shopAddress.setLongitude(request.getLongitude());
-        shopAddress.setLatitude(request.getLatitude());
+        if (request.getName() != null) shopAddress.setName(request.getName());
+        if (request.getStreet() != null) shopAddress.setStreet(request.getStreet());
+        if (request.getCity() != null) shopAddress.setCity(request.getCity());
+        if (request.getStreet() != null) shopAddress.setState(request.getState());
+        if (request.getLongitude() != null) shopAddress.setLongitude(request.getLongitude());
+        if (request.getLatitude() != null) shopAddress.setLatitude(request.getLatitude());
         return shopAddress;
     }
 }
