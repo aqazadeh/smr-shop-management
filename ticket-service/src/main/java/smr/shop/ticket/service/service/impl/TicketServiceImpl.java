@@ -2,7 +2,7 @@ package smr.shop.ticket.service.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.Helper.UserHelper;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
@@ -41,7 +41,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<GetTicketMessageResponse> getById(UUID ticketId, Integer page) {
-        Pageable pageable = (Pageable) PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         return ticketMessageRepository.findAllByTicketId(ticketServiceHelper.getById(ticketId).getId(), pageable)
                 .stream().map(ticketServiceMapper::mapToResponse)
                 .toList();
