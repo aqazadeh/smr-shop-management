@@ -4,15 +4,14 @@ import org.springframework.stereotype.Component;
 import smr.shop.courier.service.dto.request.CourierCreateRequest;
 import smr.shop.courier.service.dto.request.CourierUpdateRequest;
 import smr.shop.courier.service.dto.response.CourierResponse;
-import smr.shop.courier.service.model.Courier;
+import smr.shop.courier.service.model.CourierEntity;
 
 import java.util.UUID;
 
 @Component
-public class CourierMapper {
-    public Courier toCourier(CourierCreateRequest request) {
-        // check image id is exists
-        Courier.CourierBuilder builder = Courier.builder();
+public class CourierServiceMapper {
+    public CourierEntity courierCreateRequestToCourier(CourierCreateRequest request) {
+        CourierEntity.CourierEntityBuilder builder = CourierEntity.builder();
         builder.userId(request.getUserId());
         builder.imageId(UUID.randomUUID());
         builder.name(request.getName());
@@ -20,7 +19,7 @@ public class CourierMapper {
         return builder.build();
     }
 
-    public Courier toUpdateCourier(CourierUpdateRequest request, Courier courier) {
+    public CourierEntity toUpdateCourier(CourierUpdateRequest request, CourierEntity courier) {
         if (request.getName() != null) courier.setName(request.getName());
         if (request.getSurname() != null) courier.setSurname(request.getSurname());
         if (request.getRating() != null) courier.setRating(request.getRating());
@@ -28,7 +27,7 @@ public class CourierMapper {
         return courier;
     }
 
-    public CourierResponse toCourierResponse(Courier courier) {
+    public CourierResponse toCourierResponse(CourierEntity courier) {
         return CourierResponse.builder()
                 .id(courier.getId())
                 .userId(courier.getUserId())
