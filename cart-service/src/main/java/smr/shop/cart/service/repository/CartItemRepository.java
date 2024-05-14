@@ -15,14 +15,14 @@ import java.util.UUID;
  */
 
 public interface CartItemRepository extends JpaRepository<CartItemEntity, UUID> {
-    void deleteByUserIdAndProductId(Long userId, Long productId);
 
-
-    Optional<CartItemEntity> findByUserIdAndAttributeId(Long userId, UUID attributeId);
-
-    void deleteByUserIdAndProductIdAndAttributeId(Long userId, Long productId, UUID attributeId);
-
-    Optional<CartItemEntity> findByUserIdAndProductIdAndAttributeId(Long userId, Long productId, UUID attributeId);
+    Optional<CartItemEntity> findByUserIdAndProductIdAndStockId(Long userId, Long productId, UUID attributeId);
 
     List<CartItemEntity> findByCartId(UUID cartId);
+
+    void deleteByProductId(Long productId);
+
+    void deleteByStockId(UUID stockId);
+
+    void deleteByCartId(UUID id);
 }

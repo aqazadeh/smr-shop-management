@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9001/brandDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9001/cartDB?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
@@ -36,6 +36,24 @@ grpc:
 
   client:
     upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    coupon-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-attribute-service:
       address: 'discovery:///upload-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true

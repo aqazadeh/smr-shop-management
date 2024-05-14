@@ -10,6 +10,8 @@ public final class MessagingConstants {
     
     public static final String PRODUCT_DELETE_TOPIC = "product-delete-topic";
     public static final String WISHLIST_PRODUCT_DELETE_GROUP_ID = "wishlist-product-delete-group";
+    public static final String CART_PRODUCT_DELETE_GROUP_ID = "cart-product-delete-group";
+    public static final String PRODUCT_STOCK_DELETE_TOPIC = "product-stock-delete-topic";
 
 
     private MessagingConstants() {}

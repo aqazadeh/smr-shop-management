@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
+import smr.shop.libs.common.Helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
@@ -58,13 +59,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createProduct(ProductCreateRequest request) {
-        CategoryGrpcResponse categoryGrpcResponse =  productGrpcClientService.getCategory(request.getCategoryId());
+        CategoryGrpcResponse categoryGrpcResponse = productGrpcClientService.getCategory(request.getCategoryId());
         BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(request.getBrandId());
         UploadGrpcResponse uploadGrpcResponse = productGrpcClientService.getImage(request.getThumbnail());
-
-        // TODO Check image ids
+        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(request.getShopId());
 
         ProductEntity product = productServiceMapper.productCreateRequestToProductEntity(request);
+
+        // TODO Check image ids
 
         StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStock());
         productRepository.save(product);
@@ -76,6 +78,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         product = productServiceMapper.productUpdateRequestToProductEntity(product, request);
 
         productRepository.save(product);
@@ -86,6 +90,8 @@ public class ProductServiceImpl implements ProductService {
     public void updateProductCategory(Long productId, Long categoryId) {
 
         ProductEntity product = findById(productId);
+
+        validateUserShop(product);
 
         CategoryGrpcResponse categoryGrpcResponse = productGrpcClientService.getCategory(categoryId);
 
@@ -100,6 +106,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(brandId);
 
         product.setBrandId(brandId);
@@ -113,6 +121,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         product.setStatus(productStatus);
 
         productRepository.save(product);
@@ -125,6 +135,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         product.setRating(rating);
 
         productRepository.save(product);
@@ -135,6 +147,8 @@ public class ProductServiceImpl implements ProductService {
     public void addProductThumbNail(Long productId, String imageId) {
 
         ProductEntity product = findById(productId);
+
+        validateUserShop(product);
 
         UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
 
@@ -150,6 +164,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         product.setThumbnail(null);
 
         productRepository.save(product);
@@ -160,6 +176,8 @@ public class ProductServiceImpl implements ProductService {
     public void addProductImage(Long productId, String imageId) {
 
         ProductEntity product = findById(productId);
+
+        validateUserShop(product);
 
         UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
 
@@ -174,6 +192,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
 
         product.getImageIds().remove(imageId);
@@ -186,6 +206,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity product = findById(productId);
 
+        validateUserShop(product);
+
         product.setStatus(ProductStatus.DELETED);
 
         productRepository.save(product);
@@ -195,6 +217,13 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductsByBrand(Long brandId) {
 
         productRepository.updateStatusByBrandId(ProductStatus.DELETED, brandId);
+
+    }
+
+    @Override
+    public void deleteProductsByShop(Long shopId) {
+
+        productRepository.updateStatusByShopId(ProductStatus.DELETED, shopId);
 
     }
 
@@ -211,7 +240,7 @@ public class ProductServiceImpl implements ProductService {
 
         CategoryGrpcResponse categoryGrpcResponse =  productGrpcClientService.getCategory(product.getCategoryId());
         BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(product.getBrandId());
-        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShop(product.getShopId());
+        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(product.getShopId());
         DiscountGrpcResponse discountGrpcResponse = productGrpcClientService.getDiscount(product.getId());
         List<ProductStockGrpcResponse> productStockGrpcResponse = productGrpcClientService.getStock(product.getId());
 
@@ -238,9 +267,26 @@ public class ProductServiceImpl implements ProductService {
         return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
 
     }
+// TODO : Lazim olarsa deye brandId vasitesile productlari cagirmaq
+    public List<ProductResponse> getAllProductsByBrandId(Long brandId) {
+
+        List<ProductEntity> productEntities = productRepository.findByBrandId(brandId);
+
+        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+
+    }
 
     public ProductEntity findById(Long productId){
        return productRepository.findById(productId)
                .orElseThrow(()-> new ProductException("Product not found with id: " + productId, HttpStatus.NOT_FOUND));
+    }
+
+    private void validateUserShop(ProductEntity product){
+
+        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByUserId(UserHelper.getUserId());
+
+        if (!product.getShopId().equals(shopGrpcResponse.getShopId())){
+            throw  new ProductException("Product not found with id: " + product.getId(), HttpStatus.NOT_FOUND);
+        }
     }
 }

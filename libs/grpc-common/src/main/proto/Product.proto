@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "ProductAttribute.proto";
+import "ProductStock.proto";
 option java_package = "smr.shop.libs.grpc.product";
 option java_multiple_files = true;
 
@@ -11,15 +11,14 @@ message ProductGrpcRequest {
 
 message ProductGrpcResponse {
   int64 id = 1;
-  string slug = 8;
-  int64 shopId = 2;
-  double price = 3;
-  double shippingPrice = 4;
-  string name = 5;
-  string thumbnail = 6;
-  double discountPrice = 9;
-
-  ProductAttributeGrpcResponse  productAttribute = 7;
+  string slug = 2;
+  int64 shopId = 3;
+  double price = 4;
+  double shippingPrice = 5;
+  string name = 6;
+  string thumbnail = 7;
+  double discountPrice = 8;
+  ProductStockGrpcResponse stock = 9;
 }
 
 

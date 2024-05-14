@@ -1,10 +1,12 @@
 package smr.shop.shop.service.service;
 
-import smr.shop.shop.service.dto.request.*;
+import smr.shop.shop.service.dto.request.CreateShopRequest;
+import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
+import smr.shop.shop.service.dto.request.UpdateShopRequest;
+import smr.shop.shop.service.dto.request.UpdateShopStatusRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
 import smr.shop.shop.service.model.Shop;
-import smr.shop.shop.service.model.valueobject.ShopAddress;
 
 import java.util.List;
 

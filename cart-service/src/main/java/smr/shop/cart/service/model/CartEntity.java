@@ -17,6 +17,8 @@ public class CartEntity {
     @Id
     private UUID id;
 
+    private Long userId;
+
     private String coupon;
 
     private ZonedDateTime createdAt;
