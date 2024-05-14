@@ -12,6 +12,7 @@ import lombok.Value;
 @Value
 @Builder
 public class ProductBrandResponse {
+
     String brandName;
 
     String brandSlug;

@@ -23,9 +23,12 @@ public interface ProductGrpcClientService {
 
     UploadGrpcResponse getImage(String thumbnail);
 
-    ShopGrpcResponse getShop(Long shopId);
+    ShopGrpcResponse getShopByShopId(Long shopId);
+
+    ShopGrpcResponse getShopByUserId(Long userId);
 
     DiscountGrpcResponse getDiscount(Long id);
 
     List<ProductStockGrpcResponse> getStock(Long id);
+
 }

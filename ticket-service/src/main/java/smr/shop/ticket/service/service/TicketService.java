@@ -4,7 +4,6 @@ import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.request.TicketMessageRequest;
 import smr.shop.ticket.service.dto.response.TicketMessageResponse;
 import smr.shop.ticket.service.dto.response.TicketResponse;
-import smr.shop.ticket.service.model.TicketMessage;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 
 import java.util.List;

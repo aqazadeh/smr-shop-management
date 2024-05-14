@@ -24,11 +24,16 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query("update ProductEntity p set p.status = ?1 where p.brandId = ?2")
     void updateStatusByBrandId(ProductStatus status, Long brandId);
 
-
     @Transactional
     @Modifying
     @Query("update ProductEntity p set p.status = ?1 where p.categoryId = ?2")
     void updateStatusByCategoryId(ProductStatus productStatus, Long categoryId);
 
+    @Transactional
+    @Modifying
+    @Query("update ProductEntity p set p.status = ?1 where p.shopId = ?2")
+    void updateStatusByShopId(ProductStatus productStatus, Long shopId);
+
     ProductEntity findBySlug(String slug);
+
 }
