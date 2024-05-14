@@ -1,35 +1,39 @@
+#version: '3.1'
 
 services:
   postgres:
     image: postgres:16
-    restart: unless-stopped
+    container_name: postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
-    ports:
-      - "27542:5432"
-    volumes:
-      - keycloak-postgres-volume:/var/lib/postgresql/data
-
 
   keycloak:
     image: quay.io/keycloak/keycloak
-    command: [ "start-dev", "--import-realm" ]
-    restart: unless-stopped
+    container_name: keycloak
     environment:
       KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: password
-      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak"
-      KC_REALM_NAME: smr-shop
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    depends_on:
+      - postgres
     ports:
-      - "7777:8080"
-    volumes:
-      - auth-volume:/opt/keycloak/data/
+      - "8180:8080"
 
 volumes:
-  keycloak-volume:
-  keycloak-postgres-volume:
+  postgres_data:
