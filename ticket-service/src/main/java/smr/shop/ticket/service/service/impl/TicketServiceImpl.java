@@ -21,7 +21,7 @@ import smr.shop.ticket.service.service.TicketService;
 import java.util.List;
 import java.util.UUID;
 
-import static smr.shop.libs.common.constant.ServiceConstants.*;
+import static smr.shop.libs.common.constant.ServiceConstants.pageSize;
 
 @Service
 @RequiredArgsConstructor
