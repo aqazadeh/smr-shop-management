@@ -8,22 +8,23 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import smr.shop.cart.service.service.CartService;
 import smr.shop.libs.common.constant.MessagingConstants;
+import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 
 @Component
 @Slf4j
-public class ProductRemoveMessageListener implements MessageListener<ProductDeleteMessageModel> {
+public class CouponDeleteMessageListener implements MessageListener<CouponMessageModel> {
 
     private final CartService cartService;
 
-    public ProductRemoveMessageListener(CartService cartService) {
+    public CouponDeleteMessageListener(CartService cartService) {
         this.cartService = cartService;
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.PRODUCT_DELETE_TOPIC, groupId = MessagingConstants.CART_PRODUCT_DELETE_GROUP)
-    public void receive(@Payload ProductDeleteMessageModel message,
+    @KafkaListener(topics = MessagingConstants.PRODUCT_DELETE_TOPIC, groupId = MessagingConstants.CART_COUPON_DELETE_GROUP)
+    public void receive(@Payload CouponMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {

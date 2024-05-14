@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.Helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
@@ -56,8 +57,8 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void deleteProductsInWishlist(Long productId) {
-        wishlistRepository.deleteByProductId(productId);
+    public void deleteProductsInWishlist(ProductDeleteMessageModel productDeleteMessageModel) {
+        wishlistRepository.deleteByProductId(productDeleteMessageModel.getId());
     }
 
     @Override

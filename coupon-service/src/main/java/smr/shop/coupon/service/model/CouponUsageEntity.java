@@ -24,8 +24,3 @@ public class CouponUsageEntity {
     private ZonedDateTime createdAt;
 
 }
-
-/*
-    Bu entity istifadecilerin istifade etdiyi kuponlari tutur.
-    eger istifade edilmeye calisilan kupon daha onceden istifade olunubsa daha sonra istifade edile bilmez. Bunu nezere alin
- */
