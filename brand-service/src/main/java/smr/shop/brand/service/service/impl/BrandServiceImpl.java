@@ -18,7 +18,6 @@ import smr.shop.brand.service.service.BrandService;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.BrandDeleteMessageModel;
 import smr.shop.libs.common.dto.message.BrandImageDeleteMessageModel;
-import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
