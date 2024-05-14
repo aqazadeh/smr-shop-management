@@ -50,7 +50,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketResponse> getAllUserTickets(Integer page) {
         Long userId = UserHelper.getUserId();
-        Pageable pageable = (Pageable) PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         return ticketRepository.findAllByUserId(userId, pageable)
                 .stream()
                 .map(ticketServiceMapper::mapToResponse)
