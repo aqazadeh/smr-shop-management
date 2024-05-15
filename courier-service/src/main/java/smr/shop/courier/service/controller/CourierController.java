@@ -51,7 +51,7 @@ public class CourierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourierResponse> updateCourierActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
+    public ResponseEntity<CourierResponse> changeActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
         CourierResponse courierResponse = courierService.updateCourierActiveType(id, request);
         return ResponseEntity.ok(courierResponse);
     }

@@ -14,7 +14,7 @@ spring:
     username: postgres
     password: admin
   application:
-    name: brand-service
+    name: category-brand-service
 
   kafka:
     consumer:

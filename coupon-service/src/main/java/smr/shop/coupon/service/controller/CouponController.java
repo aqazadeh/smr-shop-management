@@ -18,7 +18,7 @@ import java.util.UUID;
  * Time: 5:53 PM
  */
 @RestController
-@RequestMapping("/api/v1/coupon")
+@RequestMapping("/api/1.0/coupon")
 public class CouponController {
 
     private final CouponService couponService;

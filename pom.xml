@@ -20,6 +20,7 @@
         <grpc.version>1.65.0-SNAPSHOT</grpc.version>
         <protoc.version>3.25.1</protoc.version>
         <spring-grpc.version>3.1.0.RELEASE</spring-grpc.version>
+        <swagger.version>2.5.0</swagger.version>
     </properties>
 
     <modules>
