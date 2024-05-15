@@ -8,27 +8,32 @@ import lombok.*;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Author: Ali Gadashov
+ * Version: v1.0
+ * Date: 5/14/2024
+ * Time: 4:20 PM
+ */
 @Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class BrandEntity {
+public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    private String imageId;
+    private String description;
 
     private String slug;
 
-    private String description;
+    private Long parentId;
 
     private ZonedDateTime createdAt;
 
     private ZonedDateTime updatedAt;
-
 }

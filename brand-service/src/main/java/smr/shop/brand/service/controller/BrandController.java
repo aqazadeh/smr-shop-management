@@ -24,40 +24,34 @@ public class BrandController {
         this.brandService = brandService;
     }
 
+//    -------------------------------------- POST --------------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BrandResponse> createBrand(@RequestBody BrandCreateRequest brandCreateRequest) {
+    public ResponseEntity<EmptyResponse> createBrand(@RequestBody BrandCreateRequest brandCreateRequest) {
         log.info("Create brand request: {}", brandCreateRequest);
-        BrandResponse brandResponse = brandService.create(brandCreateRequest);
-        return ResponseEntity.ok(brandResponse);
-    }
-
-    @PutMapping("/{brandId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BrandResponse> updateBrand(
-            @PathVariable(name = "brandId") Long brandId,
-            @RequestBody BrandUpdateRequest brandUpdateRequest) {
-        BrandResponse brandResponse = brandService.updateBrand(brandId, brandUpdateRequest);
-        return ResponseEntity.ok(brandResponse);
-    }
-
-    @DeleteMapping("/{brandId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<EmptyResponse> deleteBrand(
-            @PathVariable(name = "brandId") Long brandId) {
-        brandService.deleteBrand(brandId);
+        brandService.createBrand(brandCreateRequest);
         EmptyResponse response = EmptyResponse.builder()
-                .message("Brand deleted successfully with id " + brandId)
+                .message("Brand created successfully")
                 .build();
+
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<BrandResponse>> getAllBrand(@RequestParam(name = "page", defaultValue = "0") Integer page) {
-        return ResponseEntity.ok(brandService.getAllBrands(page));
-    }
+//    -------------------------------------- PUT --------------------------------------
 
+    @PutMapping("/{brandId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateBrand(
+            @PathVariable(name = "brandId") Long brandId,
+            @RequestBody BrandUpdateRequest brandUpdateRequest) {
+        brandService.updateBrand(brandId, brandUpdateRequest);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Brand updated successfully")
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
 
     @PutMapping("/{brandId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
@@ -71,6 +65,15 @@ public class BrandController {
         return ResponseEntity.ok(response);
     }
 
+//    -------------------------------------- GET --------------------------------------
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<BrandResponse>> getAllBrand(@RequestParam(name = "page", defaultValue = "0") Integer page) {
+        return ResponseEntity.ok(brandService.getAllBrands(page));
+    }
+
+//    -------------------------------------- DELETE --------------------------------------
 
     @DeleteMapping("/{brandId}/image")
     @ResponseStatus(HttpStatus.OK)
@@ -80,6 +83,17 @@ public class BrandController {
                 .message("Image delete successfully with brandId: " + brandId)
                 .build();
 
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{brandId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<EmptyResponse> deleteBrand(
+            @PathVariable(name = "brandId") Long brandId) {
+        brandService.deleteBrand(brandId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Brand deleted successfully with id " + brandId)
+                .build();
         return ResponseEntity.ok(response);
     }
 }
