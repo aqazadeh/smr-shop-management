@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BrandService {
-    BrandResponse create(BrandCreateRequest request);
+    void createBrand(BrandCreateRequest request);
 
-    BrandResponse updateBrand(Long id, BrandUpdateRequest request);
+    void updateBrand(Long id, BrandUpdateRequest request);
 
     void deleteBrand(Long id);
 

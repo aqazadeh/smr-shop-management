@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.repository.TicketRepository;
 
-
 import java.util.UUID;
 
 @Service

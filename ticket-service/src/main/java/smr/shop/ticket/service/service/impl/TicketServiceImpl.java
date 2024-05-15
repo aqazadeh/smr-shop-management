@@ -2,7 +2,6 @@ package smr.shop.ticket.service.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import java.awt.print.Pageable;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.Helper.UserHelper;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
@@ -19,10 +18,11 @@ import smr.shop.ticket.service.repository.TicketMessageRepository;
 import smr.shop.ticket.service.repository.TicketRepository;
 import smr.shop.ticket.service.service.TicketService;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.UUID;
 
-import static smr.shop.libs.common.constant.ServiceConstants.*;
+import static smr.shop.libs.common.constant.ServiceConstants.pageSize;
 
 @Service
 @RequiredArgsConstructor

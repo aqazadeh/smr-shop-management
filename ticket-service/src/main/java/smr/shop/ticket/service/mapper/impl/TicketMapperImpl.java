@@ -5,15 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.ticket.request.UpdateTicketRequest;
 import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
 import smr.shop.ticket.service.mapper.TicketMapper;
 import smr.shop.ticket.service.model.Ticket;
 
-
 import java.util.UUID;
 
-import static smr.shop.ticket.service.model.valueobject.TicketStatus.*;
+import static smr.shop.ticket.service.model.valueobject.TicketStatus.ACTIVE;
 
 @Service
 @RequiredArgsConstructor

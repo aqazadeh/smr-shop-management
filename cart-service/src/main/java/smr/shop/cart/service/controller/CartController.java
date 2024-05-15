@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.service.CartService;
 import smr.shop.libs.common.dto.response.EmptyResponse;
-import smr.shop.libs.grpc.cart.Cart;
 
 import java.util.UUID;
 

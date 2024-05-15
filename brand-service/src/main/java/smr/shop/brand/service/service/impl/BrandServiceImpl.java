@@ -46,7 +46,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponse create(BrandCreateRequest request) {
+    public void createBrand(BrandCreateRequest request) {
         UploadGrpcResponse image = brandGrpcClientService.getImage(request.getImageId().toString());
 
         BrandEntity brandEntity = brandServiceMapper.brandCreateResponseToBrandEntity(request);
@@ -57,11 +57,10 @@ public class BrandServiceImpl implements BrandService {
 
         BrandResponse brandResponse = brandServiceMapper.brandEntityToBrandResponse(brandEntity);
         brandResponse.setImageUrl(image.getUrl());
-        return brandResponse;
     }
 
     @Override
-    public BrandResponse updateBrand(Long id, BrandUpdateRequest request) {
+    public void updateBrand(Long id, BrandUpdateRequest request) {
         BrandEntity brandEntity = findById(id);
 
         BrandEntity brandEntityUpdated = brandServiceMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
@@ -71,7 +70,6 @@ public class BrandServiceImpl implements BrandService {
         UploadGrpcResponse image = brandGrpcClientService.getImage(brandEntity.getImageId());
         BrandResponse brandResponse = brandServiceMapper.brandEntityToBrandResponse(brandEntity);
         brandResponse.setImageUrl(image.getUrl());
-        return brandResponse;
     }
 
     @Override
@@ -112,14 +110,13 @@ public class BrandServiceImpl implements BrandService {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<BrandEntity> list = brandRepository.findAll(pageable).toList();
         //TODO fix many grpc request problem
-        List<BrandResponse> brandResponseList = list.stream().map(entity -> {
+
+        return list.stream().map(entity -> {
             BrandResponse brandResponse = brandServiceMapper.brandEntityToBrandResponse(entity);
             UploadGrpcResponse image = brandGrpcClientService.getImage(entity.getImageId());
             brandResponse.setImageUrl(image.getUrl());
             return brandResponse;
         }).toList();
-
-        return brandResponseList;
     }
 
     @Override
