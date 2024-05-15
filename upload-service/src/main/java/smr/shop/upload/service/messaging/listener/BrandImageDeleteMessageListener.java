@@ -17,8 +17,8 @@ import smr.shop.libs.common.messaging.listener.MessageListener;
 public class BrandImageDeleteMessageListener implements MessageListener<BrandDeleteMessageModel> {
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.brandImageDeleteTopic},
-            groupId = MessagingConstants.brandImageDeleteGroupId)
+    @KafkaListener(topics = {MessagingConstants.IMAGE_DELETE_TOPIC},
+            groupId = MessagingConstants.IMAGE_DELETE_GROUP)
     public void receive(@Payload BrandDeleteMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
