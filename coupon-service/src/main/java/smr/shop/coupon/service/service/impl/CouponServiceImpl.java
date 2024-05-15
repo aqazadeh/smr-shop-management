@@ -4,16 +4,30 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import smr.shop.coupon.service.dto.request.CouponCreateRequest;
 import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
-import smr.shop.coupon.service.exception.CouponException;
+import smr.shop.coupon.service.exception.CouponServiceException;
+import smr.shop.coupon.service.grpc.client.CouponClientGrpcService;
 import smr.shop.coupon.service.mapper.CouponServiceMapper;
+import smr.shop.coupon.service.message.publisher.CouponDeleteMessagePublisher;
 import smr.shop.coupon.service.model.CouponEntity;
+import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
+import smr.shop.coupon.service.model.valueobject.CouponType;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
+import smr.shop.coupon.service.service.CouponUsageService;
 import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.common.dto.message.CouponMessageModel;
+import smr.shop.libs.common.helper.Money;
+import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.grpc.coupon.CouponGrpcRequest;
+import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,51 +43,166 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponServiceMapper couponMapper;
+    private final CouponClientGrpcService couponClientGrpcService;
+    private final CouponDeleteMessagePublisher couponDeleteMessagePublisher;
+    private final CouponUsageService couponUsageService;
 
-    public CouponServiceImpl(CouponRepository couponRepository, CouponServiceMapper couponMapper) {
+    public CouponServiceImpl(CouponRepository couponRepository,
+                             CouponServiceMapper couponMapper,
+                             CouponClientGrpcService couponClientGrpcService,
+                             CouponDeleteMessagePublisher couponDeleteMessagePublisher,
+                             CouponUsageService couponUsageService) {
         this.couponRepository = couponRepository;
         this.couponMapper = couponMapper;
+        this.couponClientGrpcService = couponClientGrpcService;
+        this.couponDeleteMessagePublisher = couponDeleteMessagePublisher;
+        this.couponUsageService = couponUsageService;
     }
 
     @Override
-    public CouponResponse createCoupon(CouponCreateRequest request) {
+    @Transactional
+    public void createCouponWithAdmin(CouponCreateRequest request){
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
-        couponEntity = couponRepository.save(couponEntity);
-        return couponMapper.couponEntityToCouponResponse(couponEntity);
+        validateCoupon(couponEntity);
+        couponEntity.setId(UUID.randomUUID());
+        couponEntity.setType(CouponType.ALL);
+        couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
     }
 
     @Override
-    public CouponResponse updateCoupon(UUID couponId, CouponUpdateRequest request) {
+    @Transactional
+    public void createCoupon(CouponCreateRequest request) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
+        CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
+        validateCoupon(couponEntity);
+        couponEntity.setId(UUID.randomUUID());
+        couponEntity.setType(CouponType.SHOP);
+        couponEntity.setShopId(shopGrpcResponse.getShopId());
+        couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
+    }
 
-        // TODO SEND KAFKA EVENT
-
+    @Override
+    public void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request) {
         CouponEntity couponEntity = findById(couponId);
+        couponEntity.setAmount(null);
+        couponEntity.setPercentage(null);
         CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
-        couponEntity = couponRepository.save(couponEntityUpdated);
-        return couponMapper.couponEntityToCouponResponse(couponEntity);
+        validateCoupon(couponEntityUpdated);
+        couponEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntityUpdated);
     }
 
     @Override
-    public void deleteCoupon(UUID couponId) {
+    @Transactional
+    public void updateCoupon(UUID couponId, CouponUpdateRequest request) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
         CouponEntity couponEntity = findById(couponId);
-        couponRepository.delete(couponEntity);
-        // TODO if need send kafka event
+        if(!couponEntity.getShopId().equals(shopGrpcResponse.getShopId())){
+            throw new CouponServiceException("you dont have a access to update coupon with id: " +  couponId,  HttpStatus.NOT_FOUND);
+        }
+        couponEntity.setAmount(null);
+        couponEntity.setPercentage(null);
+        CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
+        validateCoupon(couponEntityUpdated);
+        couponEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntityUpdated);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCoupon(UUID couponId) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
+        CouponEntity couponEntity = findById(couponId);
+        if(!couponEntity.getShopId().equals(shopGrpcResponse.getShopId())){
+            throw new CouponServiceException("you dont have a access to delete coupon with id: " +  couponId,  HttpStatus.NOT_FOUND);
+        }
+        couponEntity.setIsDeleted(Boolean.TRUE);
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
+        couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
+    }
+
+    @Override
+    @Transactional
+    public void deleteCouponWithAdmin(UUID couponId) {
+        CouponEntity couponEntity = findById(couponId);
+        couponEntity.setIsDeleted(Boolean.TRUE);
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
+        couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
     }
 
     @Override
     public List<CouponResponse> getAllCoupons(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-        return couponRepository.findAll(pageable).map(couponMapper::couponEntityToCouponResponse).toList();
+        return couponRepository.findAllByIsDeletedFalse(pageable).map(couponMapper::couponEntityToCouponResponse).toList();
+    }
+
+    @Override
+    public List<CouponResponse> getShopAllCoupons(Integer page) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
+        Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
+        return couponRepository.findAllByShopIdAndIsDeletedFalse(shopGrpcResponse .getShopId(),pageable).map(couponMapper::couponEntityToCouponResponse).toList();
     }
 
     @Override
     public CouponResponse getCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
+
         return couponMapper.couponEntityToCouponResponse(couponEntity);
     }
 
     @Override
     public CouponEntity findById(UUID couponId) {
-        return couponRepository.findById(couponId).orElseThrow(() -> new CouponException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
+        CouponEntity couponEntity = couponRepository.findByIdAndIsDeletedFalse(couponId).orElseThrow(() -> new CouponServiceException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
+        return couponEntity;
+    }
+
+    @Override
+    public CouponEntity findByCode(String couponCode) {
+        CouponEntity couponEntity = couponRepository.findByCode(couponCode).orElseThrow(() -> new CouponServiceException("Coupon Not found With code : " + couponCode, HttpStatus.NOT_FOUND));
+        return couponEntity;
+    }
+
+    @Override
+    public CouponGrpcResponse getCouponDetail(CouponGrpcRequest couponGrpcRequest){
+        CouponEntity couponEntity;
+        couponEntity = findByCode(couponGrpcRequest.getCode());
+        Boolean couponUsage = couponUsageService.getCouponUsage(couponEntity.getId(), UUID.fromString(couponGrpcRequest.getUserId()));
+        Boolean isCouponExpired = isCouponExpired(couponEntity);
+        CouponGrpcResponse couponGrpcResponse = couponMapper.couponEntityToCouponGrpcResponse(couponEntity, couponUsage, isCouponExpired);
+        return couponGrpcResponse;
+    }
+
+    private Boolean isCouponExpired(CouponEntity couponEntity){
+        return couponEntity.getExpirationTime().compareTo(ZonedDateTime.now(ServiceConstants.ZONE_ID)) > 0;
+    }
+
+    private void validateCoupon(CouponEntity couponEntity) {
+        if (couponEntity.getAmount() == null && couponEntity.getPercentage() == null) {
+            throw new CouponServiceException("coupon amount or percentage can not be null", HttpStatus.BAD_REQUEST);
+        }
+        if (!Money.isGreaterThanZero(couponEntity.getMaxDiscountPrice())){
+            throw new CouponServiceException("max discount price must be great than zero", HttpStatus.BAD_REQUEST);
+        }
+        if(couponEntity.getDiscountType() == CouponDiscountType.AMOUNT){
+            if (!Money.isGreaterThanZero(couponEntity.getAmount())){
+                throw new CouponServiceException("amount must be great than zero", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if(couponEntity.getDiscountType() == CouponDiscountType.PERCENT){
+            if (couponEntity.getPercentage() <= 0){
+                throw new CouponServiceException("percentage must be great than zero", HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 }

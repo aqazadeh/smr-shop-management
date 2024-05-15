@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: category-brand-service-postgres
+    image: postgres:16
+    ports:
+      - "9103:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=
+      - broker-3
+    expose:
+      - 9001
+    volumes:
+      - category-brand-volume:/var/lib/postgresql/data
+volumes:
+  category-brand-volume:

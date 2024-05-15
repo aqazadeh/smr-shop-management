@@ -5,7 +5,7 @@ import smr.shop.shop.service.model.valueobject.ShopAddress;
 
 @Value
 public class UpdateShopRequest {
-    Long userId;
+    UUID userId;
     String name;
     String slug;
     String description;

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class UpdateTicketMessageRequest {
     @Min(value = 1, message = "User ID cannot be less than 1!")
-    private Long userId;
+    private UUID userId;
     private UUID ticketId;
     private String message;
 }

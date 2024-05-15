@@ -8,18 +8,14 @@ enum CouponType {
   SHOP = 0;
   ALL = 1;
 }
-
 enum CouponDiscountType {
   PERCENT = 0;
   AMOUNT = 1;
 }
 
-message CouponCodeGrpcRequest {
-  string code = 1;
-}
-
-message CouponIdGrpcRequest {
-  string id = 1;
+message CouponGrpcRequest {
+  string code = 2;
+  string userId = 3;
 }
 
 message CouponGrpcResponse {
@@ -27,14 +23,14 @@ message CouponGrpcResponse {
   string code = 2;
   int64 shopId = 3;
   CouponType couponType = 4;
-  double amount  = 5;
+  double amount = 5;
   sint32 percentage = 6;
   double maxDiscountPrice = 7;
-  google.type.DateTime expireDatetime = 8;
+  bool isDeleted = 8;
   bool isUsed = 9;
+  bool isExpired = 10;
 }
 
 service CouponService {
-  rpc getCouponDetailWithCode(CouponCodeGrpcRequest) returns (CouponGrpcResponse);
-  rpc getCouponDetailWithId(CouponIdGrpcRequest) returns (CouponGrpcResponse);
+  rpc getCouponDetail(CouponGrpcRequest) returns (CouponGrpcResponse);
 }

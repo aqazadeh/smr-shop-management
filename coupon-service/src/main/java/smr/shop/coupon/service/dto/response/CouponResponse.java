@@ -2,6 +2,7 @@ package smr.shop.coupon.service.dto.response;
 
 import lombok.Builder;
 import lombok.Value;
+import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -21,10 +22,11 @@ public class CouponResponse {
 
     UUID id;
     String code;
+    CouponDiscountType type;
     String details;
     Long shopId;
     BigDecimal amount;
-    short percentage;
+    Short percentage;
     BigDecimal maxDiscountPrice;
     ZonedDateTime endDate;
 

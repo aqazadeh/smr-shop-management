@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 public class ProductReviewResponse {
     UUID id;
-    @JsonProperty("user_id") Long userId;
+    @JsonProperty("user_id") UUID userId;
     @JsonProperty("product_id") Long productId;
     Byte rating;
     String comment;

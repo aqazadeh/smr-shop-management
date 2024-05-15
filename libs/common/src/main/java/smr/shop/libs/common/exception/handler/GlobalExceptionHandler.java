@@ -7,12 +7,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.GlobalException;
 
 import java.util.List;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 

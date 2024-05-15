@@ -1,7 +1,6 @@
 package smr.shop.coupon.service.service;
 
-import smr.shop.coupon.service.dto.response.CouponUsageResponse;
-import smr.shop.coupon.service.model.CouponUsageEntity;
+import smr.shop.libs.common.dto.message.UseCouponMessageModel;
 
 import java.util.UUID;
 
@@ -14,11 +13,8 @@ import java.util.UUID;
 
 public interface CouponUsageService {
 
-    CouponUsageResponse createCouponUsage(UUID couponId);
 
-    void deleteCouponUsage(UUID couponUsageId);
+    void createCouponUsage(UseCouponMessageModel useCouponMessageModel);
 
-    CouponUsageResponse getCouponUsage(UUID couponUsageId);
-
-    CouponUsageEntity findById(UUID couponUsageId);
+    Boolean getCouponUsage(UUID couponId, UUID userId);
 }

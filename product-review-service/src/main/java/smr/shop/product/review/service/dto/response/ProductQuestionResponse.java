@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class ProductQuestionResponse {
     UUID id;
-    @JsonProperty("user_id") Long userId;
+    @JsonProperty("user_id") UUID userId;
     @JsonProperty("product_id") Long productId;
     String question;
     @JsonProperty("question_id") UUID questionId;

@@ -22,7 +22,7 @@ public class Order {
     @Id
     private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     @Embedded
     private OrderAddress address;

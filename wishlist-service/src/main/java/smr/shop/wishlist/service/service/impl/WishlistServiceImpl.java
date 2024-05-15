@@ -4,8 +4,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
@@ -36,7 +37,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public void addProductToWishlist(Long productId) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         if (wishlistRepository.findByUserIdAndProductId(userId, productId).isEmpty()) {
             ProductGrpcResponse productGrpcResponse = wishlistGrpcClientService.getProduct(productId);
             WishlistEntity wishlistEntity = wishlistServiceMapper.productIdAndUserIdToWishlist(productGrpcResponse.getId(), userId);
@@ -47,7 +48,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public void deleteProductInUserWishlist(Long productId) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         if (wishlistRepository.findByUserIdAndProductId(userId, productId).isEmpty()) {
             throw new WishlistException("can not found wishlist with product id: " + productId, HttpStatus.NOT_FOUND);
         }
@@ -56,8 +57,8 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void deleteProductsInWishlist(Long productId) {
-        wishlistRepository.deleteByProductId(productId);
+    public void deleteProductsInWishlist(ProductDeleteMessageModel productDeleteMessageModel) {
+        wishlistRepository.deleteByProductId(productDeleteMessageModel.getId());
     }
 
     @Override

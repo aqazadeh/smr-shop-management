@@ -17,7 +17,7 @@ public class CartEntity {
     @Id
     private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     private String coupon;
 

@@ -21,7 +21,7 @@ public class DeliveryConversation {
     @Id
     private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     @ManyToOne
     @JoinColumn(name = "delivery_id")

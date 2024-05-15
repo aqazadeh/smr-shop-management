@@ -5,7 +5,7 @@ import smr.shop.order.service.model.valueobject.OrderAddress;
 
 @Value
 public class UpdateOrderRequest {
-    Long userId;
+    UUID userId;
     OrderAddress address;
     Double shippingCost;
 }

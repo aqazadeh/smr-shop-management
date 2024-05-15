@@ -40,19 +40,13 @@ public class CouponEntity {
 
     private BigDecimal maxDiscountPrice;
 
-    private ZonedDateTime endDate;
+    private ZonedDateTime expirationTime;
 
-    private Boolean isActive = true;
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
 
     private ZonedDateTime createdAt;
 
     private ZonedDateTime updatedAt;
 
 }
-
-
-/*
-    Hem admin hem de magaza sahibleri yeni bir coupon yarada biler.
-    Eger kupon tipi all'dirsa butun magazalarda,
-    eger Shopdursa sadece uygun magazada mehsullarinda istifade oluna biler
-*/

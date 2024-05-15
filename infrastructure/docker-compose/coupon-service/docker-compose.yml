@@ -5,13 +5,13 @@ services:
     container_name: coupon-service-postgres
     image: postgres:16
     ports:
-      - "9002:5432"
+      - "9104:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=couponDB
     expose:
-      - 9002
+      - 9104
     volumes:
       - coupon-volume:/var/lib/postgresql/data
 volumes:

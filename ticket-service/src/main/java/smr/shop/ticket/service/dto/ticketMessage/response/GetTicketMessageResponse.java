@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class GetTicketMessageResponse {
-    private Long userId;
+    private UUID userId;
     private UUID ticketId;
     private String message;
 }

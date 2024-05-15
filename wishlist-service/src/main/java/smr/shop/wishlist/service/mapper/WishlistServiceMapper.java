@@ -20,7 +20,7 @@ public class WishlistServiceMapper {
     }
 
 
-    public WishlistEntity productIdAndUserIdToWishlist(Long productId, Long userId) {
+    public WishlistEntity productIdAndUserIdToWishlist(Long productId, UUID userId) {
         return WishlistEntity.builder()
                 .userId(userId)
                 .productId(productId)

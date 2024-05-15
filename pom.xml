@@ -42,7 +42,7 @@
         <module>wishlist-service</module>
         <module>courier-service</module>
         <module>discount-service</module>
-        <module>brand-service</module>
+        <module>category-brand-service</module>
         <module>libs</module>
         <module>cart-service</module>
     </modules>

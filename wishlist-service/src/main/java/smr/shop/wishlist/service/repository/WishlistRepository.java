@@ -6,8 +6,8 @@ import smr.shop.wishlist.service.model.WishlistEntity;
 import java.util.Optional;
 
 public interface WishlistRepository extends JpaRepository<WishlistEntity, Long> {
-    void deleteByUserIdAndProductId(Long userId, Long productId);
-    Optional<WishlistEntity> findByUserIdAndProductId(Long userId, Long productId);
+    void deleteByUserIdAndProductId(UUID userId, Long productId);
+    Optional<WishlistEntity> findByUserIdAndProductId(UUID userId, Long productId);
 
     void deleteByProductId(Long productId);
 }

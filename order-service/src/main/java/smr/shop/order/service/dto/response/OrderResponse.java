@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class OrderResponse {
     UUID id;
-    Long userId;
+    UUID userId;
     OrderAddress address;
     Double shippingCost;
     List<UUID> couponId;

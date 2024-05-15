@@ -9,7 +9,7 @@ import java.util.UUID;
 @Value
 public class CourierCreateRequest {
     @NotBlank
-    Long userId;
+    UUID userId;
     @NotBlank
     UUID imageId;
     @NotBlank

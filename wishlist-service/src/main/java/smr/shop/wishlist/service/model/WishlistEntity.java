@@ -18,7 +18,7 @@ public class WishlistEntity {
     @Id
     private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     private Long productId;
 

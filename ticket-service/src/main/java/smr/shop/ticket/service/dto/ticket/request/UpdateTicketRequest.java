@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateTicketRequest {
     @Min(value = 1, message = "User id cannot be less than 1!")
-    Long userId;
+    UUID userId;
     String subject;
 }

@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class CreateTicketRequest {
     @NotNull(message = "User id is required!")
     @Min(value = 1, message = "User id cannot be less than 1!")
-    Long userId;
+    UUID userId;
     @NotBlank(message = "Subject is required!")
     String subject;
 }
