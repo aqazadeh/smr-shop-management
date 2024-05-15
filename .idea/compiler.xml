@@ -8,10 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="delivery-service" />
-        <module name="brand-service" />
         <module name="cart-service" />
         <module name="config-service" />
         <module name="coupon-service" />
+        <module name="category-brand-service" />
         <module name="shop-service" />
         <module name="flash-service" />
         <module name="product-service" />
@@ -41,8 +41,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
-      <module name="brand-service" options="-parameters" />
       <module name="cart-service" options="-parameters" />
+      <module name="category-brand-service" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="coupon-service" options="-parameters" />
