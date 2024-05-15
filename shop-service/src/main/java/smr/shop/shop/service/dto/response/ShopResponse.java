@@ -9,7 +9,7 @@ import smr.shop.shop.service.model.valueobject.ShopStatus;
 @Builder
 public class ShopResponse {
     Long id;
-    Long userId;
+    UUID userId;
     String name;
     String slug;
     String description;

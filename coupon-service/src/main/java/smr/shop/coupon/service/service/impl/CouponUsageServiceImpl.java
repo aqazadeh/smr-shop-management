@@ -33,16 +33,12 @@ public class CouponUsageServiceImpl implements CouponUsageService {
         if (couponUsageRepository.findCouponUsageByCouponId(useCouponMessageModel.getCouponId()).isPresent()) {
             throw new CouponServiceException("This coupon already exist", HttpStatus.BAD_REQUEST);
         }
-        CouponUsageEntity couponUsage = CouponUsageEntity.builder()
-                .id(UUID.randomUUID())
-                .userId(useCouponMessageModel.getUserId())
-                .couponId(useCouponMessageModel.getCouponId())
-                .build();
+        CouponUsageEntity couponUsage = couponMapper.useCouponMessageModelToCouponUsageEntity(useCouponMessageModel);
         couponUsageRepository.save(couponUsage);
     }
 
     @Override
-    public boolean getCouponUsage(UUID couponId, Long userId) {
+    public Boolean getCouponUsage(UUID couponId, UUID userId) {
         return couponUsageRepository.findByCouponIdAndUserId(couponId, userId).isPresent();
     }
 }

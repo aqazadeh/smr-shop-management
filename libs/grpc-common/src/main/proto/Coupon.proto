@@ -8,16 +8,14 @@ enum CouponType {
   SHOP = 0;
   ALL = 1;
 }
-
 enum CouponDiscountType {
   PERCENT = 0;
   AMOUNT = 1;
 }
 
 message CouponGrpcRequest {
-  string id = 1;
   string code = 2;
-  int64 userId = 3;
+  string userId = 3;
 }
 
 message CouponGrpcResponse {
@@ -28,7 +26,9 @@ message CouponGrpcResponse {
   double amount = 5;
   sint32 percentage = 6;
   double maxDiscountPrice = 7;
+  bool isDeleted = 8;
   bool isUsed = 9;
+  bool isExpired = 10;
 }
 
 service CouponService {

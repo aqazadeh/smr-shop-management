@@ -23,7 +23,7 @@ public class CourierReview {
 
     private UUID orderId;
 
-    private Long userId;
+    private UUID userId;
 
     @ManyToOne
     @JoinColumn(name = "courier_id")

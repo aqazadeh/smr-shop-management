@@ -1,10 +1,10 @@
 package smr.shop.coupon.service.message.publisher;
 
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.messaging.publisher.MessagePublisher;
-import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.UUID;
 

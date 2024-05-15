@@ -2,8 +2,6 @@ package smr.shop.coupon.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
-import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
-import smr.shop.coupon.service.model.valueobject.CouponType;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -19,30 +17,18 @@ import java.time.ZonedDateTime;
 public class CouponUpdateRequest {
 
     @NotBlank
-    CouponType type;
-
-    @NotBlank
     String code;
 
     @NotBlank
     String details;
 
-    @NotBlank
-    CouponDiscountType discountType;
-
-    @NotBlank
     BigDecimal amount;
 
-    @NotBlank
-    short percentage;
+    Short percentage;
 
-    @NotBlank
     BigDecimal maxDiscountPrice;
 
     @NotBlank
     ZonedDateTime endDate;
-
-    @NotBlank
-    ZonedDateTime updatedAt;
 
 }

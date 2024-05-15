@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
 import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
@@ -49,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketResponse> getAllUserTickets(Integer page) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         Pageable pageable = (Pageable) PageRequest.of(page, pageSize);
         return ticketRepository.findAllByUserId(userId, pageable)
                 .stream()

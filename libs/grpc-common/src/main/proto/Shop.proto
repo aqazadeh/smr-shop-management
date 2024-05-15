@@ -3,8 +3,12 @@ syntax = "proto3";
 option java_package = "smr.shop.libs.grpc.product.shop";
 option java_multiple_files = true;
 
-message ShopGrpcRequest {
+message FindShopByShopIdGrpcRequest {
   int64 shopId = 1;
+}
+
+message FindShopByUserIdGrpcRequest {
+  string userId = 1;
 }
 
 message ShopGrpcResponse {
@@ -16,5 +20,6 @@ message ShopGrpcResponse {
 }
 
 service ShopService {
-  rpc GetShop(ShopGrpcRequest) returns  (ShopGrpcResponse);
+  rpc getShopInformationByShopId(FindShopByShopIdGrpcRequest) returns  (ShopGrpcResponse);
+  rpc getShopInformationByUserId(FindShopByUserIdGrpcRequest) returns  (ShopGrpcResponse);
 }

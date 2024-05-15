@@ -20,7 +20,7 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private UUID userId;
 
     private String name;
 

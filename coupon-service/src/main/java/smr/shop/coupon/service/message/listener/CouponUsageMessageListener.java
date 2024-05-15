@@ -1,7 +1,6 @@
 package smr.shop.coupon.service.message.listener;
 
 import org.springframework.stereotype.Component;
-import smr.shop.coupon.service.service.CouponService;
 import smr.shop.coupon.service.service.CouponUsageService;
 import smr.shop.libs.common.dto.message.UseCouponMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;

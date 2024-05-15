@@ -16,7 +16,7 @@ import java.util.UUID;
 public class TicketMessage {
     @Id
     private UUID id;
-    private Long userId;
+    private UUID userId;
     private UUID ticketId;
     private String message;
     private ZonedDateTime createdAt;

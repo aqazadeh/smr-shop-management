@@ -19,7 +19,7 @@ public class CartItemEntity {
 
     private UUID cartId;
 
-    private Long userId;
+    private UUID userId;
 
     private Long productId;
 

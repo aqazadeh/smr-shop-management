@@ -42,7 +42,8 @@ public class CouponEntity {
 
     private ZonedDateTime expirationTime;
 
-    private Boolean isActive = true;
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
 
     private ZonedDateTime createdAt;
 

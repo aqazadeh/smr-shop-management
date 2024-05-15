@@ -19,7 +19,7 @@ public class ProductReview {
     @Id
     private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     private Long productId;
 

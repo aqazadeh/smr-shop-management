@@ -18,10 +18,7 @@ public class BrandGrpcClientServiceImpl implements BrandGrpcClientService {
         UploadGrpcRequest request = UploadGrpcRequest.newBuilder()
                 .setId(id)
                 .build();
-
-        UploadGrpcResponse test1 = UploadGrpcResponse.newBuilder().setId("TEST1").setUrl("http://testurl").build();
-//        return blockingStub.getUpload(request);
-        return test1;
+        return blockingStub.getUpload(request);
     }
 
 

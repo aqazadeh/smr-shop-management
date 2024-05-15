@@ -1,10 +1,10 @@
 package smr.shop.coupon.service.service.impl;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import smr.shop.coupon.service.dto.request.CouponCreateRequest;
 import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
@@ -13,13 +13,15 @@ import smr.shop.coupon.service.grpc.client.CouponClientGrpcService;
 import smr.shop.coupon.service.mapper.CouponServiceMapper;
 import smr.shop.coupon.service.message.publisher.CouponDeleteMessagePublisher;
 import smr.shop.coupon.service.model.CouponEntity;
+import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
 import smr.shop.coupon.service.model.valueobject.CouponType;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.coupon.service.service.CouponUsageService;
-import smr.shop.libs.common.Helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.CouponMessageModel;
+import smr.shop.libs.common.helper.Money;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.grpc.coupon.CouponGrpcRequest;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
@@ -58,91 +60,149 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponResponse createCoupon(CouponCreateRequest request) {
+    @Transactional
+    public void createCouponWithAdmin(CouponCreateRequest request){
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
-        couponEntity = couponRepository.save(couponEntity);
-        return couponMapper.couponEntityToCouponResponse(couponEntity);
+        validateCoupon(couponEntity);
+        couponEntity.setId(UUID.randomUUID());
+        couponEntity.setType(CouponType.ALL);
+        couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
     }
 
     @Override
-    public CouponResponse updateCoupon(UUID couponId, CouponUpdateRequest request) {
+    @Transactional
+    public void createCoupon(CouponCreateRequest request) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
+        CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
+        validateCoupon(couponEntity);
+        couponEntity.setId(UUID.randomUUID());
+        couponEntity.setType(CouponType.SHOP);
+        couponEntity.setShopId(shopGrpcResponse.getShopId());
+        couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
+    }
 
+    @Override
+    public void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request) {
         CouponEntity couponEntity = findById(couponId);
+        couponEntity.setAmount(null);
+        couponEntity.setPercentage(null);
         CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
-        couponEntity = couponRepository.save(couponEntityUpdated);
-        return couponMapper.couponEntityToCouponResponse(couponEntity);
+        validateCoupon(couponEntityUpdated);
+        couponEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntityUpdated);
     }
 
     @Override
-    public void deleteCoupon(UUID couponId) {
+    @Transactional
+    public void updateCoupon(UUID couponId, CouponUpdateRequest request) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
         CouponEntity couponEntity = findById(couponId);
-        if(couponEntity.getType() != CouponType.SHOP){
+        if(!couponEntity.getShopId().equals(shopGrpcResponse.getShopId())){
+            throw new CouponServiceException("you dont have a access to update coupon with id: " +  couponId,  HttpStatus.NOT_FOUND);
+        }
+        couponEntity.setAmount(null);
+        couponEntity.setPercentage(null);
+        CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
+        validateCoupon(couponEntityUpdated);
+        couponEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntityUpdated);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCoupon(UUID couponId) {
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
+        CouponEntity couponEntity = findById(couponId);
+        if(!couponEntity.getShopId().equals(shopGrpcResponse.getShopId())){
             throw new CouponServiceException("you dont have a access to delete coupon with id: " +  couponId,  HttpStatus.NOT_FOUND);
         }
-        couponRepository.delete(couponEntity);
+        couponEntity.setIsDeleted(Boolean.TRUE);
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
         couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
     }
 
     @Override
+    @Transactional
     public void deleteCouponWithAdmin(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
-        couponRepository.delete(couponEntity);
+        couponEntity.setIsDeleted(Boolean.TRUE);
+        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        couponRepository.save(couponEntity);
         couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
     }
 
     @Override
     public List<CouponResponse> getAllCoupons(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-        return couponRepository.findAll(pageable).map(couponMapper::couponEntityToCouponResponse).toList();
+        return couponRepository.findAllByIsDeletedFalse(pageable).map(couponMapper::couponEntityToCouponResponse).toList();
     }
 
     @Override
     public List<CouponResponse> getShopAllCoupons(Integer page) {
-        Long userId = UserHelper.getUserId();
-        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.getShopByUserId(userId);
-
+        UUID userId = UserHelper.getUserId();
+        ShopGrpcResponse shopGrpcResponse = couponClientGrpcService.shopInformationByUser(userId);
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-        Page<CouponEntity> all = couponRepository.findAllByShopId(shopGrpcResponse .getShopId(),pageable);
-        return all.map(couponMapper::couponEntityToCouponResponse).toList();
+        return couponRepository.findAllByShopIdAndIsDeletedFalse(shopGrpcResponse .getShopId(),pageable).map(couponMapper::couponEntityToCouponResponse).toList();
     }
 
     @Override
     public CouponResponse getCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
+
         return couponMapper.couponEntityToCouponResponse(couponEntity);
     }
 
     @Override
     public CouponEntity findById(UUID couponId) {
-        CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new CouponServiceException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
-        return validateCoupon(couponEntity);
+        CouponEntity couponEntity = couponRepository.findByIdAndIsDeletedFalse(couponId).orElseThrow(() -> new CouponServiceException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
+        return couponEntity;
     }
 
     @Override
     public CouponEntity findByCode(String couponCode) {
         CouponEntity couponEntity = couponRepository.findByCode(couponCode).orElseThrow(() -> new CouponServiceException("Coupon Not found With code : " + couponCode, HttpStatus.NOT_FOUND));
-        return validateCoupon(couponEntity);
+        return couponEntity;
     }
 
     @Override
     public CouponGrpcResponse getCouponDetail(CouponGrpcRequest couponGrpcRequest){
         CouponEntity couponEntity;
-        if (couponGrpcRequest.getId().isBlank()) {
-            couponEntity = findByCode(couponGrpcRequest.getCode());
-        }else{
-            couponEntity = findById(UUID.fromString(couponGrpcRequest.getId()));
-        }
-        boolean couponUsage = couponUsageService.getCouponUsage(couponEntity.getId(), couponGrpcRequest.getUserId());
-        CouponGrpcResponse couponGrpcResponse = couponMapper.couponEntityToCouponGrpcResponse(couponEntity, couponUsage);
+        couponEntity = findByCode(couponGrpcRequest.getCode());
+        Boolean couponUsage = couponUsageService.getCouponUsage(couponEntity.getId(), UUID.fromString(couponGrpcRequest.getUserId()));
+        Boolean isCouponExpired = isCouponExpired(couponEntity);
+        CouponGrpcResponse couponGrpcResponse = couponMapper.couponEntityToCouponGrpcResponse(couponEntity, couponUsage, isCouponExpired);
         return couponGrpcResponse;
     }
 
+    private Boolean isCouponExpired(CouponEntity couponEntity){
+        return couponEntity.getExpirationTime().compareTo(ZonedDateTime.now(ServiceConstants.ZONE_ID)) > 0;
+    }
 
-
-    private CouponEntity validateCoupon(CouponEntity couponEntity) {
-        if (couponEntity.getExpirationTime().compareTo(ZonedDateTime.now(ZoneId.of(ServiceConstants.UTC))) < 0) {
-            throw new CouponServiceException("coupon expired with id: + " + couponEntity.getId(), HttpStatus.BAD_REQUEST);
+    private void validateCoupon(CouponEntity couponEntity) {
+        if (couponEntity.getAmount() == null && couponEntity.getPercentage() == null) {
+            throw new CouponServiceException("coupon amount or percentage can not be null", HttpStatus.BAD_REQUEST);
         }
-        return couponEntity;
+        if (!Money.isGreaterThanZero(couponEntity.getMaxDiscountPrice())){
+            throw new CouponServiceException("max discount price must be great than zero", HttpStatus.BAD_REQUEST);
+        }
+        if(couponEntity.getDiscountType() == CouponDiscountType.AMOUNT){
+            if (!Money.isGreaterThanZero(couponEntity.getAmount())){
+                throw new CouponServiceException("amount must be great than zero", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if(couponEntity.getDiscountType() == CouponDiscountType.PERCENT){
+            if (couponEntity.getPercentage() <= 0){
+                throw new CouponServiceException("percentage must be great than zero", HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 }

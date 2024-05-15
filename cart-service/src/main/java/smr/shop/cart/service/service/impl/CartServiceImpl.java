@@ -13,7 +13,7 @@ import smr.shop.cart.service.model.CartItemEntity;
 import smr.shop.cart.service.repository.CartItemRepository;
 import smr.shop.cart.service.repository.CartRepository;
 import smr.shop.cart.service.service.CartService;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.common.dto.message.ProductStockMessageModel;
@@ -59,7 +59,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addProductToCart(Long productId, UUID stockId) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
 
         cartGrpcClientService.getProduct(productId);
         cartGrpcClientService.getAttribute(stockId);
@@ -98,7 +98,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse addCoupon(String couponCode) {
         //userId
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CouponGrpcResponse couponDetailWithCode = cartGrpcClientService.getCouponDetailWithCode(couponCode);
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(CartEntity::new);
         cartEntity.setCoupon(couponDetailWithCode.getCode());
@@ -108,7 +108,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse removeCoupon() {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(CartEntity::new);
         if (cartEntity.getCoupon() != null) {
             cartEntity.setCoupon(null);
@@ -119,7 +119,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void clearCart() {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CartEntity cart = cartRepository.findByUserId(userId).orElseGet(() -> CartEntity.builder().id(UUID.randomUUID()).build());
         cartItemRepository.deleteByCartId(cart.getId());
 
@@ -128,7 +128,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCartItem(UUID cartItemId) {
         CartItemEntity cartItemEntity = findItemById(cartItemId);
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         if (!cartItemEntity.getUserId().equals(userId)) {
             throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
         }
@@ -137,7 +137,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse getAllCartItems() {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(() -> CartEntity.builder().id(UUID.randomUUID()).build());
         return getCartResponse(cartEntity);
     }
@@ -146,7 +146,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void increase(UUID cartItemId) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CartItemEntity cartItemEntity = findItemById(cartItemId);
         if (!cartItemEntity.getUserId().equals(userId)) {
             throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
@@ -159,7 +159,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void decrease(UUID cartItemId) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         CartItemEntity cartItemEntity = findItemById(cartItemId);
         if (!cartItemEntity.getUserId().equals(userId)) {
             throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);

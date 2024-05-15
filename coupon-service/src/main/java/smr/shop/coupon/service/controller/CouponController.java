@@ -6,6 +6,7 @@ import smr.shop.coupon.service.dto.request.CouponCreateRequest;
 import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
 import smr.shop.coupon.service.service.CouponService;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,24 +28,65 @@ public class CouponController {
     }
 
     @PostMapping
-    public ResponseEntity<CouponResponse> createCoupon(@RequestBody CouponCreateRequest request) {
-        CouponResponse couponResponse = couponService.createCoupon(request);
-        return ResponseEntity.ok(couponResponse);
+    public ResponseEntity<EmptyResponse> createCoupon(@RequestBody CouponCreateRequest request) {
+        couponService.createCoupon(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon created successfully!")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<EmptyResponse> createCouponWithAdmin(@RequestBody CouponCreateRequest request) {
+        couponService.createCouponWithAdmin(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon created successfully!")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{couponId}")
-    public ResponseEntity<CouponResponse> updateCoupon(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
-        CouponResponse couponResponse = couponService.updateCoupon(couponId, request);
-        return ResponseEntity.ok(couponResponse);
+    public ResponseEntity<EmptyResponse> updateCoupon(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
+        couponService.updateCoupon(couponId, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon updated successfully with id: " + couponId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/admin/{couponId}")
+    public ResponseEntity<EmptyResponse> updateCouponWithAdmin(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
+        couponService.updateCouponWithAdmin(couponId, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon updated successfully with id: " + couponId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{couponId}")
-    public ResponseEntity<Void> deleteCoupon(@PathVariable UUID couponId) {
+    public ResponseEntity<EmptyResponse> deleteCoupon(@PathVariable UUID couponId) {
         couponService.deleteCoupon(couponId);
-        return ResponseEntity.noContent().build();
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon deleted successfully with id: " + couponId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/admin/{couponId}")
+    public ResponseEntity<EmptyResponse> deleteCouponWithAdmin(@PathVariable UUID couponId) {
+        couponService.deleteCouponWithAdmin(couponId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Coupon deleted successfully with id: " + couponId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
+    public ResponseEntity<List<CouponResponse>> getAllShopCoupon(Integer page) {
+        List<CouponResponse> allCoupon = couponService.getShopAllCoupons(page);
+        return ResponseEntity.ok(allCoupon);
+    }
+
+    @GetMapping("/admin")
     public ResponseEntity<List<CouponResponse>> getAllCoupon(Integer page) {
         List<CouponResponse> allCoupon = couponService.getAllCoupons(page);
         return ResponseEntity.ok(allCoupon);

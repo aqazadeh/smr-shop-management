@@ -1,7 +1,7 @@
 package smr.shop.ticket.service.mapper;
 
 import org.springframework.stereotype.Component;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
 import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;

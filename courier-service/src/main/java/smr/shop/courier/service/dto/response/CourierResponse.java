@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class CourierResponse {
     Long id;
-    Long userId;
+    UUID userId;
     UUID imageId;
     String name;
     String surname;

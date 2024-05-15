@@ -18,6 +18,6 @@ public interface CouponUsageRepository extends JpaRepository<CouponUsageEntity, 
     Optional<CouponUsageEntity> findCouponUsageByCouponId(UUID couponId);
 
 
-    Optional<CouponUsageEntity> findByCouponIdAndUserId(UUID couponId, Long userId);
+    Optional<CouponUsageEntity> findByCouponIdAndUserId(UUID couponId, UUID userId);
 }
 

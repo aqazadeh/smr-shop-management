@@ -8,7 +8,7 @@ import smr.shop.shop.service.model.valueobject.ShopAddress;
 
 @Value
 public class CreateShopRequest {
-    @NotBlank Long userId;
+    @NotBlank UUID userId;
     @NotBlank @Size(min = 4) String name;
     @NotBlank String slug;
     @NotBlank String logo;

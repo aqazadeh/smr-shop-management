@@ -9,5 +9,5 @@ import smr.shop.ticket.service.model.Ticket;
 import java.util.UUID;
 
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
-    Page<Ticket> findAllByUserId(Long userId, Pageable pageable);
+    Page<Ticket> findAllByUserId(UUID userId, Pageable pageable);
 }

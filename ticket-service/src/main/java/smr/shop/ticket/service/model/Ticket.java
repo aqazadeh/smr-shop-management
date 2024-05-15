@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Ticket {
     @Id
     private UUID id;
-    private Long userId;
+    private UUID userId;
     private String subject;
     @Enumerated(EnumType.STRING)
     @Builder.Default

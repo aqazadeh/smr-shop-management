@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Value
 public class CreateOrderRequest {
-    Long userId;
+    UUID userId;
     OrderAddress address;
     Double shippingCost;
     List<UUID> couponId;

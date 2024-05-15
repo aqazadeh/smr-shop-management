@@ -19,9 +19,13 @@ import java.util.UUID;
 
 public interface CouponService {
 
-    CouponResponse createCoupon(CouponCreateRequest request);
+    void createCouponWithAdmin(CouponCreateRequest request);
 
-    CouponResponse updateCoupon(UUID couponId, CouponUpdateRequest request);
+    void createCoupon(CouponCreateRequest request);
+
+    void updateCoupon(UUID couponId, CouponUpdateRequest request);
+
+    void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request);
 
     void deleteCoupon(UUID couponId);
 

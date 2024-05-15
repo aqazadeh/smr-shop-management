@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;

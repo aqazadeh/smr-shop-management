@@ -14,5 +14,5 @@ import java.util.UUID;
 @Data
 public class UseCouponMessageModel implements BaseMessageModel {
     private UUID couponId;
-    private Long userId;
+    private UUID userId;
 }

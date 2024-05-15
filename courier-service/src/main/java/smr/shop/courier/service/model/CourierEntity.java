@@ -23,7 +23,7 @@ public class CourierEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private UUID userId;
 
     private UUID imageId;
 

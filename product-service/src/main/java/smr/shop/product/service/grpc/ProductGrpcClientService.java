@@ -25,7 +25,7 @@ public interface ProductGrpcClientService {
 
     ShopGrpcResponse getShopByShopId(Long shopId);
 
-    ShopGrpcResponse getShopByUserId(Long userId);
+    ShopGrpcResponse getShopByUserId(UUID userId);
 
     DiscountGrpcResponse getDiscount(Long id);
 

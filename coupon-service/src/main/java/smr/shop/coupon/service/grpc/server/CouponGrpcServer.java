@@ -1,7 +1,6 @@
 package smr.shop.coupon.service.grpc.server;
 
 import io.grpc.stub.StreamObserver;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.libs.grpc.coupon.CouponGrpcRequest;

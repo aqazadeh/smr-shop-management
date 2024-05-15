@@ -1,5 +1,5 @@
 server:
-  port: 2202
+  port: 8104
 
 spring:
   cloud:
@@ -10,12 +10,28 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9002/couponDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9104/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
     name: coupon-service
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
 
 eureka:
   instance:
@@ -34,8 +50,9 @@ grpc:
   server:
     port: 3024
 
-  shop-service:
-    address: 'discovery:///shop-service'
-    enableKeepAlive: true
-    keepAliveWithoutCalls: true
-    negotiationType: plaintext
+  client:
+    shop-service:
+      address: 'discovery:///shop-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
