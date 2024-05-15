@@ -1,10 +1,9 @@
 package smr.shop.ticket.service.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import smr.shop.libs.common.Helper.UserHelper;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
 import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
@@ -24,13 +23,19 @@ import java.util.UUID;
 import static smr.shop.libs.common.constant.ServiceConstants.pageSize;
 
 @Service
-@RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final TicketServiceMapper ticketServiceMapper;
     private final TicketMessageRepository ticketMessageRepository;
     private final TicketServiceHelper ticketServiceHelper;
 
+    public TicketServiceImpl(TicketRepository ticketRepository, TicketServiceHelper ticketServiceHelper,
+                             TicketMessageRepository ticketMessageRepository, TicketServiceMapper ticketServiceMapper) {
+        this.ticketRepository = ticketRepository;
+        this.ticketServiceHelper = ticketServiceHelper;
+        this.ticketMessageRepository = ticketMessageRepository;
+        this.ticketServiceMapper = ticketServiceMapper;
+    }
 
     @Override
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
@@ -49,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketResponse> getAllUserTickets(Integer page) {
-        Long userId = UserHelper.getUserId();
+        UUID userId = UserHelper.getUserId();
         Pageable pageable = PageRequest.of(page, pageSize);
         return ticketRepository.findAllByUserId(userId, pageable)
                 .stream()

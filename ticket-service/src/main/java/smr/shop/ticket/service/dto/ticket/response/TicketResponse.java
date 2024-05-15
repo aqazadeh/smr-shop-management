@@ -1,15 +1,10 @@
 package smr.shop.ticket.service.dto.ticket.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 @Builder
 public class TicketResponse {
-    private String subject;
-    private String ticketStatus;
+     String subject;
+     String ticketStatus;
 }
