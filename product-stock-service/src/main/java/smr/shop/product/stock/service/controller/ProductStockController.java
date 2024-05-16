@@ -1,5 +1,6 @@
 package smr.shop.product.stock.service.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.product.stock.service.dto.request.CreateProductStockRequest;
@@ -21,13 +22,13 @@ public class ProductStockController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateProductStockRequest create(@RequestBody CreateProductStockRequest request) {
+    public CreateProductStockRequest create(@RequestBody @Valid CreateProductStockRequest request) {
         return productStockService.create(request);
     }
 
     @PostMapping("/crate-all")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<CreateProductStockRequest> createAll(@RequestBody List<CreateProductStockRequest> productStockRequests) {
+    public List<CreateProductStockRequest> createAll(@RequestBody @Valid List<CreateProductStockRequest> productStockRequests) {
         return productStockService.createAll(productStockRequests);
     }
 
@@ -52,7 +53,7 @@ public class ProductStockController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void updateById(@PathVariable UUID id,
-                           @RequestBody UpdateProductStockRequest request) {
+                           @RequestBody @Valid UpdateProductStockRequest request) {
         productStockService.updateById(id, request);
     }
 }
