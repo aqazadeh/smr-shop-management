@@ -6,9 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Value;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
 
+import java.util.UUID;
+
 @Value
 public class CreateShopRequest {
-    @NotBlank UUID userId;
     @NotBlank @Size(min = 4) String name;
     @NotBlank String slug;
     @NotBlank String logo;

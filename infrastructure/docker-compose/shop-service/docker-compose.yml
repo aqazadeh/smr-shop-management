@@ -5,13 +5,12 @@ services:
     container_name: shop-service-postgres
     image: postgres:16
     ports:
-      - "9013:5432"
+      - "9115:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=shopDB
     expose:
-      - 9013
+      - 9115
     volumes:
       - shop-volume:/var/lib/postgresql/data
 volumes:

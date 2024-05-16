@@ -13,8 +13,7 @@ import smr.shop.shop.service.model.valueobject.ShopAddress;
 public class ShopMapper {
     public Shop toShop(CreateShopRequest request) {
         Shop.ShopBuilder builder = Shop.builder();
-        builder.userId(request.getUserId());
-        builder.name(request.getName());
+        builder.shopName(request.getName());
         builder.slug(request.getSlug());
         builder.logo(request.getLogo());
         builder.phone(request.getPhone());
@@ -24,13 +23,11 @@ public class ShopMapper {
     }
 
     public Shop toUpdateShop(UpdateShopRequest request, Shop shop) {
-        shop.setUserId(request.getUserId());
-        shop.setName(request.getName());
+        shop.setShopName(request.getName());
         shop.setSlug(request.getSlug());
         shop.setDescription(request.getDescription());
         shop.setLogo(request.getLogo());
         shop.setPhone(request.getPhone());
-        shop.setAddress(request.getAddress());
         return shop;
     }
 
@@ -38,7 +35,7 @@ public class ShopMapper {
         return ShopResponse.builder()
                 .id(shop.getId())
                 .userId(shop.getUserId())
-                .name(shop.getName())
+                .name(shop.getShopName())
                 .slug(shop.getSlug())
                 .description(shop.getDescription())
                 .logo(shop.getLogo())

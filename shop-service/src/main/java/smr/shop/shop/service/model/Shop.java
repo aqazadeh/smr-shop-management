@@ -8,6 +8,7 @@ import smr.shop.shop.service.model.valueobject.ShopAddress;
 import smr.shop.shop.service.model.valueobject.ShopStatus;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -22,7 +23,7 @@ public class Shop {
 
     private UUID userId;
 
-    private String name;
+    private String shopName;
 
     private String slug;
 

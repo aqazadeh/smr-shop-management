@@ -5,6 +5,8 @@ import lombok.Value;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
 import smr.shop.shop.service.model.valueobject.ShopStatus;
 
+import java.util.UUID;
+
 @Value
 @Builder
 public class ShopResponse {

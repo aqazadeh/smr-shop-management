@@ -58,13 +58,13 @@ public class ShopController {
         return ResponseEntity.ok(shopResponse);
     }
 
-    @PatchMapping("/{id}/address/}")
+    @PatchMapping("/{id}/address/")
     public ResponseEntity<ShopAddressResponse> updateShopAddress(@PathVariable Long id, @RequestBody UpdateShopAddressRequest request) {
         ShopAddressResponse shopAddressResponse = shopService.updateShopAddress(id, request);
         return ResponseEntity.ok(shopAddressResponse);
     }
 
-    @GetMapping("/{id}/adress/{addressId}")
+    @GetMapping("/{id}/address/{addressId}")
     public ResponseEntity<ShopAddressResponse> getShopAddressById(@PathVariable Long id, @PathVariable Long addressId) {
         ShopAddressResponse shopAddressResponse = shopService.getShopAddressById(id, addressId);
         return ResponseEntity.ok(shopAddressResponse);

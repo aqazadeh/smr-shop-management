@@ -1,21 +1,56 @@
 server:
-  port: 2213
+  port: 8115
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
+  application:
+    name: product-service
+
   cloud:
     config:
       enabled: false
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+
   datasource:
-    url: jdbc:postgresql://localhost:9013/shopDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9115/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
-  application:
-    name: shop-service
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
 
 eureka:
   instance:
@@ -27,3 +62,15 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+
+grpc:
+  server:
+    port: 7115
+
+  client:
+    upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
