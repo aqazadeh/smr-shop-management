@@ -1,1 +1,0 @@
-package smr.shop.product.stock.service.controller;

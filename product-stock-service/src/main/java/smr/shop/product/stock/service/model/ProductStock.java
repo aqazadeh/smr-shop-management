@@ -26,5 +26,4 @@ public class ProductStock {
     private ZonedDateTime createdAt;
 
     private ZonedDateTime updatedAt;
-
 }

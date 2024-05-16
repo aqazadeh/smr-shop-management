@@ -18,8 +18,9 @@ import java.util.UUID;
 @RequestMapping("/api/1.0/tickets")
 public class TicketController {
     private final TicketService ticketService;
-    public TicketController(TicketService ticketService){
-        this.ticketService=ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
 
     @GetMapping("/{id}")
@@ -27,10 +28,12 @@ public class TicketController {
                                                   @RequestParam(value = "page", defaultValue = "0") Integer page) {
         return ticketService.getById(id, page);
     }
+
     @GetMapping
     public List<TicketResponse> getAllUserTickets(@RequestParam(value = "page", defaultValue = "0") Integer page) {
         return ticketService.getAllUserTickets(page);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CreateTicketRequest add(@RequestBody CreateTicketRequest request) {
