@@ -11,7 +11,6 @@ import java.util.UUID;
 @Builder
 public class ShopResponse {
     Long id;
-    UUID userId;
     String name;
     String slug;
     String description;

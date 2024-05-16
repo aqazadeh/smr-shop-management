@@ -8,6 +8,5 @@ public class UpdateShopRequest {
     String name;
     String slug;
     String description;
-    String logo;
     String phone;
 }

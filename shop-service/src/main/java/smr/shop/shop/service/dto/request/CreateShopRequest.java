@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CreateShopRequest {
     @NotBlank @Size(min = 4) String name;
     @NotBlank String slug;
-    @NotBlank String logo;
+    @NotBlank UUID imageId;
     @NotBlank String phone;
     @NotBlank ShopAddress address;
     @NotBlank @Lob String description;
