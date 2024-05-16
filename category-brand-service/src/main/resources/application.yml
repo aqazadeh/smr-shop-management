@@ -1,7 +1,24 @@
 server:
   port: 8103
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
+  application:
+    name: category-brand-service
   cloud:
     config:
       enabled: false
@@ -13,8 +30,6 @@ spring:
     url: jdbc:postgresql://localhost:9103/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
-  application:
-    name: category-brand-service
 
   kafka:
     consumer:
@@ -39,7 +54,7 @@ eureka:
     instanceId: ${spring.application.name}:${random.int}
     prefer-ip-address: true
   client:
-    register-with-eureka: true
+    register-with-eureka: false
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/

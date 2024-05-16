@@ -9,8 +9,6 @@ import java.util.UUID;
 public interface CartGrpcClientService {
     CouponGrpcResponse getCouponDetailWithCode(String code);
 
-    CouponGrpcResponse getCouponDetailWithId(UUID couponId);
-
     ProductGrpcResponse getProduct(Long productId);
 
     ProductStockGrpcResponse getAttribute(UUID attributeId);

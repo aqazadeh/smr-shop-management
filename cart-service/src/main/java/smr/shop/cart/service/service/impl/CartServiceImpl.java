@@ -13,6 +13,7 @@ import smr.shop.cart.service.model.CartItemEntity;
 import smr.shop.cart.service.repository.CartItemRepository;
 import smr.shop.cart.service.repository.CartRepository;
 import smr.shop.cart.service.service.CartService;
+import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
@@ -63,8 +64,6 @@ public class CartServiceImpl implements CartService {
 
         cartGrpcClientService.getProduct(productId);
         cartGrpcClientService.getAttribute(stockId);
-        // Exception if not found
-
 
         Optional<CartItemEntity> cartItemEntityOptional = cartItemRepository.findByUserIdAndProductIdAndStockId(userId, productId, stockId);
         CartItemEntity cartItem;
@@ -190,6 +189,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartEntity findCartById(UUID cartId) {
         return cartRepository.findById(cartId).orElseThrow(() -> new CartException("cart not found with id : " + cartId, HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public void removeCouponInItems(CouponMessageModel message) {
+        cartRepository.removeCouponInCart(message.getCode());
     }
 
     private CartResponse getCartResponse(CartEntity cartEntity) {

@@ -14,4 +14,5 @@ import java.util.UUID;
 @Data
 public class CouponMessageModel implements BaseMessageModel {
     private UUID id;
+    private String code;
 }

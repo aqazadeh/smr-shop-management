@@ -29,6 +29,6 @@ public class CouponDeleteMessageListener implements MessageListener<CouponMessag
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {
 
-        cartService.removeItemByProduct(message);
+        cartService.removeCouponInItems(message);
     }
 }

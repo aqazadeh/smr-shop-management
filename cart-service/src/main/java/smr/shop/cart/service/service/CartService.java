@@ -3,6 +3,7 @@ package smr.shop.cart.service.service;
 import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.model.CartEntity;
 import smr.shop.cart.service.model.CartItemEntity;
+import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.common.dto.message.ProductStockMessageModel;
 
@@ -41,4 +42,6 @@ public interface CartService {
     CartItemEntity findItemById(UUID cartItemId);
 
     CartEntity findCartById(UUID cartId);
+
+    void removeCouponInItems(CouponMessageModel message);
 }

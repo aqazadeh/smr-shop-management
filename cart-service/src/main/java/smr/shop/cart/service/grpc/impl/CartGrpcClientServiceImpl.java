@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 import smr.shop.cart.service.grpc.CartGrpcClientService;
-import smr.shop.libs.grpc.coupon.CouponCodeGrpcRequest;
+import smr.shop.libs.grpc.coupon.CouponGrpcRequest;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
-import smr.shop.libs.grpc.coupon.CouponIdGrpcRequest;
 import smr.shop.libs.grpc.coupon.CouponServiceGrpc;
 import smr.shop.libs.grpc.product.ProductGrpcRequest;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
@@ -34,16 +33,9 @@ public class CartGrpcClientServiceImpl implements CartGrpcClientService {
 
     @Override
     public CouponGrpcResponse getCouponDetailWithCode(String code) {
-        CouponCodeGrpcRequest couponCodeGrpcRequest = CouponCodeGrpcRequest.newBuilder().setCode(code).build();
-        CouponGrpcResponse couponDetailWithCode = couponServiceBlockingStub.getCouponDetailWithCode(couponCodeGrpcRequest);
-        return couponDetailWithCode;
-    }
-
-    @Override
-    public CouponGrpcResponse getCouponDetailWithId(UUID couponId) {
-        CouponIdGrpcRequest couponIdGrpcRequest = CouponIdGrpcRequest.newBuilder().setId(couponId.toString()).build();
-        CouponGrpcResponse couponDetailWithId = couponServiceBlockingStub.getCouponDetailWithId(couponIdGrpcRequest);
-        return couponDetailWithId;
+        CouponGrpcRequest couponCodeGrpcRequest = CouponGrpcRequest.newBuilder().setCode(code).build();
+        CouponGrpcResponse couponGrpcResponse = couponServiceBlockingStub.getCouponDetail(couponCodeGrpcRequest);
+        return couponGrpcResponse;
     }
 
     @Override
