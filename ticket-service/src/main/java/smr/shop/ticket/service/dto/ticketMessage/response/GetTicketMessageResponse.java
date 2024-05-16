@@ -3,7 +3,7 @@ package smr.shop.ticket.service.dto.ticketMessage.response;
 import lombok.*;
 
 import java.util.UUID;
-@Value
+@Data
 @Builder
 public class GetTicketMessageResponse {
      UUID userId;
