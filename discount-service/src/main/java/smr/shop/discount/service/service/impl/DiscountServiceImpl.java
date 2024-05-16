@@ -45,7 +45,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public DiscountResponse getById(Long id) {
+    public DiscountResponse getDiscountById(Long id) {
         DiscountEntity discountEntity = findById(id);
 
         DiscountResponse discountResponse = discountMapper.discountEntityToDiscountResponse(discountEntity);
@@ -55,6 +55,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public DiscountEntity findById(Long id) {
-        return discountRepository.findById(id).orElseThrow(() -> new DiscountException("Brand Not found With id : " + id, HttpStatus.NOT_FOUND));
+        return discountRepository.findById(id).orElseThrow(() -> new DiscountException("Discount Not found With id : " + id, HttpStatus.NOT_FOUND));
     }
 }
