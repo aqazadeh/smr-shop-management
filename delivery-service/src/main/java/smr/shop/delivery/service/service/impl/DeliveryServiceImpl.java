@@ -1,5 +1,6 @@
 package smr.shop.delivery.service.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,24 +33,26 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public DeliveryResponse createDelivery(DeliveryCreateRequest request) {
-        Delivery deliveryResponse = deliveryMapper.toDeliveryResponse(request);
-        deliveryResponse = deliveryRepository.save(deliveryResponse);
+    @Transactional
+    public void createDelivery(DeliveryCreateRequest request) {
+        Delivery deliveryResponse = deliveryMapper.toDelivery(request);
         deliveryResponse.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         deliveryResponse.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        return deliveryMapper.toDeliveryResponse(deliveryResponse);
+        deliveryResponse = deliveryRepository.save(deliveryResponse);
+        deliveryMapper.toDeliveryResponse(deliveryResponse);
     }
 
     @Override
-    public DeliveryResponse updateDelivery(Long id, DeliveryUpdateRequest request) {
+    @Transactional
+    public void updateDelivery(Long id, DeliveryUpdateRequest request) {
         Delivery delivery = findById(id);
         Delivery updateDelivery = deliveryMapper.toUpdateDelivery(request, delivery);
-        delivery = deliveryRepository.save(updateDelivery);
         delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        return deliveryMapper.toDeliveryResponse(delivery);
+        deliveryRepository.save(updateDelivery);
     }
 
     @Override
+    @Transactional
     public void deleteDelivery(Long id) {
         Delivery delivery = findById(id);
         delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
@@ -63,6 +66,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public DeliveryResponse getDeliveryById(Long id) {
         Delivery delivery = findById(id);
         return deliveryMapper.toDeliveryResponse(delivery);
@@ -72,8 +76,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     public DeliveryResponse updateDeliveryStatus(Long id, UpdateDeliveryStatusRequest request) {
         Delivery delivery = findById(id);
         delivery.setStatus(request.getStatus());
-        delivery = deliveryRepository.save(delivery);
         delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        delivery = deliveryRepository.save(delivery);
         return deliveryMapper.toDeliveryResponse(delivery);
     }
 

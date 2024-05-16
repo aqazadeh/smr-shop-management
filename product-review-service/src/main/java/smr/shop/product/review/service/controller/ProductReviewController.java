@@ -1,7 +1,9 @@
 package smr.shop.product.review.service.controller;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
 import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.service.ProductReviewService;
@@ -19,14 +21,22 @@ public class ProductReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductReviewResponse> createProductReview(@RequestBody CreateProductReviewRequest request) {
-        ProductReviewResponse productReviewResponse = productReviewService.createProductReview(request);
-        return ResponseEntity.ok(productReviewResponse);
+    @Transactional
+    public ResponseEntity<EmptyResponse> createProductReview(@RequestBody CreateProductReviewRequest request) {
+        productReviewService.createProductReview(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Review created successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductReview(@PathVariable UUID id) {
+    @Transactional
+    public ResponseEntity<EmptyResponse> deleteProductReview(@PathVariable UUID id) {
         productReviewService.deleteProductReview(id);
-        return ResponseEntity.noContent().build();
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Review deleted successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
