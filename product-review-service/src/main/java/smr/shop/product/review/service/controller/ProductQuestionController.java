@@ -1,7 +1,9 @@
 package smr.shop.product.review.service.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.review.service.dto.request.CreateProductQuestionRequest;
 import smr.shop.product.review.service.dto.response.ProductQuestionResponse;
 import smr.shop.product.review.service.service.ProductQuestionService;
@@ -19,14 +21,22 @@ public class ProductQuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductQuestionResponse> createProductQuestion(@RequestBody CreateProductQuestionRequest request) {
-        ProductQuestionResponse productQuestionResponse = procuctQuestionService.createProductQuestion(request);
-        return ResponseEntity.ok(productQuestionResponse);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<EmptyResponse> createProductQuestion(@RequestBody CreateProductQuestionRequest request) {
+        procuctQuestionService.createProductQuestion(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Question created successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductQuestion(@PathVariable UUID id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<EmptyResponse> deleteProductQuestion(@PathVariable UUID id) {
         procuctQuestionService.deleteProductQuestion(id);
-        return ResponseEntity.noContent().build();
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Question deleted successfully with id: " + id)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
