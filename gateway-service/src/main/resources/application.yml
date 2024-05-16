@@ -11,17 +11,16 @@ spring:
       enabled: false
 
     gateway:
-      mvc:
-        routes:
-          - id: brand-service
-            uri: lb://brand-service
-            predicates:
-              - Path=/api/1.0/brands/**
+      routes:
+        - id: category-brand-service
+          uri: lb://category-brand-service
+          predicates:
+            - Path=/api/1.0/brands/**, /api/1.0/category/**, /v3/api-docs/category-brand
 
-#          - id: brand-service
-#            uri: lb://brand-service
-#            predicates:
-#              - Path=/api/1.0/brands/**
+        - id: coupon-service
+          uri: lb://coupon-service
+          predicates:
+            - Path=/api/1.0/coupon/**, /v3/api-docs/coupon
 
 eureka:
   instance:
