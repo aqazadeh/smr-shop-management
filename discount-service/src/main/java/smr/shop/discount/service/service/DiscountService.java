@@ -10,6 +10,6 @@ public interface DiscountService {
     void updateDiscount(Long discountId,DiscountUpdateRequest request);
     void deleteDiscount(Long discountId);
 
-    DiscountResponse getById(Long id);
+    DiscountResponse getDiscountById(Long id);
     DiscountEntity findById(Long id);
 }
