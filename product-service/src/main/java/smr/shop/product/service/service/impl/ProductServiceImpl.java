@@ -63,10 +63,10 @@ public void createProduct(ProductCreateRequest request) {
     CategoryGrpcResponse categoryGrpcResponse = productGrpcClientService.getCategory(request.getCategoryId());
     BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(request.getBrandId());
     UploadGrpcResponse uploadGrpcResponse = productGrpcClientService.getImage(request.getThumbnail());
-    ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(request.getShopId());
+    ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByUserId(UserHelper.getUserId());
 
     ProductEntity product = productServiceMapper.productCreateRequestToProductEntity(request);
-
+    product.setShopId(shopGrpcResponse.getShopId());
     // TODO Check image ids
 
     StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStock());
@@ -299,8 +299,11 @@ public void createProduct(ProductCreateRequest request) {
         ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByUserId(UserHelper.getUserId());
 
         if (!product.getShopId().equals(shopGrpcResponse.getShopId())){
-            throw  new ProductException("Product not found with id: " + product.getId(), HttpStatus.NOT_FOUND);
+            throw  new ProductException("Your don't have access to modify this product", HttpStatus.NOT_FOUND);
         }
 
     }
+
+
+
 }

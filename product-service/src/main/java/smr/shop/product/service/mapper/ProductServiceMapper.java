@@ -26,7 +26,6 @@ public class ProductServiceMapper {
     public ProductEntity productCreateRequestToProductEntity(ProductCreateRequest request) {
 
         return ProductEntity.builder()
-                .shopId(request.getShopId())
                 .categoryId(request.getCategoryId())
                 .brandId(request.getBrandId())
                 .name(request.getName())

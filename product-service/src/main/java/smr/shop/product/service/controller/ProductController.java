@@ -46,7 +46,6 @@ public class ProductController {
         EmptyResponse response = EmptyResponse.builder().message("successfully added thumbnail to product productId:" + productId).build();
         return ResponseEntity.ok(response);
 
-
     }
 
     @PostMapping("/{productId}/image/{imageId}")
