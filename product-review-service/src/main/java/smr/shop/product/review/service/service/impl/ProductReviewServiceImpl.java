@@ -1,10 +1,10 @@
 package smr.shop.product.review.service.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
-import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.exception.ProductReviewException;
 import smr.shop.product.review.service.mapper.ProductReviewMapper;
 import smr.shop.product.review.service.model.ProductReview;
@@ -28,15 +28,17 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
-    public ProductReviewResponse createProductReview(CreateProductReviewRequest request) {
+    @Transactional
+    public void createProductReview(CreateProductReviewRequest request) {
         ProductReview productReview = productReviewMapper.toProductReview(request);
-        productReview = productReviewRepository.save(productReview);
         productReview.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        return productReviewMapper.toProductReviewResponse(productReview);
+        productReview = productReviewRepository.save(productReview);
+        productReviewMapper.toProductReviewResponse(productReview);
     }
 
     @Override
+    @Transactional
     public void deleteProductReview(UUID id) {
         ProductReview productReview = findById(id);
         productReviewRepository.delete(productReview);

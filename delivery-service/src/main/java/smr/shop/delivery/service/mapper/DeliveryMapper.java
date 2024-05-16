@@ -11,7 +11,7 @@ import java.util.UUID;
 @Component
 public class DeliveryMapper {
 
-    public Delivery toDeliveryResponse(DeliveryCreateRequest request) {
+    public Delivery toDelivery(DeliveryCreateRequest request) {
         Delivery.DeliveryBuilder builder = Delivery.builder();
         builder.courierId(request.getCourierId());
         builder.orderId(UUID.randomUUID());
