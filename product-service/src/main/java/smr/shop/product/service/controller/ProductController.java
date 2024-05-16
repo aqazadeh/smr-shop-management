@@ -88,10 +88,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{productId}")
+    @PatchMapping("/{productId}/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmptyResponse> updateProductStatus(@PathVariable Long productId,
-                                                             @RequestBody ProductStatus productStatus){
+                                                             @RequestParam ProductStatus productStatus){
         productService.updateProductStatus(productId, productStatus);
         EmptyResponse response = EmptyResponse.builder().message("successfully updated product status productId:" + productId).build();
         return ResponseEntity.ok(response);

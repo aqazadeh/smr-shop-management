@@ -5,13 +5,13 @@ services:
     container_name: product-service-postgres
     image: postgres:16
     ports:
-      - "9011:5432"
+      - "9113:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=productDB
     expose:
-      - 9011
+      - 9113
     volumes:
       - product-volume:/var/lib/postgresql/data
 volumes:

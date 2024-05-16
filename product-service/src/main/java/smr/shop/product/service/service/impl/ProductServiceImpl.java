@@ -17,7 +17,7 @@ import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
 import smr.shop.product.service.dto.response.ProductResponse;
 import smr.shop.product.service.exception.ProductException;
-import smr.shop.product.service.grpc.ProductGrpcClientService;
+import smr.shop.product.service.grpc.client.ProductGrpcClientService;
 import smr.shop.product.service.mapper.ProductServiceMapper;
 import smr.shop.product.service.messaging.ProductStockCreateMessagePublisher;
 import smr.shop.product.service.model.ProductEntity;
@@ -280,6 +280,8 @@ public class ProductServiceImpl implements ProductService {
        return productRepository.findById(productId)
                .orElseThrow(()-> new ProductException("Product not found with id: " + productId, HttpStatus.NOT_FOUND));
     }
+
+    //TODO DELETE product by category and Delete product by brand and Delete product by Shop
 
     private void validateUserShop(ProductEntity product){
 

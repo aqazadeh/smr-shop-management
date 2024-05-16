@@ -1,4 +1,4 @@
-package smr.shop.product.service.grpc;
+package smr.shop.product.service.grpc.client;
 
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
@@ -8,6 +8,7 @@ import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Author: Ali Gadashov
