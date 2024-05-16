@@ -1,6 +1,5 @@
 package smr.shop.ticket.service.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,16 +20,22 @@ import smr.shop.ticket.service.service.TicketService;
 import java.util.List;
 import java.util.UUID;
 
-import static smr.shop.libs.common.constant.ServiceConstants.*;
+import static smr.shop.libs.common.constant.ServiceConstants.pageSize;
 
 @Service
-@RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final TicketServiceMapper ticketServiceMapper;
     private final TicketMessageRepository ticketMessageRepository;
     private final TicketServiceHelper ticketServiceHelper;
 
+    public TicketServiceImpl(TicketRepository ticketRepository, TicketServiceHelper ticketServiceHelper,
+                             TicketMessageRepository ticketMessageRepository, TicketServiceMapper ticketServiceMapper) {
+        this.ticketRepository = ticketRepository;
+        this.ticketServiceHelper = ticketServiceHelper;
+        this.ticketMessageRepository = ticketMessageRepository;
+        this.ticketServiceMapper = ticketServiceMapper;
+    }
 
     @Override
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
@@ -50,7 +55,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketResponse> getAllUserTickets(Integer page) {
         UUID userId = UserHelper.getUserId();
-        Pageable pageable = (Pageable) PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         return ticketRepository.findAllByUserId(userId, pageable)
                 .stream()
                 .map(ticketServiceMapper::mapToResponse)

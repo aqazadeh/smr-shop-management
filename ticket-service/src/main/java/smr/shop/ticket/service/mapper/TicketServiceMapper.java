@@ -32,6 +32,7 @@ public class TicketServiceMapper {
                 .userId(UserHelper.getUserId())
                 .build();
     }
+
     public TicketResponse mapToResponse(Ticket ticket) {
         return TicketResponse.builder()
                 .ticketStatus(ticket.getTicketStatus().name())
