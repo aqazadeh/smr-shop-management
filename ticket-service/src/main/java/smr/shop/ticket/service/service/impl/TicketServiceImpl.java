@@ -40,6 +40,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
         Ticket ticket = ticketServiceMapper.mapToTicket(request);
+        System.out.println(ticket.getUserId());
         ticketRepository.save(ticket);
         return request;
     }
@@ -63,8 +64,12 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void sendMessage(UUID ticketId, CreateTicketMessageRequest request) {
+    public void sendMessageByUser(UUID ticketId, CreateTicketMessageRequest request) {
+        Ticket ticket = ticketServiceHelper.getById(ticketId);
+        if (!UserHelper.getUserId().toString().equals(ticket.getUserId().toString()))
+            throw new RuntimeException("Ticket given by id doesn't belongs to current user!");
         TicketMessage ticketMessage = ticketServiceMapper.mapToTicketMessage(request);
+        ticketMessage.setTicketId(ticketId);
         ticketMessageRepository.save(ticketMessage);
     }
 
@@ -73,5 +78,11 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
         ticket.setTicketStatus(status);
         ticketRepository.save(ticket);
+    }
+
+    public void sendMessageByAdmin(UUID ticketId, CreateTicketMessageRequest request) {
+        TicketMessage ticketMessage = ticketServiceMapper.mapToTicketMessage(request);
+        ticketMessage.setTicketId(ticketId);
+        ticketMessageRepository.save(ticketMessage);
     }
 }

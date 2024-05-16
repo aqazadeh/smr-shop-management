@@ -5,7 +5,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 
 import java.time.ZonedDateTime;
@@ -25,7 +24,6 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private TicketStatus ticketStatus = TicketStatus.ACTIVE;
-    @CreationTimestamp
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

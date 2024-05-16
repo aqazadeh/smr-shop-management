@@ -41,17 +41,25 @@ public class TicketController {
         return ticketService.createTicket(request);
     }
 
-    @PutMapping("/update/{id}/")
+    @PutMapping("/update/{ticketId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID id, @RequestBody @Valid TicketStatus ticketstatus) {
-        ticketService.updateTicketStatus(id, ticketstatus);
+    public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID ticketId,
+                                                      @RequestParam("ticketStatus") @Valid TicketStatus ticketstatus) {
+        ticketService.updateTicketStatus(ticketId, ticketstatus);
         return ResponseEntity.ok().body(EmptyResponse.builder().message("updated success").build());
     }
 
-    @PostMapping("/send-message/{ticketId}")
+    @PostMapping("/send-message-user/{ticketId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendMessage(@PathVariable UUID ticketId,
                             @RequestBody @Valid CreateTicketMessageRequest request) {
-        ticketService.sendMessage(ticketId, request);
+        ticketService.sendMessageByUser(ticketId, request);
+    }
+
+    @PostMapping("/send-message-admin/{ticketId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void sendMessageByAdmin(@PathVariable UUID ticketId,
+                                   @RequestBody @Valid CreateTicketMessageRequest request) {
+        ticketService.sendMessageByAdmin(ticketId, request);
     }
 }

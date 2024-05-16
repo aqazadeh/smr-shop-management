@@ -2,7 +2,7 @@ package smr.shop.ticket.service.dto.ticket.response;
 
 import lombok.*;
 
-@Value
+@Data
 @Builder
 public class TicketResponse {
      String subject;
