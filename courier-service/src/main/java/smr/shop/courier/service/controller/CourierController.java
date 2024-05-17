@@ -1,5 +1,6 @@
 package smr.shop.courier.service.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.courier.service.dto.request.CourierCreateRequest;
@@ -7,6 +8,7 @@ import smr.shop.courier.service.dto.request.CourierUpdateRequest;
 import smr.shop.courier.service.dto.request.UpdateCourierActiveTypeRequest;
 import smr.shop.courier.service.dto.response.CourierResponse;
 import smr.shop.courier.service.service.CourierService;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 
 import java.util.List;
 
@@ -21,21 +23,33 @@ public class CourierController {
     }
 
     @PostMapping
-    public ResponseEntity<CourierResponse> createCourier(@RequestBody CourierCreateRequest request) {
-        CourierResponse courierResponse = courierService.createCourier(request);
-        return ResponseEntity.ok(courierResponse);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<EmptyResponse> createCourier(@RequestBody CourierCreateRequest request) {
+        courierService.createCourier(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Courier created successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<CourierResponse> updateCourier(@PathVariable Long id, @RequestBody CourierUpdateRequest request) {
-        CourierResponse courierResponse = courierService.updateCourier(id, request);
-        return ResponseEntity.ok(courierResponse);
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateCourier(@PathVariable Long id, @RequestBody CourierUpdateRequest request) {
+        courierService.updateCourier(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Courier updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourier(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<EmptyResponse> deleteCourier(@PathVariable Long id) {
         courierService.deleteCourier(id);
-        return ResponseEntity.noContent().build();
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Courier deleted successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

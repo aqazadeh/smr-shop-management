@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.product.review.service.dto.request.CreateProductQuestionRequest;
-import smr.shop.product.review.service.dto.response.ProductQuestionResponse;
-import smr.shop.product.review.service.exception.ProductQuestionException;
-import smr.shop.product.review.service.mapper.ProductQuestionMapper;
+import smr.shop.product.review.service.dto.request.UpdateProductQuestionRequest;
+import smr.shop.product.review.service.exception.ProductQuestionServiceException;
+import smr.shop.product.review.service.mapper.ProductQuestionServiceMapper;
 import smr.shop.product.review.service.model.ProductQuestion;
 import smr.shop.product.review.service.repository.ProductQuestionRepository;
 import smr.shop.product.review.service.repository.ProductReviewRepository;
@@ -22,21 +22,21 @@ import java.util.UUID;
 public class ProductQuestionServiceImpl implements ProductQuestionService {
 
     private final ProductQuestionRepository productQuestionRepository;
-    private final ProductQuestionMapper productQuestionMapper;
+    private final ProductQuestionServiceMapper productQuestionServiceMapper;
 
-    public ProductQuestionServiceImpl(ProductQuestionRepository productQuestionRepository, ProductQuestionMapper productQuestionMapper, ProductReviewRepository productReviewRepository) {
+    public ProductQuestionServiceImpl(ProductQuestionRepository productQuestionRepository, ProductQuestionServiceMapper productQuestionServiceMapper, ProductReviewRepository productReviewRepository) {
         this.productQuestionRepository = productQuestionRepository;
-        this.productQuestionMapper = productQuestionMapper;
+        this.productQuestionServiceMapper = productQuestionServiceMapper;
     }
 
     @Override
     @Transactional
     public void createProductQuestion(CreateProductQuestionRequest request) {
-        ProductQuestion productQuestion = productQuestionMapper.toProductQuestion(request);
+        ProductQuestion productQuestion = productQuestionServiceMapper.toProductQuestion(request);
         productQuestion.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestion.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestion = productQuestionRepository.save(productQuestion);
-        productQuestionMapper.toProductQuestionResponse(productQuestion);
+        productQuestionServiceMapper.toProductQuestionResponse(productQuestion);
     }
 
     @Override
@@ -46,8 +46,16 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
         productQuestionRepository.delete(question);
     }
 
+    @Override
+    public void updateProductReview(UUID id, UpdateProductQuestionRequest request) {
+        ProductQuestion question = findById(id);
+        productQuestionServiceMapper.toUpdateProductQuestion(request, question);
+        productQuestionRepository.save(question);
+        productQuestionServiceMapper.toProductQuestionResponse(question);
+    }
+
     public ProductQuestion findById(UUID id) {
         return productQuestionRepository.findById(id)
-                .orElseThrow(() -> new ProductQuestionException("Product Question Not Found With Id: " + id, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProductQuestionServiceException("Product Question Not Found With Id: " + id, HttpStatus.NOT_FOUND));
     }
 }
