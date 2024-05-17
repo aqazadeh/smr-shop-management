@@ -1,5 +1,6 @@
 package smr.shop.courier.service.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
+    @Transactional
     public CourierResponse createCourier(CourierCreateRequest request) {
         CourierEntity courierEntity = courierServiceMapper.courierCreateRequestToCourier(request);
         courierEntity.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
@@ -41,6 +43,7 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
+    @Transactional
     public CourierResponse updateCourier(Long id, CourierUpdateRequest request) {
         CourierEntity courierEntity = findById(id);
         CourierEntity updateCourierEntity = courierServiceMapper.toUpdateCourier(request, courierEntity);
@@ -50,8 +53,10 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
+    @Transactional
     public void deleteCourier(Long id) {
         CourierEntity courierEntity = findById(id);
+        courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierRepository.delete(courierEntity);
     }
 

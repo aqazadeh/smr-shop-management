@@ -44,6 +44,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     @Transactional
     public void deleteProductReview(UUID id) {
         ProductReview productReview = findById(id);
+        productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productReviewRepository.delete(productReview);
     }
 
@@ -54,6 +55,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         if (existingReview.isPresent()) {
             ProductReview productReview = existingReview.get();
             productReviewServiceMapper.toUpdateProductReview(updateRequest, productReview);
+            productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
             productReviewRepository.save(productReview);
             productReviewServiceMapper.toProductReviewResponse(productReview);
         } else {

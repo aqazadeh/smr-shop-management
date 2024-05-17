@@ -32,7 +32,7 @@ public class DeliveryController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmptyResponse> updateDelivery(@PathVariable Long id, @RequestBody DeliveryUpdateRequest request) {
         deliveryService.updateDelivery(id, request);
