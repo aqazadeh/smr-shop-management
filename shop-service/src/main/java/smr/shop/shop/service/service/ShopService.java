@@ -1,5 +1,8 @@
 package smr.shop.shop.service.service;
 
+import smr.shop.libs.grpc.product.shop.FindShopByShopIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.FindShopByUserIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
@@ -33,4 +36,8 @@ public interface ShopService {
     ShopEntity findById(Long shopId);
 
     ShopAddressResponse getShopAddress(Long shopId);
+
+    ShopGrpcResponse getShopInformationByShopId(FindShopByShopIdGrpcRequest request);
+
+    ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request);
 }

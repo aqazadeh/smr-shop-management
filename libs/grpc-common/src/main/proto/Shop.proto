@@ -13,9 +13,10 @@ message FindShopByUserIdGrpcRequest {
 
 message ShopGrpcResponse {
   int64 shopId = 1;
-  string slug = 2;
-  string name = 3;
-  string thumbnail = 4;
+  string userId = 2;
+  string slug = 3;
+  string name = 4;
+  string logo = 5;
 
 }
 

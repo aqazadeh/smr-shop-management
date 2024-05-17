@@ -1,6 +1,10 @@
 package smr.shop.shop.service.mapper;
 
 import org.springframework.stereotype.Component;
+import smr.shop.libs.common.dto.message.ImageDeleteMessageModel;
+import smr.shop.libs.common.dto.message.ShopMessageModel;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
+import smr.shop.shop.service.dto.request.CreateShopAddressRequest;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
@@ -16,9 +20,18 @@ public class ShopServiceMapper {
                 .shopName(request.getName())
                 .slug(request.getSlug())
                 .phone(request.getPhone())
-                .address(request.getAddress())
+                .address(createShopAddressToShopAddress(request.getAddress()))
                 .description(request.getDescription())
                 .build();
+    }
+
+    private ShopAddress createShopAddressToShopAddress(CreateShopAddressRequest request) {
+        ShopAddress shopAddress = new ShopAddress();
+        shopAddress.setName(request.getName());
+        shopAddress.setStreet(request.getStreet());
+        shopAddress.setCity(request.getCity());
+        shopAddress.setState(request.getState());
+        return shopAddress;
     }
 
     public ShopEntity updateShopRequestToShopEntity(UpdateShopRequest request, ShopEntity shopEntity) {
@@ -38,10 +51,6 @@ public class ShopServiceMapper {
                 .logo(shopEntity.getLogo())
                 .phone(shopEntity.getPhone())
                 .address(shopEntity.getAddress())
-                .rating(shopEntity.getRating())
-                .reviewsCount(shopEntity.getReviewsCount())
-                .salesCount(shopEntity.getSalesCount())
-                .viewCount(shopEntity.getViewCount())
                 .status(shopEntity.getStatus())
                 .build();
     }
@@ -52,19 +61,42 @@ public class ShopServiceMapper {
                 .street(shopAddress.getStreet())
                 .city(shopAddress.getCity())
                 .state(shopAddress.getState())
-                .longitude(shopAddress.getLongitude())
-                .latitude(shopAddress.getLatitude())
                 .build();
     }
 
+
     public ShopAddress updateShopAddressRequestToShopAddress(UpdateShopAddressRequest request) {
         ShopAddress shopAddress = new ShopAddress();
-        if (request.getName() != null) shopAddress.setName(request.getName());
-        if (request.getStreet() != null) shopAddress.setStreet(request.getStreet());
-        if (request.getCity() != null) shopAddress.setCity(request.getCity());
-        if (request.getStreet() != null) shopAddress.setState(request.getState());
-        if (request.getLongitude() != null) shopAddress.setLongitude(request.getLongitude());
-        if (request.getLatitude() != null) shopAddress.setLatitude(request.getLatitude());
+        shopAddress.setName(request.getName());
+        shopAddress.setStreet(request.getStreet());
+        shopAddress.setCity(request.getCity());
+        shopAddress.setState(request.getState());
         return shopAddress;
+    }
+
+    public ShopMessageModel shopEntityToShopMessageModel(ShopEntity shopEntity) {
+        return ShopMessageModel.builder()
+                .id(shopEntity.getId())
+                .build();
+    }
+
+    public ImageDeleteMessageModel shopEntityToImageDeleteMessageModel(ShopEntity shopEntity) {
+        return ImageDeleteMessageModel.builder()
+                .imageUrl(shopEntity.getLogo())
+                .build();
+    }
+
+    public ImageDeleteMessageModel shopEntityToImageDeleteMessageModel(String oldImage) {
+        return ImageDeleteMessageModel.builder().imageUrl(oldImage).build();
+    }
+
+    public ShopGrpcResponse shopEntityToShopGrpcResponse(ShopEntity shopEntity) {
+        return ShopGrpcResponse.newBuilder()
+                .setShopId(shopEntity.getId())
+                .setName(shopEntity.getShopName())
+                .setUserId(shopEntity.getUserId().toString())
+                .setLogo(shopEntity.getLogo())
+                .setSlug(shopEntity.getSlug())
+                .build();
     }
 }

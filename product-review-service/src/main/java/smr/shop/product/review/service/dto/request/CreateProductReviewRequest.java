@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
 
 import java.util.List;
+import java.util.UUID;
 
 @Value
 public class CreateProductReviewRequest {
-    @NotBlank @JsonProperty("user_id") UUID userId;
     @NotBlank @JsonProperty("product_id") Long productId;
     @NotBlank Byte rating;
     @NotBlank String comment;

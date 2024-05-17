@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import smr.shop.wishlist.service.model.WishlistEntity;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface WishlistRepository extends JpaRepository<WishlistEntity, Long> {
     void deleteByUserIdAndProductId(UUID userId, Long productId);

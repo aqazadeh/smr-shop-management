@@ -18,6 +18,7 @@ import smr.shop.wishlist.service.repository.WishlistRepository;
 import smr.shop.wishlist.service.service.WishlistService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class WishlistServiceImpl implements WishlistService {

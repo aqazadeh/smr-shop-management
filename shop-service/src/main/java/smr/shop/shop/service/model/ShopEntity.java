@@ -36,16 +36,9 @@ public class ShopEntity {
     @Embedded
     private ShopAddress address;
 
-    private Double rating;
-
-    private Integer reviewsCount;
-
-    private Integer salesCount;
-
-    private Integer viewCount;
-
     @Enumerated(EnumType.STRING)
-    private ShopStatus status;
+    @Builder.Default
+    private ShopStatus status = ShopStatus.APPROVED;
 
     @CreatedDate
     private ZonedDateTime createdAt;

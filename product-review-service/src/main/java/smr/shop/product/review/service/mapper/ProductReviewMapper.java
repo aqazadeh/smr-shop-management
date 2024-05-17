@@ -9,7 +9,6 @@ import smr.shop.product.review.service.model.ProductReview;
 public class ProductReviewMapper {
     public ProductReview toProductReview(CreateProductReviewRequest request) {
         ProductReview.ProductReviewBuilder builder = ProductReview.builder();
-        builder.userId(request.getUserID());
         builder.productId(request.getProductId());
         builder.rating(request.getRating());
         builder.comment(request.getComment());

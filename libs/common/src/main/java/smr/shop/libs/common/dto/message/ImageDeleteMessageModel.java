@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
-import java.util.UUID;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ShopMessageModel implements BaseMessageModel {
-    private Long id;
+public class ImageDeleteMessageModel implements BaseMessageModel {
+    private String imageUrl;
 }

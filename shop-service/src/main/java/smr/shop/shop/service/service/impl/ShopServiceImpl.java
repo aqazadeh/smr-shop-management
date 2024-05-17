@@ -6,7 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smr.shop.libs.common.constant.ServiceConstants;
+import smr.shop.libs.common.dto.message.ImageDeleteMessageModel;
+import smr.shop.libs.common.dto.message.ShopMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.grpc.product.shop.FindShopByShopIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.FindShopByUserIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
@@ -16,6 +21,8 @@ import smr.shop.shop.service.dto.response.ShopResponse;
 import smr.shop.shop.service.exception.ShopException;
 import smr.shop.shop.service.grpc.client.UploadGrpcServiceClient;
 import smr.shop.shop.service.mapper.ShopServiceMapper;
+import smr.shop.shop.service.message.publisher.ImageDeleteMessagePublisher;
+import smr.shop.shop.service.message.publisher.ShopStatusChangeMessagePublisher;
 import smr.shop.shop.service.model.ShopEntity;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
 import smr.shop.shop.service.model.valueobject.ShopStatus;
@@ -32,13 +39,19 @@ public class ShopServiceImpl implements ShopService {
     private final ShopServiceMapper shopServiceMapper;
     private final ShopRepository shopRepository;
     private final UploadGrpcServiceClient uploadGrpcServiceClient;
+    private final ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher;
+    private final ImageDeleteMessagePublisher imageDeleteMessagePublisher;
 
     public ShopServiceImpl(ShopServiceMapper shopServiceMapper,
                            ShopRepository shopRepository,
-                           UploadGrpcServiceClient uploadGrpcServiceClient) {
+                           UploadGrpcServiceClient uploadGrpcServiceClient,
+                           ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher,
+                           ImageDeleteMessagePublisher imageDeleteMessagePublisher) {
         this.shopServiceMapper = shopServiceMapper;
         this.shopRepository = shopRepository;
         this.uploadGrpcServiceClient = uploadGrpcServiceClient;
+        this.shopStatusChangeMessagePublisher = shopStatusChangeMessagePublisher;
+        this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
     }
 
     @Override
@@ -69,10 +82,12 @@ public class ShopServiceImpl implements ShopService {
     public void deleteShop(Long shopId) {
         ShopEntity shopEntity = findById(shopId);
         validateShopCreator(shopEntity);
-        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopEntity.setStatus(ShopStatus.CLOSED);
+        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(shopEntity);
-        //TODO send Kafka event
+        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
+        ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
+        shopStatusChangeMessagePublisher.publish(shopMessageModel);
     }
 
     @Override
@@ -81,8 +96,9 @@ public class ShopServiceImpl implements ShopService {
         validateShopCreator(shopEntity);
         shopEntity.setLogo(null);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        shopRepository.save(shopEntity);
-        //TODO send kafka event to image deleted!
+        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
+        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(savedShopEntity);
+        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
     }
 
     @Override
@@ -91,19 +107,22 @@ public class ShopServiceImpl implements ShopService {
         ShopEntity shopEntity = findById(shopId);
         shopEntity.setStatus(status);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        shopRepository.save(shopEntity);
-        //TODO send Kafka status
+        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
+        ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
+        shopStatusChangeMessagePublisher.publish(shopMessageModel);
     }
 
     @Override
     public void UpdateShopLogo(Long shopId, UUID imageId) {
         ShopEntity shopEntity = findById(shopId);
+        String oldImage = shopEntity.getLogo();
         validateShopCreator(shopEntity);
         UploadGrpcResponse image = uploadGrpcServiceClient.getImageById(imageId.toString());
         shopEntity.setLogo(image.getUrl());
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(shopEntity);
-        // TODO send kafka event to Image updated
+        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(oldImage);
+        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
     }
 
     @Override
@@ -122,6 +141,21 @@ public class ShopServiceImpl implements ShopService {
         ShopEntity shopEntity = findById(shopId);
         ShopAddress address = shopEntity.getAddress();
         return shopServiceMapper.shopAddressToShopAddressResponse(address);
+    }
+
+    @Override
+    public ShopGrpcResponse getShopInformationByShopId(FindShopByShopIdGrpcRequest request) {
+        ShopEntity shopEntity = findById(request.getShopId());
+        ShopGrpcResponse shopGrpcResponse = shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
+        return shopGrpcResponse;
+    }
+
+    @Override
+    public ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request) {
+        UUID userId = UUID.fromString(request.getUserId());
+        ShopEntity shopEntity = shopRepository.findByUserId(userId);
+        ShopGrpcResponse shopGrpcResponse = shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
+        return shopGrpcResponse;
     }
 
     @Override
