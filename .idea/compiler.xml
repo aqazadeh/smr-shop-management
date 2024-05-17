@@ -12,15 +12,15 @@
         <module name="config-service" />
         <module name="coupon-service" />
         <module name="category-brand-service" />
-        <module name="shop-service" />
         <module name="flash-service" />
         <module name="product-service" />
+        <module name="shop-service" />
         <module name="product-stock-service" />
         <module name="wishlist-service" />
         <module name="courier-service" />
         <module name="discovery-service" />
-        <module name="notification-service" />
         <module name="grpc-common" />
+        <module name="notification-service" />
         <module name="ticket-service" />
         <module name="auth-service" />
         <module name="payment-service" />

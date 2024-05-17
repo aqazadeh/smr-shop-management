@@ -21,7 +21,7 @@ public interface ShopService {
 
     void updateShopStatus(Long shopId, ShopStatus status);
 
-    void UpdateShopLogo(Long shopId, UUID imageId);
+    void updateShopLogo(Long shopId, UUID imageId);
 
     void updateShopAddress(Long id, UpdateShopAddressRequest request);
 

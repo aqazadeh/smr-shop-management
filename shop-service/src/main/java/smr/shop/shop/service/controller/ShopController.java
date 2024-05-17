@@ -12,6 +12,7 @@ import smr.shop.shop.service.model.valueobject.ShopStatus;
 import smr.shop.shop.service.service.ShopService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/shop")
@@ -32,7 +33,7 @@ public class ShopController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{shopId}")
+    @PutMapping("/{shopId}")
     public ResponseEntity<EmptyResponse> updateShop(@PathVariable Long shopId, @RequestBody UpdateShopRequest request) {
         shopService.updateShop(shopId, request);
         EmptyResponse response = EmptyResponse.builder()
@@ -62,7 +63,7 @@ public class ShopController {
         return ResponseEntity.ok(shopResponse);
     }
 
-    @PutMapping("/{shopId}")
+    @PutMapping("/{shopId}/status")
     public ResponseEntity<EmptyResponse> updateShopStatus(@PathVariable Long shopId, @RequestParam ShopStatus status) {
         shopService.updateShopStatus(shopId, status);
         EmptyResponse response = EmptyResponse.builder()
@@ -71,11 +72,29 @@ public class ShopController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{shopId}/address")
+    @DeleteMapping("/{shopId}/image")
+    public ResponseEntity<EmptyResponse> removeShopLogo(@PathVariable Long shopId) {
+        shopService.deleteShopImage(shopId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop image successfully deleted with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{shopId}/address")
     public ResponseEntity<EmptyResponse> updateShopAddress(@PathVariable Long shopId, @RequestBody UpdateShopAddressRequest request) {
         shopService.updateShopAddress(shopId, request);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Shop address successfully with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{shopId}/image/{imageId}")
+    public ResponseEntity<EmptyResponse> updateShopLogo(@PathVariable Long shopId, @PathVariable UUID imageId) {
+        shopService.updateShopLogo(shopId, imageId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop logo successfully with shopId: " + shopId)
                 .build();
         return ResponseEntity.ok(response);
     }

@@ -121,7 +121,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public void UpdateShopLogo(Long shopId, UUID imageId) {
+    public void updateShopLogo(Long shopId, UUID imageId) {
         ShopEntity shopEntity = findById(shopId);
         String oldImage = shopEntity.getLogo();
         validateShopCreator(shopEntity);
