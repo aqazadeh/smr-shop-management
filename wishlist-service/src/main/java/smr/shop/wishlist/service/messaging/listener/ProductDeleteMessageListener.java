@@ -22,11 +22,11 @@ public class ProductDeleteMessageListener implements MessageListener<ProductDele
     }
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC }, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP)
+    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC}, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP)
     public void receive(@Payload ProductDeleteMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
-                        @Header(KafkaHeaders.OFFSET) Long offset)  {
+                        @Header(KafkaHeaders.OFFSET) Long offset) {
         log.info("{} number of ProductDeleteMessageModel response received with key: {}, partition: {} and offset: {}",
                 message.toString(),
                 key,

@@ -10,13 +10,14 @@ import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
-import smr.shop.wishlist.service.exception.WishlistException;
+import smr.shop.wishlist.service.exception.WishlistServiceException;
 import smr.shop.wishlist.service.grpc.WishlistGrpcClientService;
 import smr.shop.wishlist.service.mapper.WishlistServiceMapper;
 import smr.shop.wishlist.service.model.WishlistEntity;
 import smr.shop.wishlist.service.repository.WishlistRepository;
 import smr.shop.wishlist.service.service.WishlistService;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,20 +43,13 @@ public class WishlistServiceImpl implements WishlistService {
         if (wishlistRepository.findByUserIdAndProductId(userId, productId).isEmpty()) {
             ProductGrpcResponse productGrpcResponse = wishlistGrpcClientService.getProduct(productId);
             WishlistEntity wishlistEntity = wishlistServiceMapper.productIdAndUserIdToWishlist(productGrpcResponse.getId(), userId);
+            wishlistEntity.setId(UUID.randomUUID());
+            wishlistEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
             wishlistRepository.save(wishlistEntity);
         }
     }
 
 
-    @Override
-    public void deleteProductInUserWishlist(Long productId) {
-        UUID userId = UserHelper.getUserId();
-        if (wishlistRepository.findByUserIdAndProductId(userId, productId).isEmpty()) {
-            throw new WishlistException("can not found wishlist with product id: " + productId, HttpStatus.NOT_FOUND);
-        }
-
-        wishlistRepository.deleteByUserIdAndProductId(userId, productId);
-    }
 
     @Override
     public void deleteProductsInWishlist(ProductDeleteMessageModel productDeleteMessageModel) {
@@ -66,18 +60,29 @@ public class WishlistServiceImpl implements WishlistService {
     public List<WishlistResponse> getAllWishlistProducts(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<WishlistEntity> wishlistEntityList = wishlistRepository.findAll(pageable).stream().toList();
-
         return wishlistEntityList.stream().map(wishlistEntity -> {
             WishlistResponse wishlistResponse = wishlistServiceMapper.wishlistEntityToWishlistResponse(wishlistEntity);
-
             ProductGrpcResponse product = wishlistGrpcClientService.getProduct(wishlistEntity.getProductId());
-
             WishlistProductResponse wishlistProductResponse = wishlistServiceMapper.productGrpcResponseToWishlistProductResponse(product);
-
             wishlistResponse.setProduct(wishlistProductResponse);
-
             return wishlistResponse;
         }).toList();
+    }
+
+    @Override
+    public void deleteWishlist(UUID wishlistId) {
+        UUID userId = UserHelper.getUserId();
+        WishlistEntity wishlistEntity = findById(wishlistId);
+        if (!wishlistEntity.getUserId().equals(userId)) {
+            throw new WishlistServiceException("you dont have a permission to delete his wishlist item with id: " + wishlistId, HttpStatus.NOT_FOUND);
+        }
+        wishlistRepository.delete(wishlistEntity);
+    }
+
+    @Override
+    public WishlistEntity findById(UUID wishlistId) {
+        return wishlistRepository.findById(wishlistId)
+                .orElseThrow(() -> new WishlistServiceException("wishlist not found with id: " + wishlistId, HttpStatus.NOT_FOUND));
     }
 
 }
