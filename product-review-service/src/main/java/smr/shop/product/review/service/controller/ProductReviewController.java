@@ -1,10 +1,12 @@
 package smr.shop.product.review.service.controller;
 
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
+import smr.shop.product.review.service.dto.request.UpdateProductReviewRequest;
 import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.service.ProductReviewService;
 
@@ -36,6 +38,16 @@ public class ProductReviewController {
         productReviewService.deleteProductReview(id);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Product Review deleted successfully")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductReview(@RequestBody CreateProductReviewRequest request, @RequestBody UpdateProductReviewRequest updateRequest) {
+        productReviewService.updateProductReviewRequest(request, updateRequest);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Review updated successfully")
                 .build();
         return ResponseEntity.ok(response);
     }
