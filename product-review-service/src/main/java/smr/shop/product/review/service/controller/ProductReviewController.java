@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
 import smr.shop.product.review.service.dto.request.UpdateProductReviewRequest;
-import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.service.ProductReviewService;
 
 import java.util.UUID;
@@ -23,7 +22,7 @@ public class ProductReviewController {
     }
 
     @PostMapping
-    @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createProductReview(@RequestBody CreateProductReviewRequest request) {
         productReviewService.createProductReview(request);
         EmptyResponse response = EmptyResponse.builder()
@@ -33,7 +32,7 @@ public class ProductReviewController {
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<EmptyResponse> deleteProductReview(@PathVariable UUID id) {
         productReviewService.deleteProductReview(id);
         EmptyResponse response = EmptyResponse.builder()
