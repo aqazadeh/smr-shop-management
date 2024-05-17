@@ -9,7 +9,7 @@ import smr.shop.delivery.service.model.Delivery;
 import java.util.UUID;
 
 @Component
-public class DeliveryMapper {
+public class DeliveryServiceMapper {
 
     public Delivery toDelivery(DeliveryCreateRequest request) {
         Delivery.DeliveryBuilder builder = Delivery.builder();

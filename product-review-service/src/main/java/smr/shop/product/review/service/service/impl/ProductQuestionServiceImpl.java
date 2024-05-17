@@ -43,6 +43,7 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     @Transactional
     public void deleteProductQuestion(UUID id) {
         ProductQuestion question = findById(id);
+        question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestionRepository.delete(question);
     }
 
@@ -50,6 +51,7 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     public void updateProductReview(UUID id, UpdateProductQuestionRequest request) {
         ProductQuestion question = findById(id);
         productQuestionServiceMapper.toUpdateProductQuestion(request, question);
+        question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestionRepository.save(question);
         productQuestionServiceMapper.toProductQuestionResponse(question);
     }
