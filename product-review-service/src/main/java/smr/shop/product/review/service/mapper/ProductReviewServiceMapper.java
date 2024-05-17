@@ -2,14 +2,14 @@ package smr.shop.product.review.service.mapper;
 
 import org.springframework.stereotype.Component;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
+import smr.shop.product.review.service.dto.request.UpdateProductReviewRequest;
 import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.model.ProductReview;
 
 @Component
-public class ProductReviewMapper {
+public class ProductReviewServiceMapper {
     public ProductReview toProductReview(CreateProductReviewRequest request) {
         ProductReview.ProductReviewBuilder builder = ProductReview.builder();
-        builder.userId(request.getUserID());
         builder.productId(request.getProductId());
         builder.rating(request.getRating());
         builder.comment(request.getComment());
@@ -26,5 +26,14 @@ public class ProductReviewMapper {
                 .comment(productReview.getComment())
                 .images(productReview.getImages())
                 .build();
+    }
+
+    public ProductReview toUpdateProductReview(UpdateProductReviewRequest request, ProductReview review) {
+        if (request.getUserId() != null) review.setUserId(request.getUserId());
+        if (request.getProductId() != null) review.setProductId(request.getProductId());
+        if (request.getRating() != null) review.setRating(request.getRating());
+        if (request.getComment() != null) review.setComment(request.getComment());
+        if (request.getImages() != null) review.setImages(request.getImages());
+        return review;
     }
 }

@@ -8,6 +8,7 @@ import smr.shop.wishlist.service.dto.response.WishlistResponse;
 import smr.shop.wishlist.service.service.WishlistService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/1.0/wishlist")
@@ -26,17 +27,19 @@ public class WishlistController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{productId}/remove")
+    @DeleteMapping("/{wishlistId}/remove")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> removeProductToWishlist(@PathVariable Long productId) {
-        wishlistService.deleteProductInUserWishlist(productId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully removed product to wishlist with productId: " + productId).build();
+    public ResponseEntity<EmptyResponse> removeToWishlist(@PathVariable UUID wishlistId) {
+        wishlistService.deleteWishlist(wishlistId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("successfully removed product to wishlist with productId: " + wishlistId)
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<WishlistResponse>> getWishlist(@RequestParam Integer page) {
+    public ResponseEntity<List<WishlistResponse>> getWishlist(@RequestParam(value = "page", defaultValue = "0") Integer page) {
         List<WishlistResponse> wishlistProducts = wishlistService.getAllWishlistProducts(page);
         return ResponseEntity.ok(wishlistProducts);
     }

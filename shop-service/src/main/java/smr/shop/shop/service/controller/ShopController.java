@@ -2,15 +2,17 @@ package smr.shop.shop.service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
-import smr.shop.shop.service.dto.request.UpdateShopStatusRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
+import smr.shop.shop.service.model.valueobject.ShopStatus;
 import smr.shop.shop.service.service.ShopService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/shop")
@@ -23,50 +25,83 @@ public class ShopController {
     }
 
     @PostMapping
-    public ResponseEntity<ShopResponse> createShop(@RequestBody CreateShopRequest request) {
-        ShopResponse shopResponse = shopService.createShop(request);
-        return ResponseEntity.ok(shopResponse);
+    public ResponseEntity<EmptyResponse> createShop(@RequestBody CreateShopRequest request) {
+        shopService.createShop(request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop created successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ShopResponse> updateShop(@PathVariable Long id, @RequestBody UpdateShopRequest request) {
-        ShopResponse shopResponse = shopService.updateShop(id, request);
-        return ResponseEntity.ok(shopResponse);
+    @PutMapping("/{shopId}")
+    public ResponseEntity<EmptyResponse> updateShop(@PathVariable Long shopId, @RequestBody UpdateShopRequest request) {
+        shopService.updateShop(shopId, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop updated successfully with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteShop(@PathVariable Long id) {
-        shopService.deleteShop(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{shopId}")
+    public ResponseEntity<EmptyResponse> deleteShop(@PathVariable Long shopId) {
+        shopService.deleteShop(shopId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop deleted successfully with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ShopResponse>> getAllShop(Integer page) {
+    public ResponseEntity<List<ShopResponse>> getAllShop(@RequestParam(value = "page", defaultValue = "0") Integer page) {
         List<ShopResponse> shopResponses = shopService.getAllShop(page);
         return ResponseEntity.ok(shopResponses);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ShopResponse> getShopById(@PathVariable Long id) {
-        ShopResponse shopResponse = shopService.getShopById(id);
+    @GetMapping("/{shopId}")
+    public ResponseEntity<ShopResponse> getShopById(@PathVariable Long shopId) {
+        ShopResponse shopResponse = shopService.getShopById(shopId);
         return ResponseEntity.ok(shopResponse);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ShopResponse> updateShopStatus(@PathVariable Long id, @RequestBody UpdateShopStatusRequest request) {
-        ShopResponse shopResponse = shopService.updateShopStatus(id, request);
-        return ResponseEntity.ok(shopResponse);
+    @PutMapping("/{shopId}/status")
+    public ResponseEntity<EmptyResponse> updateShopStatus(@PathVariable Long shopId, @RequestParam ShopStatus status) {
+        shopService.updateShopStatus(shopId, status);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop status successfully updated with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/address/")
-    public ResponseEntity<ShopAddressResponse> updateShopAddress(@PathVariable Long id, @RequestBody UpdateShopAddressRequest request) {
-        ShopAddressResponse shopAddressResponse = shopService.updateShopAddress(id, request);
-        return ResponseEntity.ok(shopAddressResponse);
+    @DeleteMapping("/{shopId}/image")
+    public ResponseEntity<EmptyResponse> removeShopLogo(@PathVariable Long shopId) {
+        shopService.deleteShopImage(shopId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop image successfully deleted with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/address/{addressId}")
-    public ResponseEntity<ShopAddressResponse> getShopAddressById(@PathVariable Long id, @PathVariable Long addressId) {
-        ShopAddressResponse shopAddressResponse = shopService.getShopAddressById(id, addressId);
+    @PutMapping("/{shopId}/address")
+    public ResponseEntity<EmptyResponse> updateShopAddress(@PathVariable Long shopId, @RequestBody UpdateShopAddressRequest request) {
+        shopService.updateShopAddress(shopId, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop address successfully with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{shopId}/image/{imageId}")
+    public ResponseEntity<EmptyResponse> updateShopLogo(@PathVariable Long shopId, @PathVariable UUID imageId) {
+        shopService.updateShopLogo(shopId, imageId);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Shop logo successfully with shopId: " + shopId)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{shopId}/address")
+    public ResponseEntity<ShopAddressResponse> getShopAddress(@PathVariable Long shopId) {
+        ShopAddressResponse shopAddressResponse = shopService.getShopAddress(shopId);
         return ResponseEntity.ok(shopAddressResponse);
     }
 }

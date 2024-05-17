@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishlistResponse {
-    UUID id;
-    WishlistProductResponse product;
-    ZonedDateTime createdAt;
+    private UUID id;
+    private WishlistProductResponse product;
 }

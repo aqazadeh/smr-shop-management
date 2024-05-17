@@ -1,16 +1,34 @@
 server:
-  port: 2215
+  port: 8117
 
 spring:
   cloud:
     config:
       enabled: false
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9015/uploadDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9017/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
@@ -21,13 +39,13 @@ eureka:
   instance:
     hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
-    prefer-ip-address: true
+#    prefer-ip-address: true
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
 grpc:
   server:
-    port: 3215
+    port: 7017

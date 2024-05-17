@@ -7,15 +7,16 @@ import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
 import smr.shop.wishlist.service.model.WishlistEntity;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Component
 public class WishlistServiceMapper {
     public WishlistResponse wishlistEntityToWishlistResponse(WishlistEntity entity) {
         return WishlistResponse.builder()
                 .id(entity.getId())
-                .createdAt(entity.getCreatedAt())
                 .build();
     }
 
@@ -24,7 +25,6 @@ public class WishlistServiceMapper {
         return WishlistEntity.builder()
                 .userId(userId)
                 .productId(productId)
-                .createdAt(ZonedDateTime.now(ZoneId.of(ServiceConstants.UTC)))
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class WishlistServiceMapper {
                 .name(productGrpcResponse.getName())
                 .slug(productGrpcResponse.getSlug())
                 .thumbnail(productGrpcResponse.getThumbnail())
-                .price(productGrpcResponse.getPrice())
+                .price(BigDecimal.valueOf(productGrpcResponse.getPrice()))
                 .discountPrice(productGrpcResponse.getDiscountPrice())
                 .build();
     }

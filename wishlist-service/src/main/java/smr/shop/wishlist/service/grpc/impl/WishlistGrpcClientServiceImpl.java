@@ -20,6 +20,17 @@ public class WishlistGrpcClientServiceImpl implements WishlistGrpcClientService 
         ProductGrpcRequest request = ProductGrpcRequest.newBuilder()
                 .setProductId(productId)
                 .build();
-        return productServiceStub.getProductInfo(request);
+
+        ProductGrpcResponse productGrpcResponse = ProductGrpcResponse.newBuilder()
+                .setId(1)
+                .setShopId(1)
+                .setPrice(12)
+                .setName("Product 1")
+                .setDiscountPrice(11)
+                .setShippingPrice(123)
+                .setThumbnail("thumbnail")
+                .build();
+        return productGrpcResponse;
+//        return productServiceStub.getProductInfo(request);
     }
 }

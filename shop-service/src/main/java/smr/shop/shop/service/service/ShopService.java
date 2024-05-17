@@ -1,31 +1,43 @@
 package smr.shop.shop.service.service;
 
+import smr.shop.libs.grpc.product.shop.FindShopByShopIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.FindShopByUserIdGrpcRequest;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
-import smr.shop.shop.service.dto.request.UpdateShopStatusRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
-import smr.shop.shop.service.model.Shop;
+import smr.shop.shop.service.model.ShopEntity;
+import smr.shop.shop.service.model.valueobject.ShopStatus;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ShopService {
-    ShopResponse createShop(CreateShopRequest request);
+    void createShop(CreateShopRequest request);
 
-    ShopResponse updateShop(Long id, UpdateShopRequest request);
+    void updateShop(Long shopId, UpdateShopRequest request);
 
-    void deleteShop(Long id);
+    void updateShopStatus(Long shopId, ShopStatus status);
+
+    void updateShopLogo(Long shopId, UUID imageId);
+
+    void updateShopAddress(Long id, UpdateShopAddressRequest request);
+
+    void deleteShop(Long shopId);
+
+    void deleteShopImage(Long shopId);
 
     List<ShopResponse> getAllShop(Integer page);
 
-    ShopResponse getShopById(Long id);
+    ShopResponse getShopById(Long shopId);
 
-    ShopResponse updateShopStatus(Long id, UpdateShopStatusRequest request);
+    ShopEntity findById(Long shopId);
 
-    Shop findById(Long id);
+    ShopAddressResponse getShopAddress(Long shopId);
 
-    ShopAddressResponse updateShopAddress(Long id, UpdateShopAddressRequest request);
+    ShopGrpcResponse getShopInformationByShopId(FindShopByShopIdGrpcRequest request);
 
-    ShopAddressResponse getShopAddressById(Long id, Long addressId);
+    ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request);
 }

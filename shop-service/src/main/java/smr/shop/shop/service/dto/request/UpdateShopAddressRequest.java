@@ -5,10 +5,12 @@ import lombok.Value;
 
 @Value
 public class UpdateShopAddressRequest {
-    @NotBlank String name;
-    @NotBlank String street;
-    @NotBlank String city;
-    @NotBlank String state;
-    @NotBlank Float longitude;
-    @NotBlank Float latitude;
+    @NotBlank
+    String name;
+    @NotBlank
+    String street;
+    @NotBlank
+    String city;
+    @NotBlank
+    String state;
 }
