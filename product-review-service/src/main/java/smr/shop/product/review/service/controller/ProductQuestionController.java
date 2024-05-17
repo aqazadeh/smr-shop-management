@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.review.service.dto.request.CreateProductQuestionRequest;
-import smr.shop.product.review.service.dto.response.ProductQuestionResponse;
+import smr.shop.product.review.service.dto.request.UpdateProductQuestionRequest;
 import smr.shop.product.review.service.service.ProductQuestionService;
 
 import java.util.UUID;
@@ -36,6 +36,16 @@ public class ProductQuestionController {
         procuctQuestionService.deleteProductQuestion(id);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Product Question deleted successfully with id: " + id)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductQuestion(@PathVariable UUID id, @RequestBody UpdateProductQuestionRequest request) {
+        procuctQuestionService.updateProductReview(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Question updated successfully")
                 .build();
         return ResponseEntity.ok(response);
     }
