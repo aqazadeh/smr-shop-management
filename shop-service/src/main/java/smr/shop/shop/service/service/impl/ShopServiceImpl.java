@@ -59,6 +59,9 @@ public class ShopServiceImpl implements ShopService {
     public void createShop(CreateShopRequest request) {
         UploadGrpcResponse image = uploadGrpcServiceClient.getImageById(request.getImageId().toString());
         UUID userId = UserHelper.getUserId();
+        if (shopRepository.findByUserId(userId).isPresent()) {
+           throw new  ShopException("you  already have a shop", HttpStatus.BAD_REQUEST);
+        }
         ShopEntity shopEntity = shopServiceMapper.createShopRequestToShopEntity(request);
         shopEntity.setLogo(image.getUrl());
         shopEntity.setUserId(userId);
@@ -82,6 +85,9 @@ public class ShopServiceImpl implements ShopService {
     public void deleteShop(Long shopId) {
         ShopEntity shopEntity = findById(shopId);
         validateShopCreator(shopEntity);
+        if (shopEntity.getStatus() != ShopStatus.CONFIRMED) {
+            throw new ShopException("your is shop not a active", HttpStatus.BAD_REQUEST);
+        }
         shopEntity.setStatus(ShopStatus.CLOSED);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(shopEntity);
@@ -93,6 +99,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void deleteShopImage(Long shopId) {
         ShopEntity shopEntity = findById(shopId);
+        if (shopEntity.getLogo() == null) return;
         validateShopCreator(shopEntity);
         shopEntity.setLogo(null);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
@@ -153,7 +160,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request) {
         UUID userId = UUID.fromString(request.getUserId());
-        ShopEntity shopEntity = shopRepository.findByUserId(userId);
+        ShopEntity shopEntity = shopRepository.findByUserId(userId).get();
         ShopGrpcResponse shopGrpcResponse = shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
         return shopGrpcResponse;
     }

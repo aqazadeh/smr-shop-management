@@ -11,7 +11,11 @@ import java.util.UUID;
 @Component
 public class ShopStatusChangeMessagePublisher implements MessagePublisher<ShopMessageModel> {
 
-    private KafkaTemplate<String, ShopMessageModel> kafkaTemplate;
+    private final KafkaTemplate<String, ShopMessageModel> kafkaTemplate;
+
+    public ShopStatusChangeMessagePublisher(KafkaTemplate<String, ShopMessageModel> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Override
     public void publish(ShopMessageModel messageModel) {
