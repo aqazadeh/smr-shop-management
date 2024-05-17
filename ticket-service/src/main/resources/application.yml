@@ -1,16 +1,17 @@
 server:
-  port: 2215
+  port: 8116
 
 spring:
   cloud:
     config:
       enabled: false
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9014/ticketDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9116/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
@@ -21,9 +22,9 @@ eureka:
   instance:
     hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
-    prefer-ip-address: true
+  #    prefer-ip-address: true
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/

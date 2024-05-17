@@ -3,10 +3,10 @@ package smr.shop.ticket.service.mapper;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.helper.UserHelper;
-import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
-import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
-import smr.shop.ticket.service.dto.ticketMessage.response.GetTicketMessageResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketRequest;
+import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketMessageResponse;
 import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.model.TicketMessage;
 
@@ -17,15 +17,15 @@ import java.util.UUID;
 @Component
 public class TicketServiceMapper {
 
-    public GetTicketMessageResponse mapToResponse(TicketMessage ticketMessage) {
-        return GetTicketMessageResponse.builder()
+    public TicketMessageResponse ticketMessageToResponse(TicketMessage ticketMessage) {
+        return TicketMessageResponse.builder()
                 .ticketId(ticketMessage.getTicketId())
                 .message(ticketMessage.getMessage())
                 .userId(ticketMessage.getUserId())
                 .build();
     }
 
-    public TicketMessage mapToTicketMessage(CreateTicketMessageRequest request) {
+    public TicketMessage createTicketMessageRequestToTicketMessageResponse(CreateTicketMessageRequest request) {
         UUID userId = UserHelper.getUserId();
         return TicketMessage.builder()
                 .id(UUID.randomUUID())
@@ -34,14 +34,15 @@ public class TicketServiceMapper {
                 .build();
     }
 
-    public TicketResponse mapToResponse(Ticket ticket) {
+    public TicketResponse ticketToTicketResponse(Ticket ticket) {
         return TicketResponse.builder()
+                .id(ticket.getId())
                 .ticketStatus(ticket.getTicketStatus().name())
                 .subject(ticket.getSubject())
                 .build();
     }
 
-    public Ticket mapToTicket(CreateTicketRequest request) {
+    public Ticket createTicketRequestToTicket(CreateTicketRequest request) {
         UUID userId = UserHelper.getUserId();
         return Ticket.builder()
                 .id(UUID.randomUUID())

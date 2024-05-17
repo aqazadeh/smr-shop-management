@@ -1,4 +1,4 @@
-package smr.shop.ticket.service.dto.ticketMessage.request;
+package smr.shop.ticket.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

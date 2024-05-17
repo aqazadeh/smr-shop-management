@@ -2,12 +2,14 @@ package smr.shop.ticket.service.service.impl;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.helper.UserHelper;
-import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
-import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
-import smr.shop.ticket.service.dto.ticketMessage.response.GetTicketMessageResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketRequest;
+import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketMessageResponse;
+import smr.shop.ticket.service.exception.TicketServiceException;
 import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketServiceMapper;
 import smr.shop.ticket.service.model.Ticket;
@@ -39,17 +41,17 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
-        Ticket ticket = ticketServiceMapper.mapToTicket(request);
+        Ticket ticket = ticketServiceMapper.createTicketRequestToTicket(request);
         System.out.println(ticket.getUserId());
         ticketRepository.save(ticket);
         return request;
     }
 
     @Override
-    public List<GetTicketMessageResponse> getById(UUID ticketId, Integer page) {
+    public List<TicketMessageResponse> getById(UUID ticketId, Integer page) {
         Pageable pageable = PageRequest.of(page, pageSize);
         return ticketMessageRepository.findAllByTicketId(ticketServiceHelper.getById(ticketId).getId(), pageable)
-                .stream().map(ticketServiceMapper::mapToResponse)
+                .stream().map(ticketServiceMapper::ticketMessageToResponse)
                 .toList();
     }
 
@@ -59,16 +61,19 @@ public class TicketServiceImpl implements TicketService {
         Pageable pageable = PageRequest.of(page, pageSize);
         return ticketRepository.findAllByUserId(userId, pageable)
                 .stream()
-                .map(ticketServiceMapper::mapToResponse)
+                .map(ticketServiceMapper::ticketToTicketResponse)
                 .toList();
     }
 
     @Override
     public void sendMessageByUser(UUID ticketId, CreateTicketMessageRequest request) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
+        if(ticket.getTicketStatus() == TicketStatus.CLOSED) {
+            throw new TicketServiceException("This ticket is disabled", HttpStatus.BAD_REQUEST);
+        }
         if (!UserHelper.getUserId().toString().equals(ticket.getUserId().toString()))
-            throw new RuntimeException("Ticket given by id doesn't belongs to current user!");
-        TicketMessage ticketMessage = ticketServiceMapper.mapToTicketMessage(request);
+            throw new TicketServiceException("Ticket given by id doesn't belongs to current user!", HttpStatus.FORBIDDEN);
+        TicketMessage ticketMessage = ticketServiceMapper.createTicketMessageRequestToTicketMessageResponse(request);
         ticketMessage.setTicketId(ticketId);
         ticketMessageRepository.save(ticketMessage);
     }
@@ -81,8 +86,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public void sendMessageByAdmin(UUID ticketId, CreateTicketMessageRequest request) {
-        TicketMessage ticketMessage = ticketServiceMapper.mapToTicketMessage(request);
-        ticketMessage.setTicketId(ticketId);
+        Ticket ticket = ticketServiceHelper.getById(ticketId);
+        TicketMessage ticketMessage = ticketServiceMapper.createTicketMessageRequestToTicketMessageResponse(request);
+        ticketMessage.setTicketId(ticket.getId());
         ticketMessageRepository.save(ticketMessage);
     }
 }

@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
-import smr.shop.ticket.service.dto.ticket.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.ticket.response.TicketResponse;
-import smr.shop.ticket.service.dto.ticketMessage.request.CreateTicketMessageRequest;
-import smr.shop.ticket.service.dto.ticketMessage.response.GetTicketMessageResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketRequest;
+import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.response.TicketMessageResponse;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 import smr.shop.ticket.service.service.TicketService;
 
@@ -24,10 +24,10 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @GetMapping("/{id}")
-    public List<GetTicketMessageResponse> getById(@PathVariable UUID id,
-                                                  @Valid @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return ticketService.getById(id, page);
+    @GetMapping("/{ticketId}/messages")
+    public List<TicketMessageResponse> getById(@PathVariable UUID ticketId,
+                                               @Valid @RequestParam(value = "page", defaultValue = "0") Integer page) {
+        return ticketService.getById(ticketId, page);
     }
 
     @GetMapping
@@ -41,7 +41,7 @@ public class TicketController {
         return ticketService.createTicket(request);
     }
 
-    @PutMapping("/update/{ticketId}")
+    @PutMapping("/{ticketId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID ticketId,
                                                       @RequestParam("ticketStatus") @Valid TicketStatus ticketstatus) {
@@ -49,14 +49,14 @@ public class TicketController {
         return ResponseEntity.ok().body(EmptyResponse.builder().message("updated success").build());
     }
 
-    @PostMapping("/send-message-user/{ticketId}")
+    @PostMapping("/{ticketId}/messages/")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendMessage(@PathVariable UUID ticketId,
                             @RequestBody @Valid CreateTicketMessageRequest request) {
         ticketService.sendMessageByUser(ticketId, request);
     }
 
-    @PostMapping("/send-message-admin/{ticketId}")
+    @PostMapping("/{ticketId}/messages/admin")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendMessageByAdmin(@PathVariable UUID ticketId,
                                    @RequestBody @Valid CreateTicketMessageRequest request) {

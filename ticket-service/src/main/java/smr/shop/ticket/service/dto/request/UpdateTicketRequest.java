@@ -1,4 +1,4 @@
-package smr.shop.ticket.service.dto.ticket.request;
+package smr.shop.ticket.service.dto.request;
 
 import lombok.*;
 

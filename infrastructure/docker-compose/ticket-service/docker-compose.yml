@@ -1,15 +1,12 @@
-version: '3.8'
-
 services:
-  ticket-service-postgres:
-    container_name: ticket-service-postgres
+  postgres-ticket:
+    container_name: postgres-ticket
     image: postgres:16
     ports:
-      - "9014:5432"
+      - "9116:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=ticketDB
     expose:
       - 9014
     volumes:
