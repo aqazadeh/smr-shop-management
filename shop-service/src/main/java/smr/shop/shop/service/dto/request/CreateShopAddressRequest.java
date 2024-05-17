@@ -9,6 +9,4 @@ public class CreateShopAddressRequest {
     @NotBlank String street;
     @NotBlank String city;
     @NotBlank String state;
-    @NotBlank Float longitude;
-    @NotBlank Float latitude;
 }

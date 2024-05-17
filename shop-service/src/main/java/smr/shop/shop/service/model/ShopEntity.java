@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Shop {
+public class ShopEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,16 +36,9 @@ public class Shop {
     @Embedded
     private ShopAddress address;
 
-    private Double rating;
-
-    private Integer reviewsCount;
-
-    private Integer salesCount;
-
-    private Integer viewCount;
-
     @Enumerated(EnumType.STRING)
-    private ShopStatus status;
+    @Builder.Default
+    private ShopStatus status = ShopStatus.APPROVED;
 
     @CreatedDate
     private ZonedDateTime createdAt;

@@ -14,8 +14,4 @@ public class ShopAddress {
     private String city;
 
     private String state;
-
-    private Float longitude;
-
-    private Float latitude;
 }

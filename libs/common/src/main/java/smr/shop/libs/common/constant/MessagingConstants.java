@@ -8,6 +8,7 @@ public final class MessagingConstants {
     public static final String IMAGE_DELETE_TOPIC = "image-delete-topic";
     public static final String PRODUCT_STOCK_DELETE_TOPIC = "product-stock-delete-topic";
     public static final String CATEGORY_DELETE_TOPIC = "category-delete-topic";
+    public static final String SHOP_STATUS_CHANGE_TOPIC = "shop-status-change-topic";
 
 
     // Groups
