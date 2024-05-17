@@ -16,13 +16,13 @@
         <module name="flash-service" />
         <module name="product-service" />
         <module name="product-stock-service" />
+        <module name="user-service" />
         <module name="wishlist-service" />
         <module name="courier-service" />
         <module name="discovery-service" />
-        <module name="notification-service" />
         <module name="grpc-common" />
+        <module name="notification-service" />
         <module name="ticket-service" />
-        <module name="auth-service" />
         <module name="payment-service" />
         <module name="common" />
         <module name="discount-service" />
@@ -41,7 +41,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="auth-service" options="-parameters" />
+      <module name="brand-service" options="-parameters" />
       <module name="cart-service" options="-parameters" />
       <module name="category-brand-service" options="-parameters" />
       <module name="common" options="-parameters" />
@@ -67,6 +67,7 @@
       <module name="shop-service" options="-parameters" />
       <module name="ticket-service" options="-parameters" />
       <module name="upload-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
       <module name="wishlist-service" options="-parameters" />
     </option>
   </component>

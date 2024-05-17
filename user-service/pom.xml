@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>auth-service</artifactId>
+    <artifactId>user-service</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
