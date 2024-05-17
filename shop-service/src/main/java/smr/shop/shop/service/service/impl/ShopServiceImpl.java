@@ -18,7 +18,7 @@ import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
-import smr.shop.shop.service.exception.ShopException;
+import smr.shop.shop.service.exception.ShopServiceException;
 import smr.shop.shop.service.grpc.client.UploadGrpcServiceClient;
 import smr.shop.shop.service.mapper.ShopServiceMapper;
 import smr.shop.shop.service.message.publisher.ImageDeleteMessagePublisher;
@@ -31,6 +31,7 @@ import smr.shop.shop.service.service.ShopService;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -60,7 +61,7 @@ public class ShopServiceImpl implements ShopService {
         UploadGrpcResponse image = uploadGrpcServiceClient.getImageById(request.getImageId().toString());
         UUID userId = UserHelper.getUserId();
         if (shopRepository.findByUserId(userId).isPresent()) {
-           throw new  ShopException("you  already have a shop", HttpStatus.BAD_REQUEST);
+            throw new ShopServiceException("you  already have a shop", HttpStatus.BAD_REQUEST);
         }
         ShopEntity shopEntity = shopServiceMapper.createShopRequestToShopEntity(request);
         shopEntity.setLogo(image.getUrl());
@@ -86,7 +87,7 @@ public class ShopServiceImpl implements ShopService {
         ShopEntity shopEntity = findById(shopId);
         validateShopCreator(shopEntity);
         if (shopEntity.getStatus() != ShopStatus.CONFIRMED) {
-            throw new ShopException("your is shop not a active", HttpStatus.BAD_REQUEST);
+            throw new ShopServiceException("your is shop not a active", HttpStatus.BAD_REQUEST);
         }
         shopEntity.setStatus(ShopStatus.CLOSED);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
@@ -153,16 +154,18 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopGrpcResponse getShopInformationByShopId(FindShopByShopIdGrpcRequest request) {
         ShopEntity shopEntity = findById(request.getShopId());
-        ShopGrpcResponse shopGrpcResponse = shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
-        return shopGrpcResponse;
+        return shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
     }
 
     @Override
     public ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request) {
         UUID userId = UUID.fromString(request.getUserId());
-        ShopEntity shopEntity = shopRepository.findByUserId(userId).get();
-        ShopGrpcResponse shopGrpcResponse = shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
-        return shopGrpcResponse;
+        Optional<ShopEntity> optionalShopEntity = shopRepository.findByUserId(userId);
+        if (optionalShopEntity.isEmpty()) {
+            throw new ShopServiceException("cannot to find shop with userId: " + userId, HttpStatus.BAD_REQUEST);
+        }
+        ShopEntity shopEntity = optionalShopEntity.get();
+        return shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
     }
 
     @Override
@@ -180,13 +183,13 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopEntity findById(Long shopId) {
         return shopRepository.findById(shopId)
-                .orElseThrow(() -> new ShopException("Shop Not Found With Id:" + shopId, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ShopServiceException("Shop Not Found With Id:" + shopId, HttpStatus.NOT_FOUND));
     }
 
     private void validateShopCreator(ShopEntity shopEntity) {
         UUID userId = UserHelper.getUserId();
         if (!shopEntity.getUserId().equals(userId)) {
-            throw new ShopException("you dont have access to manipulate shop with id: " + shopEntity.getId(), HttpStatus.BAD_REQUEST);
+            throw new ShopServiceException("you dont have access to manipulate shop with id: " + shopEntity.getId(), HttpStatus.BAD_REQUEST);
         }
     }
 
