@@ -9,9 +9,9 @@ import smr.shop.delivery.service.model.Delivery;
 import java.util.List;
 
 public interface DeliveryService {
-    DeliveryResponse createDelivery(DeliveryCreateRequest request);
+    void createDelivery(DeliveryCreateRequest request);
 
-    DeliveryResponse updateDelivery(Long id, DeliveryUpdateRequest request);
+    void updateDelivery(Long id, DeliveryUpdateRequest request);
 
     void deleteDelivery(Long id);
 

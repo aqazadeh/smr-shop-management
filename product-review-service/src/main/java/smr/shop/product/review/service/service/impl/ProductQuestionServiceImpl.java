@@ -1,5 +1,6 @@
 package smr.shop.product.review.service.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import smr.shop.libs.common.constant.ServiceConstants;
@@ -29,17 +30,20 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     }
 
     @Override
-    public ProductQuestionResponse createProductQuestion(CreateProductQuestionRequest request) {
+    @Transactional
+    public void createProductQuestion(CreateProductQuestionRequest request) {
         ProductQuestion productQuestion = productQuestionMapper.toProductQuestion(request);
-        productQuestion = productQuestionRepository.save(productQuestion);
         productQuestion.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestion.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        return productQuestionMapper.toProductQuestionResponse(productQuestion);
+        productQuestion = productQuestionRepository.save(productQuestion);
+        productQuestionMapper.toProductQuestionResponse(productQuestion);
     }
 
     @Override
+    @Transactional
     public void deleteProductQuestion(UUID id) {
-
+        ProductQuestion question = findById(id);
+        productQuestionRepository.delete(question);
     }
 
     public ProductQuestion findById(UUID id) {

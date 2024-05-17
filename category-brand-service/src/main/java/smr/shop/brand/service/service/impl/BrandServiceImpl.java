@@ -46,6 +46,8 @@ public class BrandServiceImpl implements BrandService {
         this.brandDeleteMessagePublisher = brandDeleteMessagePublisher;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createBrand(BrandCreateRequest request) {
@@ -61,6 +63,9 @@ public class BrandServiceImpl implements BrandService {
         brandResponse.setImageUrl(image.getUrl());
     }
 
+
+//    ----------------------------------- Update -----------------------------------
+
     @Override
     @Transactional
     public void updateBrand(Long id, BrandUpdateRequest request) {
@@ -69,17 +74,6 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brandEntityUpdated = categoryBrandServiceMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
         brandEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandRepository.save(brandEntityUpdated);
-    }
-
-    @Override
-    @Transactional
-    public void deleteBrand(Long id) {
-        BrandEntity brandEntity = findById(id);
-        brandEntity.setIsDeleted(Boolean.TRUE);
-        brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        brandRepository.save(brandEntity);
-        BrandDeleteMessageModel brandDeleteMessageModel = categoryBrandServiceMapper.brandEntityToBrandDeleteMessageModel(brandEntity);
-        brandDeleteMessagePublisher.publish(brandDeleteMessageModel);
     }
 
     @Override
@@ -98,6 +92,19 @@ public class BrandServiceImpl implements BrandService {
         imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    @Transactional
+    public void deleteBrand(Long id) {
+        BrandEntity brandEntity = findById(id);
+        brandEntity.setIsDeleted(Boolean.TRUE);
+        brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        brandRepository.save(brandEntity);
+        BrandDeleteMessageModel brandDeleteMessageModel = categoryBrandServiceMapper.brandEntityToBrandDeleteMessageModel(brandEntity);
+        brandDeleteMessagePublisher.publish(brandDeleteMessageModel);
+    }
+
     @Override
     @Transactional
     public void deleteBrandImage(Long id) {
@@ -111,11 +118,12 @@ public class BrandServiceImpl implements BrandService {
         imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
     }
 
+//    ----------------------------------- Get -----------------------------------
+
     @Override
     public List<BrandResponse> getAllBrands(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-        List<BrandResponse> brandResponseList = brandRepository.findAllByIsDeletedFalse(pageable).map(categoryBrandServiceMapper::brandEntityToBrandResponse).toList();
-        return brandResponseList;
+        return brandRepository.findAllByIsDeletedFalse(pageable).map(categoryBrandServiceMapper::brandEntityToBrandResponse).toList();
     }
 
     @Override
@@ -123,20 +131,20 @@ public class BrandServiceImpl implements BrandService {
     public BrandResponse getBrand(Long id) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
-        BrandResponse brandResponse = categoryBrandServiceMapper.brandEntityToBrandResponse(brandEntity);
-        return brandResponse;
-    }
-
-    @Override
-    public BrandEntity findById(Long id) {
-        return brandRepository.findById(id).orElseThrow(() -> new CategoryBrandServiceException("Brand Not found With id : " + id, HttpStatus.NOT_FOUND));
+        return categoryBrandServiceMapper.brandEntityToBrandResponse(brandEntity);
     }
 
     @Override
     public BrandGrpcResponse getBrandInformation(BrandGrpcRequest request) {
         BrandEntity brandEntity = findById(request.getId());
-        BrandGrpcResponse brandGrpcResponse= categoryBrandServiceMapper.brandEntityToBrandGrpcResponse(brandEntity);
-        return brandGrpcResponse;
+        return categoryBrandServiceMapper.brandEntityToBrandGrpcResponse(brandEntity);
+    }
+
+//    ----------------------------------- Extra -----------------------------------
+
+    @Override
+    public BrandEntity findById(Long id) {
+        return brandRepository.findById(id).orElseThrow(() -> new CategoryBrandServiceException("Brand Not found With id : " + id, HttpStatus.NOT_FOUND));
     }
 
     private void validateBrand(BrandEntity brandEntity) {
@@ -144,4 +152,5 @@ public class BrandServiceImpl implements BrandService {
             throw new CategoryBrandServiceException("Brand is deleted with id : " + brandEntity.getId(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }

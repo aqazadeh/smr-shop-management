@@ -18,9 +18,6 @@ public class ProductCreateRequest {
     Long categoryId;
 
     @NotBlank
-    Long shopId;
-
-    @NotBlank
     Long brandId;
 
     @NotBlank

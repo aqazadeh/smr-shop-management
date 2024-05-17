@@ -34,6 +34,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="brand-service" target="17" />
       <module name="infrastructure" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>

@@ -56,22 +56,165 @@ public class ProductServiceImpl implements ProductService {
         this.productStockCreateMessagePublisher = productStockCreateMessagePublisher;
     }
 
+// --------------------------------------- Create or Add ---------------------------------------
+
+@Override
+public void createProduct(ProductCreateRequest request) {
+    CategoryGrpcResponse categoryGrpcResponse = productGrpcClientService.getCategory(request.getCategoryId());
+    BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(request.getBrandId());
+    UploadGrpcResponse uploadGrpcResponse = productGrpcClientService.getImage(request.getThumbnail());
+    ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByUserId(UserHelper.getUserId());
+
+    ProductEntity product = productServiceMapper.productCreateRequestToProductEntity(request);
+    product.setShopId(shopGrpcResponse.getShopId());
+    // TODO Check image ids
+
+    StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStock());
+    productRepository.save(product);
+    productStockCreateMessagePublisher.publish(model);
+}
 
     @Override
-    public void createProduct(ProductCreateRequest request) {
-        CategoryGrpcResponse categoryGrpcResponse = productGrpcClientService.getCategory(request.getCategoryId());
-        BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(request.getBrandId());
-        UploadGrpcResponse uploadGrpcResponse = productGrpcClientService.getImage(request.getThumbnail());
-        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(request.getShopId());
+    public void addProductThumbNail(Long productId, String imageId) {
 
-        ProductEntity product = productServiceMapper.productCreateRequestToProductEntity(request);
+        ProductEntity product = findById(productId);
 
-        // TODO Check image ids
+        validateUserShop(product);
 
-        StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStock());
+        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
+
+        product.setThumbnail(imageId);
+
         productRepository.save(product);
-        productStockCreateMessagePublisher.publish(model);
+
     }
+
+
+    @Override
+    public void addProductImage(Long productId, String imageId) {
+
+        ProductEntity product = findById(productId);
+
+        validateUserShop(product);
+
+        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
+
+        product.getImageIds().add(imageId);
+
+        productRepository.save(product);
+
+    }
+
+// --------------------------------------- Delete ---------------------------------------
+
+    @Override
+    public void removeProductThumbNail(Long productId) {
+
+        ProductEntity product = findById(productId);
+
+        validateUserShop(product);
+
+        product.setThumbnail(null);
+
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void removeProductImage(Long productId, String imageId) {
+
+        ProductEntity product = findById(productId);
+
+        validateUserShop(product);
+
+        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
+
+        product.getImageIds().remove(imageId);
+
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void deleteProduct(Long productId) {
+
+        ProductEntity product = findById(productId);
+
+        validateUserShop(product);
+
+        product.setStatus(ProductStatus.DELETED);
+
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void deleteProductsByBrand(Long brandId) {
+
+        productRepository.updateStatusByBrandId(ProductStatus.DELETED, brandId);
+
+    }
+
+    @Override
+    public void deleteProductsByShop(Long shopId) {
+
+        productRepository.updateStatusByShopId(ProductStatus.DELETED, shopId);
+
+    }
+
+    @Override
+    public void deleteProductsByCategory(Long categoryId) {
+
+        productRepository.updateStatusByCategoryId(ProductStatus.DELETED, categoryId);
+
+    }
+
+// --------------------------------------- Get ---------------------------------------
+
+    @Override
+    public ProductResponse getProductById(Long productId) {
+        ProductEntity product = findById(productId);
+
+        CategoryGrpcResponse categoryGrpcResponse =  productGrpcClientService.getCategory(product.getCategoryId());
+        BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(product.getBrandId());
+        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(product.getShopId());
+        DiscountGrpcResponse discountGrpcResponse = productGrpcClientService.getDiscount(product.getId());
+        List<ProductStockGrpcResponse> productStockGrpcResponse = productGrpcClientService.getStock(product.getId());
+
+        return productServiceMapper.productEntityToProductResponse(product);
+
+    }
+
+    @Override
+    public ProductResponse getProductBySlug(String slug) {
+
+        ProductEntity product = productRepository.findBySlug(slug);
+
+        return productServiceMapper.productEntityToProductResponse(product);
+
+    }
+
+    @Override
+    public List<ProductResponse> getAllProducts(Integer page) {
+
+        Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
+
+        List<ProductEntity> productEntities = productRepository.findAll(pageable).stream().toList();
+
+        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+
+    }
+
+    public List<ProductResponse> getAllProductsByBrandId(Long brandId) {
+
+        List<ProductEntity> productEntities = productRepository.findByBrandId(brandId);
+
+        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+
+    }
+
+// --------------------------------------- Update ---------------------------------------
+
 
     @Override
     public void updateProduct(Long productId, ProductUpdateRequest request) {
@@ -132,7 +275,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProductRating(Long productId,Float rating) {
 
-
         ProductEntity product = findById(productId);
 
         validateUserShop(product);
@@ -143,152 +285,25 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Override
-    public void addProductThumbNail(Long productId, String imageId) {
-
-        ProductEntity product = findById(productId);
-
-        validateUserShop(product);
-
-        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
-
-        product.setThumbnail(imageId);
-
-        productRepository.save(product);
-
-
-    }
-
-    @Override
-    public void removeProductThumbNail(Long productId) {
-
-        ProductEntity product = findById(productId);
-
-        validateUserShop(product);
-
-        product.setThumbnail(null);
-
-        productRepository.save(product);
-
-    }
-
-    @Override
-    public void addProductImage(Long productId, String imageId) {
-
-        ProductEntity product = findById(productId);
-
-        validateUserShop(product);
-
-        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
-
-        product.getImageIds().add(imageId);
-
-        productRepository.save(product);
-
-    }
-
-    @Override
-    public void removeProductImage(Long productId, String imageId) {
-
-        ProductEntity product = findById(productId);
-
-        validateUserShop(product);
-
-        UploadGrpcResponse image = productGrpcClientService.getImage(imageId);
-
-        product.getImageIds().remove(imageId);
-
-        productRepository.save(product);
-    }
-
-    @Override
-    public void deleteProduct(Long productId) {
-
-        ProductEntity product = findById(productId);
-
-        validateUserShop(product);
-
-        product.setStatus(ProductStatus.DELETED);
-
-        productRepository.save(product);
-    }
-
-    @Override
-    public void deleteProductsByBrand(Long brandId) {
-
-        productRepository.updateStatusByBrandId(ProductStatus.DELETED, brandId);
-
-    }
-
-    @Override
-    public void deleteProductsByShop(Long shopId) {
-
-        productRepository.updateStatusByShopId(ProductStatus.DELETED, shopId);
-
-    }
-
-    @Override
-    public void deleteProductsByCategory(Long categoryId) {
-
-        productRepository.updateStatusByCategoryId(ProductStatus.DELETED, categoryId);
-
-    }
-
-    @Override
-    public ProductResponse getProductById(Long productId) {
-        ProductEntity product = findById(productId);
-
-        CategoryGrpcResponse categoryGrpcResponse =  productGrpcClientService.getCategory(product.getCategoryId());
-        BrandGrpcResponse brandGrpcResponse = productGrpcClientService.getBrand(product.getBrandId());
-        ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByShopId(product.getShopId());
-        DiscountGrpcResponse discountGrpcResponse = productGrpcClientService.getDiscount(product.getId());
-        List<ProductStockGrpcResponse> productStockGrpcResponse = productGrpcClientService.getStock(product.getId());
-
-        return productServiceMapper.productEntityToProductResponse(product);
-    }
-
-    @Override
-    public ProductResponse getProductBySlug(String slug) {
-
-        ProductEntity product = productRepository.findBySlug(slug);
-
-        return productServiceMapper.productEntityToProductResponse(product);
-
-
-    }
-
-    @Override
-    public List<ProductResponse> getAllProducts(Integer page) {
-
-        Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
-
-        List<ProductEntity> productEntities = productRepository.findAll(pageable).stream().toList();
-
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
-
-    }
-// TODO : Lazim olarsa deye brandId vasitesile productlari cagirmaq
-    public List<ProductResponse> getAllProductsByBrandId(Long brandId) {
-
-        List<ProductEntity> productEntities = productRepository.findByBrandId(brandId);
-
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
-
-    }
+// --------------------------------------- Extra ---------------------------------------
 
     public ProductEntity findById(Long productId){
+
        return productRepository.findById(productId)
                .orElseThrow(()-> new ProductException("Product not found with id: " + productId, HttpStatus.NOT_FOUND));
-    }
 
-    //TODO DELETE product by category and Delete product by brand and Delete product by Shop
+    }
 
     private void validateUserShop(ProductEntity product){
 
         ShopGrpcResponse shopGrpcResponse = productGrpcClientService.getShopByUserId(UserHelper.getUserId());
 
         if (!product.getShopId().equals(shopGrpcResponse.getShopId())){
-            throw  new ProductException("Product not found with id: " + product.getId(), HttpStatus.NOT_FOUND);
+            throw  new ProductException("Your don't have access to modify this product", HttpStatus.NOT_FOUND);
         }
+
     }
+
+
+
 }
