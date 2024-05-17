@@ -7,7 +7,8 @@ public class ShopServiceException extends GlobalException {
     public ShopServiceException(String message, HttpStatus status) {
         super(message, status);
     }
-     public ShopServiceException(String message, HttpStatus status, Throwable cause) {
+
+    public ShopServiceException(String message, HttpStatus status, Throwable cause) {
         super(message, status, cause);
-     }
+    }
 }
