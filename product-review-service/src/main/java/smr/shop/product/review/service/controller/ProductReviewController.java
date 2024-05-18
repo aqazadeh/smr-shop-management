@@ -21,6 +21,8 @@ public class ProductReviewController {
         this.productReviewService = productReviewService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createProductReview(@RequestBody CreateProductReviewRequest request) {
@@ -30,6 +32,20 @@ public class ProductReviewController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductReview(@RequestBody CreateProductReviewRequest request, @RequestBody UpdateProductReviewRequest updateRequest) {
+        productReviewService.updateProductReviewRequest(request, updateRequest);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Review updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -41,13 +57,4 @@ public class ProductReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateProductReview(@RequestBody CreateProductReviewRequest request, @RequestBody UpdateProductReviewRequest updateRequest) {
-        productReviewService.updateProductReviewRequest(request, updateRequest);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Product Review updated successfully")
-                .build();
-        return ResponseEntity.ok(response);
-    }
 }

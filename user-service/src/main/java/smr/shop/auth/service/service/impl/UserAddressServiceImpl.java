@@ -25,29 +25,38 @@ public class UserAddressServiceImpl implements UserAddressService {
         this.userAddressServiceHelper = userAddressServiceHelper;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
-    public CreateUserAddressRequest create(CreateUserAddressRequest request) {
+    public CreateUserAddressRequest createUserAddress(CreateUserAddressRequest request) {
         UserAddress userAddress = userAddressServiceMapper.mapToUserAddress(request);
         userAddressRepository.save(userAddress);
         return request;
     }
 
-    @Override
-    public GetUserAddressResponse getById(UUID userAddressId) {
-        UserAddress userAddress = userAddressServiceHelper.findById(userAddressId);
-        return userAddressServiceMapper.mapToResponse(userAddress);
-    }
+//    ----------------------------------- Update -----------------------------------
 
     @Override
-    public void deleteById(UUID userAddressId) {
-        userAddressServiceHelper.findById(userAddressId);
-        userAddressRepository.deleteById(userAddressId);
-    }
-
-    @Override
-    public void update(UUID userAddressId, UpdateUserAddressRequest updateUserAddressRequest) {
+    public void updateUserAddress(UUID userAddressId, UpdateUserAddressRequest updateUserAddressRequest) {
         UserAddress userAddress = userAddressServiceHelper.findById(userAddressId);
         userAddressServiceMapper.mapForUpdate(userAddress, updateUserAddressRequest);
         userAddressRepository.save(userAddress);
     }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    public void deleteUserAddressById(UUID userAddressId) {
+        userAddressServiceHelper.findById(userAddressId);
+        userAddressRepository.deleteById(userAddressId);
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
+    @Override
+    public GetUserAddressResponse getUserAddressById(UUID userAddressId) {
+        UserAddress userAddress = userAddressServiceHelper.findById(userAddressId);
+        return userAddressServiceMapper.mapToResponse(userAddress);
+    }
+
 }

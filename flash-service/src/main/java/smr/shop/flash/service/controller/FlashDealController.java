@@ -26,11 +26,15 @@ public class FlashDealController {
         this.flashDealService = flashDealService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     public ResponseEntity<FlashDealResponse> createFlashDeal(@RequestBody FlashDealCreateRequest request) {
         FlashDealResponse flashDealResponse = flashDealService.createFlashDeal(request);
         return ResponseEntity.ok(flashDealResponse);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
 
     @PatchMapping("/{flashDealId}")
     public ResponseEntity<FlashDealResponse> updateFlashDeal(@PathVariable Long flashDealId, @RequestBody FlashDealUpdateRequest request) {
@@ -38,11 +42,15 @@ public class FlashDealController {
         return ResponseEntity.ok(flashDealResponse);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{flashDealId}")
     public ResponseEntity<Void> deleteFlashDeal(@PathVariable Long flashDealId) {
         flashDealService.deleteFlashDeal(flashDealId);
         return ResponseEntity.noContent().build();
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @GetMapping
     public ResponseEntity<List<FlashDealResponse>> getAllFlashDeal(Integer page) {

@@ -44,6 +44,8 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryDeleteMessagePublisher = categoryDeleteMessagePublisher;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createCategory(CategoryCreateRequest request) {
@@ -57,6 +59,8 @@ public class CategoryServiceImpl implements CategoryService {
         categoryEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         categoryRepository.save(categoryEntity);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     @Transactional
@@ -73,17 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(updatedCategory);
     }
 
-    @Override
-    @Transactional
-    public void deleteCategory(Long categoryId) {
-        CategoryEntity categoryEntity = findById(categoryId);
-        validateCategory(categoryEntity);
-        categoryEntity.setIsDeleted(Boolean.TRUE);
-        categoryEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        categoryRepository.save(categoryEntity);
-        CategoryMessageModel categoryMessageModel = categoryBrandServiceMapper.categoryEntityToCategoryMessageModel(categoryEntity);
-        categoryDeleteMessagePublisher.publish(categoryMessageModel);
-    }
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public CategoryResponse getCategoryById(Long categoryId) {
@@ -103,6 +97,22 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryEntity> categories = categoryRepository.findByParentIdIsNullAndIsDeletedFalse();
         return categories.stream().map(categoryBrandServiceMapper::categoryEntityToCategoryResponse).toList();
     }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        CategoryEntity categoryEntity = findById(categoryId);
+        validateCategory(categoryEntity);
+        categoryEntity.setIsDeleted(Boolean.TRUE);
+        categoryEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        categoryRepository.save(categoryEntity);
+        CategoryMessageModel categoryMessageModel = categoryBrandServiceMapper.categoryEntityToCategoryMessageModel(categoryEntity);
+        categoryDeleteMessagePublisher.publish(categoryMessageModel);
+    }
+
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public CategoryEntity findById(Long categoryId) {

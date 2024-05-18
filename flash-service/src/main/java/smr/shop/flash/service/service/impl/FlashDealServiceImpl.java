@@ -27,6 +27,9 @@ public class FlashDealServiceImpl implements FlashDealService {
         this.flashServiceMapper = flashServiceMapper;
     }
 
+
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     public FlashDealResponse createFlashDeal(FlashDealCreateRequest request) {
         //TODO GRPC get image url
@@ -34,6 +37,8 @@ public class FlashDealServiceImpl implements FlashDealService {
         FlashDealEntity saveEntity = flashDealRepository.save(flashDealEntity);
         return flashServiceMapper.flashDealEntityToFlashDealResponse(saveEntity);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     public FlashDealResponse updateFlashDeal(Long id, FlashDealUpdateRequest request) {
@@ -44,12 +49,17 @@ public class FlashDealServiceImpl implements FlashDealService {
         return flashServiceMapper.flashDealEntityToFlashDealResponse(saveEntity);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @Override
     public void deleteFlashDeal(Long id) {
         FlashDealEntity flashDeal = findById(id);
         // TODO if need send kafka event
         flashDealRepository.delete(flashDeal);
     }
+
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public FlashDealResponse getFlashDealById(Long id) {
@@ -65,6 +75,8 @@ public class FlashDealServiceImpl implements FlashDealService {
         // TODO GET IMAGES GRPC
         return flashServiceMapper.flashDealEntityToFlashDealResponse(flashDealEntityList);
     }
+
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public FlashDealEntity findById(Long id) {

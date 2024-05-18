@@ -16,24 +16,36 @@ public class DiscountController {
     public DiscountController(DiscountService discountService) {
         this.discountService = discountService;
     }
+
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     public ResponseEntity<EmptyResponse> createDiscount(@RequestBody DiscountCreateRequest request){
         discountService.createDiscount(request);
         EmptyResponse emptyResponse=EmptyResponse.builder().message("Discount created successfully").build();
         return ResponseEntity.ok(emptyResponse);
     }
+
+//    ----------------------------------- Patch or Put -----------------------------------
+
     @PatchMapping("/{id}")
     public ResponseEntity<EmptyResponse> updateDiscount(@PathVariable Long id, @RequestBody DiscountUpdateRequest request){
         discountService.updateDiscount(id, request);
         EmptyResponse emptyResponse=EmptyResponse.builder().message("Discount updated succeefully").build();
         return ResponseEntity.ok(emptyResponse);
     }
+
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{id}")
     public ResponseEntity<EmptyResponse>deleteDiscount(@PathVariable Long id){
         discountService.deleteDiscount(id);
         EmptyResponse emptyResponse=EmptyResponse.builder().message("Discount deleted successfully").build();
         return ResponseEntity.ok(emptyResponse);
     }
+
+//    ----------------------------------- Get -----------------------------------
+
     @GetMapping("/{id}")
     public ResponseEntity<DiscountResponse>getDiscountById(@PathVariable Long id){
         DiscountResponse discountResponse = discountService.getDiscountById(id);

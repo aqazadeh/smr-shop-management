@@ -58,6 +58,8 @@ public class CartServiceImpl implements CartService {
         this.cartServiceHelper = cartServiceHelper;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     public void addProductToCart(Long productId, UUID stockId) {
         UUID userId = UserHelper.getUserId();
@@ -106,7 +108,22 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void increase(UUID cartItemId) {
+        UUID userId = UserHelper.getUserId();
+        CartItemEntity cartItemEntity = findItemById(cartItemId);
+        if (!cartItemEntity.getUserId().equals(userId)) {
+            throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
+        }
+        cartItemEntity.setQuantity(cartItemEntity.getQuantity() + 1);
+        cartItemRepository.save(cartItemEntity);
+
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
     public CartResponse removeCoupon() {
+
         UUID userId = UserHelper.getUserId();
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(CartEntity::new);
         if (cartEntity.getCoupon() != null) {
@@ -114,10 +131,12 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cartEntity);
         }
         return getCartResponse(cartEntity);
+
     }
 
     @Override
     public void clearCart() {
+
         UUID userId = UserHelper.getUserId();
         CartEntity cart = cartRepository.findByUserId(userId).orElseGet(() -> CartEntity.builder().id(UUID.randomUUID()).build());
         cartItemRepository.deleteByCartId(cart.getId());
@@ -132,27 +151,6 @@ public class CartServiceImpl implements CartService {
             throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
         }
         cartItemRepository.deleteById(cartItemId);
-    }
-
-    @Override
-    public CartResponse getAllCartItems() {
-        UUID userId = UserHelper.getUserId();
-        CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(() -> CartEntity.builder().id(UUID.randomUUID()).build());
-        return getCartResponse(cartEntity);
-    }
-
-
-
-    @Override
-    public void increase(UUID cartItemId) {
-        UUID userId = UserHelper.getUserId();
-        CartItemEntity cartItemEntity = findItemById(cartItemId);
-        if (!cartItemEntity.getUserId().equals(userId)) {
-            throw new CartException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
-        }
-        cartItemEntity.setQuantity(cartItemEntity.getQuantity() + 1);
-        cartItemRepository.save(cartItemEntity);
-
 
     }
 
@@ -181,6 +179,22 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void removeCouponInItems(CouponMessageModel message) {
+        cartRepository.removeCouponInCart(message.getCode());
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
+    @Override
+    public CartResponse getAllCartItems() {
+        UUID userId = UserHelper.getUserId();
+        CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(() -> CartEntity.builder().id(UUID.randomUUID()).build());
+        return getCartResponse(cartEntity);
+    }
+
+//    ----------------------------------- Extra -----------------------------------
+
+    @Override
     public CartItemEntity findItemById(UUID cartItemId) {
         return cartItemRepository.findById(cartItemId).orElseThrow(() -> new CartException("Cart Item Not found with id : " + cartItemId, HttpStatus.NOT_FOUND));
 
@@ -189,11 +203,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartEntity findCartById(UUID cartId) {
         return cartRepository.findById(cartId).orElseThrow(() -> new CartException("cart not found with id : " + cartId, HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public void removeCouponInItems(CouponMessageModel message) {
-        cartRepository.removeCouponInCart(message.getCode());
     }
 
     private CartResponse getCartResponse(CartEntity cartEntity) {

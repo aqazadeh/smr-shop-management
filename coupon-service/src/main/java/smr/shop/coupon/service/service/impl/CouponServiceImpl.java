@@ -59,6 +59,8 @@ public class CouponServiceImpl implements CouponService {
         this.couponUsageService = couponUsageService;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createCouponWithAdmin(CouponCreateRequest request){
@@ -85,6 +87,8 @@ public class CouponServiceImpl implements CouponService {
         couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         couponRepository.save(couponEntity);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     public void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request) {
@@ -114,6 +118,8 @@ public class CouponServiceImpl implements CouponService {
         couponRepository.save(couponEntityUpdated);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @Override
     @Transactional
     public void deleteCoupon(UUID couponId) {
@@ -139,6 +145,8 @@ public class CouponServiceImpl implements CouponService {
         couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
     }
 
+//    ----------------------------------- Get -----------------------------------
+
     @Override
     public List<CouponResponse> getAllCoupons(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
@@ -159,6 +167,8 @@ public class CouponServiceImpl implements CouponService {
 
         return couponMapper.couponEntityToCouponResponse(couponEntity);
     }
+
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public CouponEntity findById(UUID couponId) {

@@ -20,6 +20,8 @@ public class ProductQuestionController {
         this.procuctQuestionService = procuctQuestionService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createProductQuestion(@RequestBody CreateProductQuestionRequest request) {
@@ -29,6 +31,20 @@ public class ProductQuestionController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateProductQuestion(@PathVariable UUID id, @RequestBody UpdateProductQuestionRequest request) {
+        procuctQuestionService.updateProductReview(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Product Question updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -40,13 +56,4 @@ public class ProductQuestionController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateProductQuestion(@PathVariable UUID id, @RequestBody UpdateProductQuestionRequest request) {
-        procuctQuestionService.updateProductReview(id, request);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Product Question updated successfully")
-                .build();
-        return ResponseEntity.ok(response);
-    }
 }

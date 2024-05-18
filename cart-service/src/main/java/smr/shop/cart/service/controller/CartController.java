@@ -26,6 +26,9 @@ public class CartController {
         this.cartService = cartService;
     }
 
+
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping("/{productId}/{stockId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> addToCart(@PathVariable Long productId, @PathVariable UUID stockId) {
@@ -48,12 +51,16 @@ public class CartController {
         return null;
     }
 
+//    ----------------------------------- Get -----------------------------------
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CartResponse> getUserCart() {
         CartResponse cartResponse = cartService.getAllCartItems();
         return ResponseEntity.ok(cartResponse);
     }
+
+//    ----------------------------------- Delete -----------------------------------
 
     @DeleteMapping("/{cartItemId}/remove")
     @ResponseStatus(HttpStatus.OK)
@@ -83,6 +90,5 @@ public class CartController {
         EmptyResponse response = EmptyResponse.builder().message("Cart clear successfully").build();
         return ResponseEntity.ok().body(response);
     }
-
 
 }

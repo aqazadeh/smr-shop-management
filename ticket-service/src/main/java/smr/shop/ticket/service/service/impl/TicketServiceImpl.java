@@ -39,6 +39,8 @@ public class TicketServiceImpl implements TicketService {
         this.ticketServiceMapper = ticketServiceMapper;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
         Ticket ticket = ticketServiceMapper.createTicketRequestToTicket(request);
@@ -46,6 +48,18 @@ public class TicketServiceImpl implements TicketService {
         ticketRepository.save(ticket);
         return request;
     }
+
+
+//    ----------------------------------- Update -----------------------------------
+
+    @Override
+    public void updateTicketStatus(UUID ticketId, TicketStatus status) {
+        Ticket ticket = ticketServiceHelper.getById(ticketId);
+        ticket.setTicketStatus(status);
+        ticketRepository.save(ticket);
+    }
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public List<TicketMessageResponse> getById(UUID ticketId, Integer page) {
@@ -65,6 +79,8 @@ public class TicketServiceImpl implements TicketService {
                 .toList();
     }
 
+//    ----------------------------------- Extra -----------------------------------
+
     @Override
     public void sendMessageByUser(UUID ticketId, CreateTicketMessageRequest request) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
@@ -78,17 +94,11 @@ public class TicketServiceImpl implements TicketService {
         ticketMessageRepository.save(ticketMessage);
     }
 
-    @Override
-    public void updateTicketStatus(UUID ticketId, TicketStatus status) {
-        Ticket ticket = ticketServiceHelper.getById(ticketId);
-        ticket.setTicketStatus(status);
-        ticketRepository.save(ticket);
-    }
-
     public void sendMessageByAdmin(UUID ticketId, CreateTicketMessageRequest request) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
         TicketMessage ticketMessage = ticketServiceMapper.createTicketMessageRequestToTicketMessageResponse(request);
         ticketMessage.setTicketId(ticket.getId());
         ticketMessageRepository.save(ticketMessage);
     }
+
 }

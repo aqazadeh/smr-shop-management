@@ -35,6 +35,8 @@ public class FlashDealProductServiceImpl implements FlashDealProductService {
         this.flashServiceMapper = flashServiceMapper;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     public FlashDealProductResponse createFlashDealProduct(FlashDealProductCreateRequest request) {
         //TODO GRPC get image url
@@ -42,6 +44,8 @@ public class FlashDealProductServiceImpl implements FlashDealProductService {
         FlashDealProductEntity saveEntity = flashDealProductRepository.save(flashDealProductEntity);
         return flashServiceMapper.flashDealProductEntityToFlashDealProductResponse(saveEntity);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     public FlashDealProductResponse updateFlashDealProduct(UUID flashDealProductId, FlashDealProductUpdateRequest request) {
@@ -52,12 +56,16 @@ public class FlashDealProductServiceImpl implements FlashDealProductService {
         return flashServiceMapper.flashDealProductEntityToFlashDealProductResponse(saveEntity);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @Override
     public void deleteFlashDealProduct(UUID flashDealProductId) {
         FlashDealProductEntity flashDealProduct = findById(flashDealProductId);
         // TODO if need send kafka event
         flashDealProductRepository.delete(flashDealProduct);
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public FlashDealProductResponse getFlashDealProductById(UUID flashDealProductId) {
@@ -73,6 +81,8 @@ public class FlashDealProductServiceImpl implements FlashDealProductService {
         // TODO GET IMAGES GRPC
         return flashServiceMapper.flashDealProductEntityToFlashDealProductResponse(flashDealProductEntityList);
     }
+
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public FlashDealProductEntity findById(UUID flashDealProductId) {

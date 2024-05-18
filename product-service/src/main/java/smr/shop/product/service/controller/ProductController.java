@@ -167,7 +167,7 @@ public class ProductController {
     }
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ProductResponse>> getAllProducts(@RequestParam Integer page){
+    public ResponseEntity<List<ProductResponse>> getAllProducts(@RequestParam(value = "page", defaultValue = "0") Integer page){
         List<ProductResponse> productProducts = productService.getAllProducts(page);
         return ResponseEntity.ok(productProducts);
     }

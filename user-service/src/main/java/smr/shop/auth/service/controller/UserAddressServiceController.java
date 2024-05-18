@@ -19,27 +19,34 @@ public class UserAddressServiceController {
         this.userAddressService = userAddressService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-
-    public CreateUserAddressRequest create(@RequestBody @Valid CreateUserAddressRequest request) {
-        return userAddressService.create(request);
+    public CreateUserAddressRequest createUserAddress(@RequestBody @Valid CreateUserAddressRequest request) {
+        return userAddressService.createUserAddress(request);
     }
 
-    @GetMapping("/{userAddressId}")
-    public GetUserAddressResponse getById(@PathVariable UUID userAddressId) {
-        return userAddressService.getById(userAddressId);
-    }
-
-    @DeleteMapping("/{userAddressId}")
-    public void deleteById(@PathVariable UUID userAddressId) {
-        userAddressService.deleteById(userAddressId);
-    }
+//    ----------------------------------- Put or Patch -----------------------------------
 
     @PatchMapping("/{userAddressId}")
-    public void update(@PathVariable UUID userAddressId,
+    public void updateUserAddress(@PathVariable UUID userAddressId,
                        @RequestBody @Valid UpdateUserAddressRequest updateUserAddressRequest) {
-        userAddressService.update(userAddressId, updateUserAddressRequest);
+        userAddressService.updateUserAddress(userAddressId, updateUserAddressRequest);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @DeleteMapping("/{userAddressId}")
+    public void deleteUserAddressById(@PathVariable UUID userAddressId) {
+        userAddressService.deleteUserAddressById(userAddressId);
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
+    @GetMapping("/{userAddressId}")
+    public GetUserAddressResponse getUserAddressById(@PathVariable UUID userAddressId) {
+        return userAddressService.getUserAddressById(userAddressId);
     }
 
 }

@@ -20,6 +20,8 @@ public class ProductStockController {
         this.productStockService = productStockService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateProductStockRequest create(@RequestBody @Valid CreateProductStockRequest request) {
@@ -31,6 +33,25 @@ public class ProductStockController {
     public List<CreateProductStockRequest> createAll(@RequestBody @Valid List<CreateProductStockRequest> productStockRequests) {
         return productStockService.createAll(productStockRequests);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateById(@PathVariable UUID id,
+                           @RequestBody @Valid UpdateProductStockRequest request) {
+        productStockService.updateById(id, request);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteById(@PathVariable UUID id) {
+        productStockService.deleteById(id);
+    }
+
+//    ----------------------------------- Get -----------------------------------
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -44,16 +65,4 @@ public class ProductStockController {
         return productStockService.getByProductId(productId);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable UUID id) {
-        productStockService.deleteById(id);
-    }
-
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateById(@PathVariable UUID id,
-                           @RequestBody @Valid UpdateProductStockRequest request) {
-        productStockService.updateById(id, request);
-    }
 }

@@ -55,6 +55,8 @@ public class ShopServiceImpl implements ShopService {
         this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createShop(CreateShopRequest request) {
@@ -71,6 +73,8 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(shopEntity);
     }
 
+//    ----------------------------------- Update -----------------------------------
+
     @Override
     @Transactional
     public void updateShop(Long shopId, UpdateShopRequest request) {
@@ -79,34 +83,6 @@ public class ShopServiceImpl implements ShopService {
         ShopEntity updateShopEntity = shopServiceMapper.updateShopRequestToShopEntity(request, shopEntity);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(updateShopEntity);
-    }
-
-    @Override
-    @Transactional
-    public void deleteShop(Long shopId) {
-        ShopEntity shopEntity = findById(shopId);
-        validateShopCreator(shopEntity);
-        if (shopEntity.getStatus() != ShopStatus.CONFIRMED) {
-            throw new ShopServiceException("your is shop not a active", HttpStatus.BAD_REQUEST);
-        }
-        shopEntity.setStatus(ShopStatus.CLOSED);
-        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        shopRepository.save(shopEntity);
-        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
-        ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
-        shopStatusChangeMessagePublisher.publish(shopMessageModel);
-    }
-
-    @Override
-    public void deleteShopImage(Long shopId) {
-        ShopEntity shopEntity = findById(shopId);
-        if (shopEntity.getLogo() == null) return;
-        validateShopCreator(shopEntity);
-        shopEntity.setLogo(null);
-        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
-        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(savedShopEntity);
-        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
     }
 
     @Override
@@ -144,6 +120,38 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(shopEntity);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    @Transactional
+    public void deleteShop(Long shopId) {
+        ShopEntity shopEntity = findById(shopId);
+        validateShopCreator(shopEntity);
+        if (shopEntity.getStatus() != ShopStatus.CONFIRMED) {
+            throw new ShopServiceException("your is shop not a active", HttpStatus.BAD_REQUEST);
+        }
+        shopEntity.setStatus(ShopStatus.CLOSED);
+        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        shopRepository.save(shopEntity);
+        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
+        ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
+        shopStatusChangeMessagePublisher.publish(shopMessageModel);
+    }
+
+    @Override
+    public void deleteShopImage(Long shopId) {
+        ShopEntity shopEntity = findById(shopId);
+        if (shopEntity.getLogo() == null) return;
+        validateShopCreator(shopEntity);
+        shopEntity.setLogo(null);
+        shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        ShopEntity savedShopEntity = shopRepository.save(shopEntity);
+        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(savedShopEntity);
+        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
     @Override
     public ShopAddressResponse getShopAddress(Long shopId) {
         ShopEntity shopEntity = findById(shopId);
@@ -179,6 +187,8 @@ public class ShopServiceImpl implements ShopService {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         return shopRepository.findAll(pageable).map(shopServiceMapper::shopEntitytoShopResponse).toList();
     }
+
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public ShopEntity findById(Long shopId) {

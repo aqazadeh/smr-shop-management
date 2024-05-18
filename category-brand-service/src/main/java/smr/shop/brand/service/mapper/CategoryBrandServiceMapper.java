@@ -21,12 +21,13 @@ import java.util.List;
 public class CategoryBrandServiceMapper {
     public BrandEntity brandCreateResponseToBrandEntity(BrandCreateRequest request) {
         return BrandEntity.builder()
-                .name(request.getName())
-                .description(request.getDescription()).build();
+                .firstName(request.getName())
+                .description(request.getDescription())
+                .build();
     }
 
     public BrandEntity brandUpdateRequestToBrandEntity(BrandUpdateRequest request, BrandEntity entity) {
-        entity.setName(request.getName());
+        entity.setFirstName(request.getName());
         entity.setSlug(request.getSlug());
         entity.setDescription(request.getDescription());
         return entity;
@@ -35,7 +36,7 @@ public class CategoryBrandServiceMapper {
     public BrandResponse brandEntityToBrandResponse(BrandEntity brandEntity) {
         return BrandResponse.builder()
                 .id(brandEntity.getId())
-                .name(brandEntity.getName())
+                .name(brandEntity.getFirstName())
                 .slug(brandEntity.getSlug())
                 .description(brandEntity.getDescription())
                 .imageUrl(brandEntity.getImageUrl())
@@ -101,7 +102,7 @@ public class CategoryBrandServiceMapper {
     public BrandGrpcResponse brandEntityToBrandGrpcResponse(BrandEntity brandEntity) {
         return BrandGrpcResponse.newBuilder()
                 .setId(brandEntity.getId())
-                .setName(brandEntity.getName())
+                .setName(brandEntity.getFirstName())
                 .setSlug(brandEntity.getSlug())
                 .setDescription(brandEntity.getDescription())
                 .setImageUrl(brandEntity.getImageUrl())

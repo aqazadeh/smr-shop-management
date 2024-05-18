@@ -29,6 +29,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         this.productReviewRepository = productReviewRepository;
     }
 
+
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createProductReview(CreateProductReviewRequest request) {
@@ -40,13 +43,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         productReviewRepository.save(productReview);
     }
 
-    @Override
-    @Transactional
-    public void deleteProductReview(UUID id) {
-        ProductReview productReview = findById(id);
-        productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        productReviewRepository.delete(productReview);
-    }
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     @Transactional
@@ -66,6 +63,18 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             productReviewServiceMapper.toProductReviewResponse(productReview);
         }
     }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    @Transactional
+    public void deleteProductReview(UUID id) {
+        ProductReview productReview = findById(id);
+        productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        productReviewRepository.delete(productReview);
+    }
+
+//    ----------------------------------- Extra -----------------------------------
 
     public ProductReview findById(UUID id) {
         return productReviewRepository.findById(id)

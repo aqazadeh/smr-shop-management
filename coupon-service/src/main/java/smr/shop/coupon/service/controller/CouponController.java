@@ -27,6 +27,8 @@ public class CouponController {
         this.couponService = couponService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     public ResponseEntity<EmptyResponse> createCoupon(@RequestBody CouponCreateRequest request) {
         couponService.createCoupon(request);
@@ -44,6 +46,8 @@ public class CouponController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Patch -----------------------------------
 
     @PatchMapping("/{couponId}")
     public ResponseEntity<EmptyResponse> updateCoupon(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
@@ -63,6 +67,8 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{couponId}")
     public ResponseEntity<EmptyResponse> deleteCoupon(@PathVariable UUID couponId) {
         couponService.deleteCoupon(couponId);
@@ -79,6 +85,8 @@ public class CouponController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @GetMapping
     public ResponseEntity<List<CouponResponse>> getAllShopCoupon(Integer page) {
@@ -97,4 +105,5 @@ public class CouponController {
         CouponResponse couponResponse = couponService.getCoupon(couponId);
         return ResponseEntity.ok(couponResponse);
     }
+
 }

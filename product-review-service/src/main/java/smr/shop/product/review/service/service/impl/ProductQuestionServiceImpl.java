@@ -7,7 +7,7 @@ import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.product.review.service.dto.request.CreateProductQuestionRequest;
 import smr.shop.product.review.service.dto.request.UpdateProductQuestionRequest;
 import smr.shop.product.review.service.exception.ProductQuestionServiceException;
-import smr.shop.product.review.service.mapper.ProductQuestionServiceMapper;
+import smr.shop.product.review.service.mapper.ProductReviewServiceMapper;
 import smr.shop.product.review.service.model.ProductQuestion;
 import smr.shop.product.review.service.repository.ProductQuestionRepository;
 import smr.shop.product.review.service.repository.ProductReviewRepository;
@@ -22,22 +22,37 @@ import java.util.UUID;
 public class ProductQuestionServiceImpl implements ProductQuestionService {
 
     private final ProductQuestionRepository productQuestionRepository;
-    private final ProductQuestionServiceMapper productQuestionServiceMapper;
+    private final ProductReviewServiceMapper productReviewServiceMapper;
 
-    public ProductQuestionServiceImpl(ProductQuestionRepository productQuestionRepository, ProductQuestionServiceMapper productQuestionServiceMapper, ProductReviewRepository productReviewRepository) {
+    public ProductQuestionServiceImpl(ProductQuestionRepository productQuestionRepository, ProductReviewServiceMapper productReviewServiceMapper, ProductReviewRepository productReviewRepository) {
         this.productQuestionRepository = productQuestionRepository;
-        this.productQuestionServiceMapper = productQuestionServiceMapper;
+        this.productReviewServiceMapper = productReviewServiceMapper;
     }
+
+//    ----------------------------------- Create or Add -----------------------------------
 
     @Override
     @Transactional
     public void createProductQuestion(CreateProductQuestionRequest request) {
-        ProductQuestion productQuestion = productQuestionServiceMapper.toProductQuestion(request);
+        ProductQuestion productQuestion = productReviewServiceMapper.toProductQuestion(request);
         productQuestion.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestion.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         productQuestion = productQuestionRepository.save(productQuestion);
-        productQuestionServiceMapper.toProductQuestionResponse(productQuestion);
+        productReviewServiceMapper.toProductQuestionResponse(productQuestion);
     }
+
+//    ----------------------------------- Update -----------------------------------
+
+    @Override
+    public void updateProductReview(UUID id, UpdateProductQuestionRequest request) {
+        ProductQuestion question = findById(id);
+        productReviewServiceMapper.toUpdateProductQuestion(request, question);
+        question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        productQuestionRepository.save(question);
+        productReviewServiceMapper.toProductQuestionResponse(question);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
 
     @Override
     @Transactional
@@ -47,14 +62,7 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
         productQuestionRepository.delete(question);
     }
 
-    @Override
-    public void updateProductReview(UUID id, UpdateProductQuestionRequest request) {
-        ProductQuestion question = findById(id);
-        productQuestionServiceMapper.toUpdateProductQuestion(request, question);
-        question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        productQuestionRepository.save(question);
-        productQuestionServiceMapper.toProductQuestionResponse(question);
-    }
+//    ----------------------------------- Delete -----------------------------------
 
     public ProductQuestion findById(UUID id) {
         return productQuestionRepository.findById(id)

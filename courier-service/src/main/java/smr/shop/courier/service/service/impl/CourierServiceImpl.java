@@ -32,6 +32,8 @@ public class CourierServiceImpl implements CourierService {
         this.courierServiceMapper = courierServiceMapper;
     }
 
+//    ----------------------------------- Create -----------------------------------
+
     @Override
     @Transactional
     public void createCourier(CourierCreateRequest request) {
@@ -41,6 +43,8 @@ public class CourierServiceImpl implements CourierService {
         courierEntity = courierRepository.save(courierEntity);
         courierServiceMapper.toCourierResponse(courierEntity);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     @Transactional
@@ -54,11 +58,25 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     @Transactional
+    public void updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request) {
+        CourierEntity courierEntity = findById(id);
+        courierEntity.setActiveType(request.getStatus());
+        courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        courierEntity = courierRepository.save(courierEntity);
+        courierServiceMapper.toCourierResponse(courierEntity);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    @Transactional
     public void deleteCourier(Long id) {
         CourierEntity courierEntity = findById(id);
         courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierRepository.delete(courierEntity);
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public List<CourierResponse> getAllCourier(Integer page) {
@@ -72,15 +90,7 @@ public class CourierServiceImpl implements CourierService {
         return courierServiceMapper.toCourierResponse(courierEntity);
     }
 
-    @Override
-    @Transactional
-    public void updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request) {
-        CourierEntity courierEntity = findById(id);
-        courierEntity.setActiveType(request.getStatus());
-        courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        courierEntity = courierRepository.save(courierEntity);
-        courierServiceMapper.toCourierResponse(courierEntity);
-    }
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public CourierEntity findById(Long id) {

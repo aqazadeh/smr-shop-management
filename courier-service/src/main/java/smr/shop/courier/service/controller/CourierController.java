@@ -22,6 +22,8 @@ public class CourierController {
         this.courierService = courierService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createCourier(@RequestBody CourierCreateRequest request) {
@@ -31,6 +33,8 @@ public class CourierController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Patch or Put -----------------------------------
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -42,6 +46,18 @@ public class CourierController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> changeActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
+        courierService.updateCourierActiveType(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Courier Active Type updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<EmptyResponse> deleteCourier(@PathVariable Long id) {
@@ -51,6 +67,9 @@ public class CourierController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+
+//    ----------------------------------- Get -----------------------------------
 
     @GetMapping
     public ResponseEntity<List<CourierResponse>> getAllCourier(Integer page) {
@@ -64,13 +83,4 @@ public class CourierController {
         return ResponseEntity.ok(courierResponse);
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> changeActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
-        courierService.updateCourierActiveType(id, request);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Courier Active Type updated successfully")
-                .build();
-        return ResponseEntity.ok(response);
-    }
 }

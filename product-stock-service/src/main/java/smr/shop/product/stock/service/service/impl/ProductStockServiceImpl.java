@@ -28,6 +28,8 @@ public class ProductStockServiceImpl implements ProductStockService {
         this.productStockServiceHelper = productStockServiceHelper;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     public CreateProductStockRequest create(CreateProductStockRequest request) {
         ProductStock productStock = productStockServiceMapper.mapToProductStock(request);
@@ -43,6 +45,25 @@ public class ProductStockServiceImpl implements ProductStockService {
         return productStockRequests;
     }
 
+//    ----------------------------------- Update -----------------------------------
+
+    @Override
+    public void updateById(UUID id, UpdateProductStockRequest request) {
+        ProductStock productStock = productStockServiceHelper.getById(id);
+        productStockServiceMapper.mapForUpdate(productStock, request);
+        productStockRepository.save(productStock);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
+    public void deleteById(UUID id) {
+        productStockServiceHelper.getById(id);
+        productStockRepository.deleteById(id);
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
     @Override
     public GetProductStockResponse getById(UUID id) {
         ProductStock productStock = productStockServiceHelper.getById(id);
@@ -55,16 +76,4 @@ public class ProductStockServiceImpl implements ProductStockService {
         return productStockServiceMapper.mapToResponse(productStock);
     }
 
-    @Override
-    public void deleteById(UUID id) {
-        productStockServiceHelper.getById(id);
-        productStockRepository.deleteById(id);
-    }
-
-    @Override
-    public void updateById(UUID id, UpdateProductStockRequest request) {
-        ProductStock productStock = productStockServiceHelper.getById(id);
-        productStockServiceMapper.mapForUpdate(productStock, request);
-        productStockRepository.save(productStock);
-    }
 }

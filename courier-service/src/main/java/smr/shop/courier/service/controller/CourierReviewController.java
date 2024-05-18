@@ -17,6 +17,8 @@ public class CourierReviewController {
         this.courierReviewService = courierReviewService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createCourierReview(@RequestBody CreateCourierReviewRequest request) {
@@ -26,4 +28,5 @@ public class CourierReviewController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
 }

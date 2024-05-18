@@ -32,6 +32,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.deliveryRepository = deliveryRepository;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
+
     @Override
     @Transactional
     public void createDelivery(DeliveryCreateRequest request) {
@@ -41,6 +43,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         deliveryResponse = deliveryRepository.save(deliveryResponse);
         deliveryServiceMapper.toDeliveryResponse(deliveryResponse);
     }
+
+//    ----------------------------------- Update -----------------------------------
 
     @Override
     @Transactional
@@ -52,12 +56,25 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    public DeliveryResponse updateDeliveryStatus(Long id, UpdateDeliveryStatusRequest request) {
+        Delivery delivery = findById(id);
+        delivery.setStatus(request.getStatus());
+        delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
+        delivery = deliveryRepository.save(delivery);
+        return deliveryServiceMapper.toDeliveryResponse(delivery);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
+    @Override
     @Transactional
     public void deleteDelivery(Long id) {
         Delivery delivery = findById(id);
         delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         deliveryRepository.delete(delivery);
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public List<DeliveryResponse> getAllDelivery(Integer page) {
@@ -72,14 +89,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return deliveryServiceMapper.toDeliveryResponse(delivery);
     }
 
-    @Override
-    public DeliveryResponse updateDeliveryStatus(Long id, UpdateDeliveryStatusRequest request) {
-        Delivery delivery = findById(id);
-        delivery.setStatus(request.getStatus());
-        delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        delivery = deliveryRepository.save(delivery);
-        return deliveryServiceMapper.toDeliveryResponse(delivery);
-    }
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public Delivery findById(Long id) {

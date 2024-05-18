@@ -27,6 +27,7 @@ public class CartServiceMapper {
                 .discountPrice(discountPrice * cart.getQuantity())
                 .totalPrice(cart.getQuantity() * product.getPrice())
                 .attributeName(product.getStock().getAttributeName())
+//                TODO Check here
                 .thumbnail(product.getThumbnail())
                 .build();
     }

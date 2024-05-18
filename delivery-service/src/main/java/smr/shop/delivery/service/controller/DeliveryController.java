@@ -22,6 +22,8 @@ public class DeliveryController {
         this.deliveryService = deliveryService;
     }
 
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> createDelivery(@RequestBody DeliveryCreateRequest request) {
@@ -31,6 +33,8 @@ public class DeliveryController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Patch or Put -----------------------------------
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -42,6 +46,14 @@ public class DeliveryController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<DeliveryResponse> updateDeliveryStatus(@PathVariable Long id, @RequestBody UpdateDeliveryStatusRequest request) {
+        DeliveryResponse deliveryResponse = deliveryService.updateDeliveryStatus(id, request);
+        return ResponseEntity.ok(deliveryResponse);
+    }
+
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<EmptyResponse> deleteDelivery(@PathVariable Long id) {
@@ -51,6 +63,8 @@ public class DeliveryController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+//    ----------------------------------- Get -----------------------------------
 
     @GetMapping
     public ResponseEntity<List<DeliveryResponse>> getAllDelivery(Integer page) {
@@ -64,9 +78,4 @@ public class DeliveryController {
         return ResponseEntity.ok(delivery);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DeliveryResponse> updateDeliveryStatus(@PathVariable Long id, @RequestBody UpdateDeliveryStatusRequest request) {
-        DeliveryResponse deliveryResponse = deliveryService.updateDeliveryStatus(id, request);
-        return ResponseEntity.ok(deliveryResponse);
-    }
 }

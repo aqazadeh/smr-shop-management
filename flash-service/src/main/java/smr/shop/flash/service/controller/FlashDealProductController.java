@@ -28,11 +28,16 @@ public class FlashDealProductController {
         this.flashDealProductService = flashDealProductService;
     }
 
+
+//    ----------------------------------- Post -----------------------------------
+
     @PostMapping
     public ResponseEntity<FlashDealProductResponse> createFlashDealProduct(@RequestBody FlashDealProductCreateRequest request) {
         FlashDealProductResponse flashDealProductResponse = flashDealProductService.createFlashDealProduct(request);
         return ResponseEntity.ok(flashDealProductResponse);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
 
     @PatchMapping("/{flashDealProductId}")
     public ResponseEntity<FlashDealProductResponse> updateFlashDealProduct(@PathVariable UUID flashDealProductId, @RequestBody FlashDealProductUpdateRequest request) {
@@ -40,11 +45,15 @@ public class FlashDealProductController {
         return ResponseEntity.ok(flashDealProductResponse);
     }
 
+//    ----------------------------------- Delete -----------------------------------
+
     @DeleteMapping("/{flashDealProductId}")
     public ResponseEntity<Void> deleteFlashDealProduct(@PathVariable UUID flashDealProductId) {
         flashDealProductService.deleteFlashDealProduct(flashDealProductId);
         return ResponseEntity.noContent().build();
     }
+
+    //    ----------------------------------- Get -----------------------------------
 
     @GetMapping
     public ResponseEntity<List<FlashDealProductResponse>> getAllFlashDealProduct(Integer page) {

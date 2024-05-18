@@ -36,6 +36,7 @@ public class WishlistServiceImpl implements WishlistService {
         this.wishlistGrpcClientService = wishlistGrpcClientService;
     }
 
+//    ----------------------------------- Create or Add -----------------------------------
 
     @Override
     public void addProductToWishlist(Long productId) {
@@ -49,12 +50,24 @@ public class WishlistServiceImpl implements WishlistService {
         }
     }
 
-
+//    ----------------------------------- Delete -----------------------------------
 
     @Override
     public void deleteProductsInWishlist(ProductDeleteMessageModel productDeleteMessageModel) {
         wishlistRepository.deleteByProductId(productDeleteMessageModel.getId());
     }
+
+    @Override
+    public void deleteWishlist(UUID wishlistId) {
+        UUID userId = UserHelper.getUserId();
+        WishlistEntity wishlistEntity = findById(wishlistId);
+        if (!wishlistEntity.getUserId().equals(userId)) {
+            throw new WishlistServiceException("you dont have a permission to delete his wishlist item with id: " + wishlistId, HttpStatus.NOT_FOUND);
+        }
+        wishlistRepository.delete(wishlistEntity);
+    }
+
+//    ----------------------------------- Get -----------------------------------
 
     @Override
     public List<WishlistResponse> getAllWishlistProducts(Integer page) {
@@ -69,15 +82,7 @@ public class WishlistServiceImpl implements WishlistService {
         }).toList();
     }
 
-    @Override
-    public void deleteWishlist(UUID wishlistId) {
-        UUID userId = UserHelper.getUserId();
-        WishlistEntity wishlistEntity = findById(wishlistId);
-        if (!wishlistEntity.getUserId().equals(userId)) {
-            throw new WishlistServiceException("you dont have a permission to delete his wishlist item with id: " + wishlistId, HttpStatus.NOT_FOUND);
-        }
-        wishlistRepository.delete(wishlistEntity);
-    }
+//    ----------------------------------- Extra -----------------------------------
 
     @Override
     public WishlistEntity findById(UUID wishlistId) {

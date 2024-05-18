@@ -24,29 +24,13 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @GetMapping("/{ticketId}/messages")
-    public List<TicketMessageResponse> getById(@PathVariable UUID ticketId,
-                                               @Valid @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return ticketService.getById(ticketId, page);
-    }
 
-    @GetMapping
-    public List<TicketResponse> getAllUserTickets(@RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return ticketService.getAllUserTickets(page);
-    }
+//    ----------------------------------- Post -----------------------------------
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CreateTicketRequest add(@RequestBody @Valid CreateTicketRequest request) {
         return ticketService.createTicket(request);
-    }
-
-    @PutMapping("/{ticketId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID ticketId,
-                                                      @RequestParam("ticketStatus") @Valid TicketStatus ticketstatus) {
-        ticketService.updateTicketStatus(ticketId, ticketstatus);
-        return ResponseEntity.ok().body(EmptyResponse.builder().message("updated success").build());
     }
 
     @PostMapping("/{ticketId}/messages/")
@@ -62,4 +46,28 @@ public class TicketController {
                                    @RequestBody @Valid CreateTicketMessageRequest request) {
         ticketService.sendMessageByAdmin(ticketId, request);
     }
+
+//    ----------------------------------- Put or Patch -----------------------------------
+
+    @PutMapping("/{ticketId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID ticketId,
+                                                      @RequestParam("ticketStatus") @Valid TicketStatus ticketstatus) {
+        ticketService.updateTicketStatus(ticketId, ticketstatus);
+        return ResponseEntity.ok().body(EmptyResponse.builder().message("updated success").build());
+    }
+
+//    ----------------------------------- Get -----------------------------------
+
+    @GetMapping("/{ticketId}/messages")
+    public List<TicketMessageResponse> getById(@PathVariable UUID ticketId,
+                                               @Valid @RequestParam(value = "page", defaultValue = "0") Integer page) {
+        return ticketService.getById(ticketId, page);
+    }
+
+    @GetMapping
+    public List<TicketResponse> getAllUserTickets(@RequestParam(value = "page", defaultValue = "0") Integer page) {
+        return ticketService.getAllUserTickets(page);
+    }
+
 }
