@@ -65,8 +65,12 @@ public class CourierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourierResponse> changeActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
-        CourierResponse courierResponse = courierService.updateCourierActiveType(id, request);
-        return ResponseEntity.ok(courierResponse);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> changeActiveType(@PathVariable Long id, @RequestBody UpdateCourierActiveTypeRequest request) {
+        courierService.updateCourierActiveType(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Courier Active Type updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

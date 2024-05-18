@@ -9,9 +9,9 @@ import smr.shop.courier.service.model.CourierEntity;
 import java.util.List;
 
 public interface CourierService {
-    CourierResponse createCourier(CourierCreateRequest request);
+    void createCourier(CourierCreateRequest request);
 
-    CourierResponse updateCourier(Long id, CourierUpdateRequest request);
+    void updateCourier(Long id, CourierUpdateRequest request);
 
     void deleteCourier(Long id);
 
@@ -19,7 +19,7 @@ public interface CourierService {
 
     CourierResponse getCourierById(Long id);
 
-    CourierResponse updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request);
+    void updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request);
 
     CourierEntity findById(Long id);
 }

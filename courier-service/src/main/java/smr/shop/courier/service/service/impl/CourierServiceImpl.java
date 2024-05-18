@@ -34,22 +34,22 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     @Transactional
-    public CourierResponse createCourier(CourierCreateRequest request) {
+    public void createCourier(CourierCreateRequest request) {
         CourierEntity courierEntity = courierServiceMapper.courierCreateRequestToCourier(request);
         courierEntity.setCreatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierEntity = courierRepository.save(courierEntity);
-        return courierServiceMapper.toCourierResponse(courierEntity);
+        courierServiceMapper.toCourierResponse(courierEntity);
     }
 
     @Override
     @Transactional
-    public CourierResponse updateCourier(Long id, CourierUpdateRequest request) {
+    public void updateCourier(Long id, CourierUpdateRequest request) {
         CourierEntity courierEntity = findById(id);
         CourierEntity updateCourierEntity = courierServiceMapper.toUpdateCourier(request, courierEntity);
         courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierEntity = courierRepository.save(updateCourierEntity);
-        return courierServiceMapper.toCourierResponse(courierEntity);
+        courierServiceMapper.toCourierResponse(courierEntity);
     }
 
     @Override
@@ -73,12 +73,13 @@ public class CourierServiceImpl implements CourierService {
     }
 
     @Override
-    public CourierResponse updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request) {
+    @Transactional
+    public void updateCourierActiveType(Long id, UpdateCourierActiveTypeRequest request) {
         CourierEntity courierEntity = findById(id);
         courierEntity.setActiveType(request.getStatus());
         courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
         courierEntity = courierRepository.save(courierEntity);
-        return courierServiceMapper.toCourierResponse(courierEntity);
+        courierServiceMapper.toCourierResponse(courierEntity);
     }
 
     @Override
