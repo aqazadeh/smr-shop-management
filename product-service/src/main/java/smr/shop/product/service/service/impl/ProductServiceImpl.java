@@ -203,6 +203,8 @@ public void createProduct(ProductCreateRequest request) {
 
         return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
 
+//        TODO Postmanda pageni 0 verdiyimizde databazadan producti getire bilir ama basqa deyer verende bos bir array verir
+
     }
 
     public List<ProductResponse> getAllProductsByBrandId(Long brandId) {
