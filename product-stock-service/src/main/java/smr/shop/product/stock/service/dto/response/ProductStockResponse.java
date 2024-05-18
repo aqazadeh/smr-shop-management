@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class GetProductStockResponse {
+public class ProductStockResponse {
      Long productId;
      String attributeName;
      Integer quantity;

@@ -6,6 +6,7 @@ import smr.shop.product.stock.service.exception.ProductStockException;
 import smr.shop.product.stock.service.model.ProductStock;
 import smr.shop.product.stock.service.repository.ProductStockRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -16,13 +17,12 @@ public class ProductStockServiceHelper {
         this.productStockRepository = productStockRepository;
     }
 
-    public ProductStock getById(UUID id) {
+    public ProductStock findById(UUID id) {
         return productStockRepository.findById(id).orElseThrow(() ->
                 new ProductStockException("Product Stock not found!", HttpStatus.NOT_FOUND));
     }
 
-    public ProductStock getByProductId(Long productId) {
-        return productStockRepository.findByProductId(productId).orElseThrow(() ->
-                new ProductStockException("Product Stock not found!", HttpStatus.NOT_FOUND));
+    public List<ProductStock> getByProductId(Long productId) {
+        return productStockRepository.findAllByProductId(productId);
     }
 }

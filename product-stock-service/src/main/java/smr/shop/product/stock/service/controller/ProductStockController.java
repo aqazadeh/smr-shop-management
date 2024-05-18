@@ -2,17 +2,19 @@ package smr.shop.product.stock.service.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.stock.service.dto.request.CreateProductStockRequest;
 import smr.shop.product.stock.service.dto.request.UpdateProductStockRequest;
-import smr.shop.product.stock.service.dto.response.GetProductStockResponse;
+import smr.shop.product.stock.service.dto.response.ProductStockResponse;
 import smr.shop.product.stock.service.service.ProductStockService;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/1.0/product-stock")
+@RequestMapping("/api/1.0/product/stock")
 public class ProductStockController {
     private final ProductStockService productStockService;
 
@@ -24,44 +26,49 @@ public class ProductStockController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateProductStockRequest create(@RequestBody @Valid CreateProductStockRequest request) {
-        return productStockService.create(request);
+    public ResponseEntity<EmptyResponse> create(@RequestBody @Valid CreateProductStockRequest request) {
+        productStockService.create(request);
+        EmptyResponse response = EmptyResponse.builder().message("Product stock created").build();
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/crate-all")
+    @PostMapping("/create/all")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<CreateProductStockRequest> createAll(@RequestBody @Valid List<CreateProductStockRequest> productStockRequests) {
-        return productStockService.createAll(productStockRequests);
+    public ResponseEntity<EmptyResponse> createAll(@RequestBody @Valid List<CreateProductStockRequest> productStockRequests) {
+        productStockService.createAll(productStockRequests);
+        EmptyResponse response = EmptyResponse.builder().message("Product stock created").build();
+        return ResponseEntity.ok(response);
     }
 
 //    ----------------------------------- Put or Patch -----------------------------------
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateById(@PathVariable UUID id,
+    public void updateById(@PathVariable UUID stockId,
                            @RequestBody @Valid UpdateProductStockRequest request) {
-        productStockService.updateById(id, request);
+        productStockService.update(stockId, request);
     }
 
 //    ----------------------------------- Delete -----------------------------------
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable UUID id) {
-        productStockService.deleteById(id);
+    public void deleteById(@PathVariable UUID stockId) {
+        productStockService.delete(stockId);
     }
 
 //    ----------------------------------- Get -----------------------------------
 
-    @GetMapping("/{id}")
+    @GetMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
-    public GetProductStockResponse getById(@PathVariable UUID id) {
-        return productStockService.getById(id);
+    public ResponseEntity<ProductStockResponse> getById(@PathVariable UUID stockId) {
+        ProductStockResponse productStockResponse = productStockService.getById(stockId);
+        return ResponseEntity.ok(productStockResponse);
     }
 
-    @GetMapping("/get-by-product-id/{productId}")
+    @GetMapping("/product/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public GetProductStockResponse getByProductId(@PathVariable Long productId) {
+    public List<ProductStockResponse> getByProductId(@PathVariable Long productId) {
         return productStockService.getByProductId(productId);
     }
 

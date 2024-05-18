@@ -47,6 +47,10 @@
             <groupId>smr.shop.libs</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>smr.shop.libs</groupId>
+            <artifactId>grpc-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
