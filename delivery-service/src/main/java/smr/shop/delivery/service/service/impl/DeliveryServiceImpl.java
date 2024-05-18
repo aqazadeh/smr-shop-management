@@ -56,6 +56,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public DeliveryResponse updateDeliveryStatus(Long id, UpdateDeliveryStatusRequest request) {
         Delivery delivery = findById(id);
         delivery.setStatus(request.getStatus());
@@ -83,7 +84,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    @Transactional
     public DeliveryResponse getDeliveryById(Long id) {
         Delivery delivery = findById(id);
         return deliveryServiceMapper.toDeliveryResponse(delivery);

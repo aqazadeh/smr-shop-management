@@ -47,9 +47,13 @@ public class DeliveryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DeliveryResponse> updateDeliveryStatus(@PathVariable Long id, @RequestBody UpdateDeliveryStatusRequest request) {
-        DeliveryResponse deliveryResponse = deliveryService.updateDeliveryStatus(id, request);
-        return ResponseEntity.ok(deliveryResponse);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptyResponse> updateDeliveryStatus(@PathVariable Long id, @RequestBody UpdateDeliveryStatusRequest request) {
+        deliveryService.updateDeliveryStatus(id, request);
+        EmptyResponse response = EmptyResponse.builder()
+                .message("Delivery Status updated successfully")
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 //    ----------------------------------- Delete -----------------------------------
@@ -59,7 +63,7 @@ public class DeliveryController {
     public ResponseEntity<EmptyResponse> deleteDelivery(@PathVariable Long id) {
         deliveryService.deleteDelivery(id);
         EmptyResponse response = EmptyResponse.builder()
-                .message("Delivery deleted sucessfully with id: " + id)
+                .message("Delivery deleted successfully with id: " + id)
                 .build();
         return ResponseEntity.ok(response);
     }

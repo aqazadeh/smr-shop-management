@@ -7,7 +7,8 @@ import lombok.Value;
 import java.util.UUID;
 
 @Value
-public class DeliveryCreateRequest {
-    @JsonProperty("courier_id") @NotBlank Long courierId;
-    @JsonProperty("order_id")  @NotBlank UUID orderId;
+public class CreateDeliveryConverstaionRequest {
+    @JsonProperty("user_id") @NotBlank UUID userId;
+    @JsonProperty("delivery_id") @NotBlank Long deliveryId;
+    @NotBlank String message;
 }
