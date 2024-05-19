@@ -6,11 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smr.shop.libs.common.constant.ServiceConstants;
-import smr.shop.libs.common.dto.message.ImageDeleteMessageModel;
 import smr.shop.libs.common.dto.message.ShopMessageModel;
+import smr.shop.libs.common.dto.message.UploadMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
-import smr.shop.libs.grpc.product.shop.FindShopByShopIdGrpcRequest;
-import smr.shop.libs.grpc.product.shop.FindShopByUserIdGrpcRequest;
+import smr.shop.libs.grpc.client.UploadGrpcClient;
+import smr.shop.libs.grpc.object.ShopGrpcId;
+import smr.shop.libs.grpc.object.UserGrpcId;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
@@ -19,7 +20,6 @@ import smr.shop.shop.service.dto.request.UpdateShopRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
 import smr.shop.shop.service.exception.ShopServiceException;
-import smr.shop.shop.service.grpc.client.UploadGrpcServiceClient;
 import smr.shop.shop.service.mapper.ShopServiceMapper;
 import smr.shop.shop.service.message.publisher.ImageDeleteMessagePublisher;
 import smr.shop.shop.service.message.publisher.ShopStatusChangeMessagePublisher;
@@ -36,31 +36,38 @@ import java.util.UUID;
 
 @Service
 public class ShopServiceImpl implements ShopService {
-
-    private final ShopServiceMapper shopServiceMapper;
+    // repository
     private final ShopRepository shopRepository;
-    private final UploadGrpcServiceClient uploadGrpcServiceClient;
+
+    // service mapper
+    private final ShopServiceMapper shopServiceMapper;
+
+    // rpc
+    private final UploadGrpcClient uploadGrpcClient;
+
+    // message Broker
     private final ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher;
     private final ImageDeleteMessagePublisher imageDeleteMessagePublisher;
 
-    public ShopServiceImpl(ShopServiceMapper shopServiceMapper,
-                           ShopRepository shopRepository,
-                           UploadGrpcServiceClient uploadGrpcServiceClient,
+    public ShopServiceImpl(ShopRepository shopRepository,
+                           ShopServiceMapper shopServiceMapper,
+                           UploadGrpcClient uploadGrpcClient,
                            ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher,
                            ImageDeleteMessagePublisher imageDeleteMessagePublisher) {
-        this.shopServiceMapper = shopServiceMapper;
         this.shopRepository = shopRepository;
-        this.uploadGrpcServiceClient = uploadGrpcServiceClient;
+        this.shopServiceMapper = shopServiceMapper;
+        this.uploadGrpcClient = uploadGrpcClient;
         this.shopStatusChangeMessagePublisher = shopStatusChangeMessagePublisher;
         this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
     }
+
 
 //    ----------------------------------- Create or Add -----------------------------------
 
     @Override
     @Transactional
     public void createShop(CreateShopRequest request) {
-        UploadGrpcResponse image = uploadGrpcServiceClient.getImageById(request.getImageId().toString());
+        UploadGrpcResponse image = uploadGrpcClient.getUploadById(request.getImageId().toString());
         UUID userId = UserHelper.getUserId();
         if (shopRepository.findByUserId(userId).isPresent()) {
             throw new ShopServiceException("you  already have a shop", HttpStatus.BAD_REQUEST);
@@ -97,16 +104,17 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    @Transactional
     public void updateShopLogo(Long shopId, UUID imageId) {
         ShopEntity shopEntity = findById(shopId);
         String oldImage = shopEntity.getLogo();
         validateShopCreator(shopEntity);
-        UploadGrpcResponse image = uploadGrpcServiceClient.getImageById(imageId.toString());
+        UploadGrpcResponse image = uploadGrpcClient.getUploadById(imageId.toString());
         shopEntity.setLogo(image.getUrl());
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(shopEntity);
-        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(oldImage);
-        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
+        UploadMessageModel uploadMessageModel = shopServiceMapper.shopEntityToUploadMessageModel(oldImage);
+        imageDeleteMessagePublisher.publish(uploadMessageModel);
     }
 
     @Override
@@ -139,6 +147,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    @Transactional
     public void deleteShopImage(Long shopId) {
         ShopEntity shopEntity = findById(shopId);
         if (shopEntity.getLogo() == null) return;
@@ -146,8 +155,8 @@ public class ShopServiceImpl implements ShopService {
         shopEntity.setLogo(null);
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         ShopEntity savedShopEntity = shopRepository.save(shopEntity);
-        ImageDeleteMessageModel imageDeleteMessageModel = shopServiceMapper.shopEntityToImageDeleteMessageModel(savedShopEntity);
-        imageDeleteMessagePublisher.publish(imageDeleteMessageModel);
+        UploadMessageModel uploadMessageModel = shopServiceMapper.shopEntityToUploadMessageModel(savedShopEntity.getLogo());
+        imageDeleteMessagePublisher.publish(uploadMessageModel);
     }
 
 //    ----------------------------------- Get -----------------------------------
@@ -160,14 +169,14 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopGrpcResponse getShopInformationByShopId(FindShopByShopIdGrpcRequest request) {
-        ShopEntity shopEntity = findById(request.getShopId());
+    public ShopGrpcResponse getShopInformationByShopId(ShopGrpcId request) {
+        ShopEntity shopEntity = findById(request.getId());
         return shopServiceMapper.shopEntityToShopGrpcResponse(shopEntity);
     }
 
     @Override
-    public ShopGrpcResponse getShopInformationByUserId(FindShopByUserIdGrpcRequest request) {
-        UUID userId = UUID.fromString(request.getUserId());
+    public ShopGrpcResponse getShopInformationByUserId(UserGrpcId request) {
+        UUID userId = UUID.fromString(request.getId());
         Optional<ShopEntity> optionalShopEntity = shopRepository.findByUserId(userId);
         if (optionalShopEntity.isEmpty()) {
             throw new ShopServiceException("cannot to find shop with userId: " + userId, HttpStatus.BAD_REQUEST);

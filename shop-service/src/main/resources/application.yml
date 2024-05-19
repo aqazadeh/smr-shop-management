@@ -1,5 +1,5 @@
 server:
-  port: 8115
+  port: 8113
 
 management:
   endpoints:
@@ -31,7 +31,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost:9115/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9113/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -63,10 +63,9 @@ eureka:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
-
 grpc:
   server:
-    port: 7115
+    port: 7113
 
   client:
     upload-service:

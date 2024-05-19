@@ -20,11 +20,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> exception(Exception e) {
-        log.error("an error occurred", e);
+    public ResponseEntity<ErrorResponse> handle(Exception exception) {
+        log.error(exception.getMessage(), exception);
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message(e.getMessage())
+                .message(exception.getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
@@ -32,23 +32,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GlobalException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> globalException(GlobalException e) {
-        log.error("an error occurred", e);
+    public ResponseEntity<ErrorResponse> handle(GlobalException exception) {
+        log.error(exception.getMessage(), exception);
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(e.getStatus())
-                .message(e.getMessage())
+                .code(exception.getStatus())
+                .message(exception.getMessage())
                 .build();
 
-        return ResponseEntity.status(e.getStatus()).body(errorResponse);
+        return ResponseEntity.status(exception.getStatus()).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException exception) {
-        log.error("an error occurred", exception);
+    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException exception) {
+        log.error(exception.getMessage(), exception);
 
         List<String> errors = exception.getBindingResult().getFieldErrors()
-                .stream().map(f -> f.getField() + " " + f.getDefaultMessage()).toList();
+                .stream().map(field -> field.getField() + " " + field.getDefaultMessage()).toList();
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST)
                 .message(String.join(", ", errors))
@@ -60,12 +60,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handle(AuthenticationException e) {
-        log.error("an error occurred", e);
-
+    public ResponseEntity<ErrorResponse> handle(AuthenticationException exception) {
+        log.error(exception.getMessage(), exception);
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.UNAUTHORIZED)
-                .message(e.getMessage())
+                .message(exception.getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
@@ -73,12 +72,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handle(AccessDeniedException e) {
-        log.error("an error occurred", e);
+    public ResponseEntity<ErrorResponse> handle(AccessDeniedException exception) {
+        log.error(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.FORBIDDEN)
-                .message(e.getMessage())
+                .message(exception.getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);

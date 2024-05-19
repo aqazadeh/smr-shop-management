@@ -1,8 +1,8 @@
 package smr.shop.shop.service.mapper;
 
 import org.springframework.stereotype.Component;
-import smr.shop.libs.common.dto.message.ImageDeleteMessageModel;
 import smr.shop.libs.common.dto.message.ShopMessageModel;
+import smr.shop.libs.common.dto.message.UploadMessageModel;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.shop.service.dto.request.CreateShopAddressRequest;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
@@ -80,23 +80,19 @@ public class ShopServiceMapper {
                 .build();
     }
 
-    public ImageDeleteMessageModel shopEntityToImageDeleteMessageModel(ShopEntity shopEntity) {
-        return ImageDeleteMessageModel.builder()
-                .imageUrl(shopEntity.getLogo())
-                .build();
-    }
-
-    public ImageDeleteMessageModel shopEntityToImageDeleteMessageModel(String oldImage) {
-        return ImageDeleteMessageModel.builder().imageUrl(oldImage).build();
-    }
-
     public ShopGrpcResponse shopEntityToShopGrpcResponse(ShopEntity shopEntity) {
         return ShopGrpcResponse.newBuilder()
-                .setShopId(shopEntity.getId())
+                .setId(shopEntity.getId())
                 .setName(shopEntity.getShopName())
                 .setUserId(shopEntity.getUserId().toString())
                 .setLogo(shopEntity.getLogo())
                 .setSlug(shopEntity.getSlug())
+                .build();
+    }
+
+    public UploadMessageModel shopEntityToUploadMessageModel(String oldImage) {
+        return UploadMessageModel.builder()
+                .imageUrl(oldImage)
                 .build();
     }
 }
