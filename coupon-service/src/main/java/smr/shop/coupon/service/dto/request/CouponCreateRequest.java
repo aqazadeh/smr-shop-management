@@ -1,6 +1,7 @@
 package smr.shop.coupon.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import smr.shop.libs.common.model.valueobject.CouponDiscountType;
 
@@ -22,17 +23,17 @@ public class CouponCreateRequest {
     @NotBlank
     String details;
 
-    @NotBlank
+    @NotNull
     CouponDiscountType type;
 
     BigDecimal amount;
 
     Short percentage;
 
-    @NotBlank
+    @NotNull
     BigDecimal maxDiscountPrice;
 
-    @NotBlank
+    @NotNull
     ZonedDateTime endDate;
 
 }

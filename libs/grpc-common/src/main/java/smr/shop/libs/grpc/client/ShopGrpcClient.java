@@ -13,7 +13,8 @@ public class ShopGrpcClient {
     @GrpcClient("shop-service")
     private ShopServiceGrpc.ShopServiceBlockingStub shopServiceBlockingStub;
 
-    public ShopGrpcResponse getShopByUserId(UserGrpcId request) {
+    public ShopGrpcResponse getShopByUserId(String userId) {
+        UserGrpcId request = UserGrpcId.newBuilder().setId(userId).build();
 //       return shopServiceBlockingStub.getShopByUserId(request);
         return ShopGrpcResponse.newBuilder()
                 .setId(1)

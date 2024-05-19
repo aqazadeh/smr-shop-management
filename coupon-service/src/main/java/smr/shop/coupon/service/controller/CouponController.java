@@ -1,5 +1,6 @@
 package smr.shop.coupon.service.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.coupon.service.dto.request.CouponCreateRequest;
@@ -30,7 +31,7 @@ public class CouponController {
 //    ----------------------------------- Post -----------------------------------
 
     @PostMapping
-    public ResponseEntity<EmptyResponse> createCoupon(@RequestBody CouponCreateRequest request) {
+    public ResponseEntity<EmptyResponse> createCoupon(@RequestBody @Valid CouponCreateRequest request) {
         couponService.createCoupon(request);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Coupon created successfully!")
@@ -39,7 +40,7 @@ public class CouponController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<EmptyResponse> createCouponWithAdmin(@RequestBody CouponCreateRequest request) {
+    public ResponseEntity<EmptyResponse> createCouponWithAdmin(@RequestBody @Valid CouponCreateRequest request) {
         couponService.createCouponWithAdmin(request);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Coupon created successfully!")
@@ -50,7 +51,7 @@ public class CouponController {
 //    ----------------------------------- Patch -----------------------------------
 
     @PatchMapping("/{couponId}")
-    public ResponseEntity<EmptyResponse> updateCoupon(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
+    public ResponseEntity<EmptyResponse> updateCoupon(@PathVariable UUID couponId, @RequestBody @Valid CouponUpdateRequest request) {
         couponService.updateCoupon(couponId, request);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Coupon updated successfully with id: " + couponId)
@@ -59,7 +60,7 @@ public class CouponController {
     }
 
     @PatchMapping("/admin/{couponId}")
-    public ResponseEntity<EmptyResponse> updateCouponWithAdmin(@PathVariable UUID couponId, @RequestBody CouponUpdateRequest request) {
+    public ResponseEntity<EmptyResponse> updateCouponWithAdmin(@PathVariable UUID couponId, @RequestBody @Valid CouponUpdateRequest request) {
         couponService.updateCouponWithAdmin(couponId, request);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Coupon updated successfully with id: " + couponId)
@@ -89,13 +90,13 @@ public class CouponController {
 //    ----------------------------------- Get -----------------------------------
 
     @GetMapping
-    public ResponseEntity<List<CouponResponse>> getAllShopCoupon(Integer page) {
+    public ResponseEntity<List<CouponResponse>> getAllShopCoupon(@RequestParam(value = "page", defaultValue = "0") Integer page) {
         List<CouponResponse> allCoupon = couponService.getShopAllCoupons(page);
         return ResponseEntity.ok(allCoupon);
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<CouponResponse>> getAllCoupon(Integer page) {
+    public ResponseEntity<List<CouponResponse>> getAllCoupon(@RequestParam(value = "page", defaultValue = "0") Integer page) {
         List<CouponResponse> allCoupon = couponService.getAllCoupons(page);
         return ResponseEntity.ok(allCoupon);
     }

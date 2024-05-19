@@ -1,7 +1,25 @@
 server:
-  port: 8104
+  port: 8102
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
+  application:
+    name: coupon-service
   cloud:
     config:
       enabled: false
@@ -10,11 +28,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9104/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9102/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
-  application:
-    name: coupon-service
 
   kafka:
     consumer:
@@ -39,7 +55,7 @@ eureka:
     instanceId: ${spring.application.name}:${random.int}
     prefer-ip-address: true
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
@@ -48,7 +64,7 @@ eureka:
 
 grpc:
   server:
-    port: 3024
+    port: 7102
 
   client:
     shop-service:

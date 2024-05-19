@@ -62,20 +62,17 @@ public class CouponServiceMapper {
                 .build();
     }
 
-    public CouponGrpcResponse couponEntityToCouponGrpcResponse(CouponEntity couponEntity, boolean couponUsage, Boolean isCouponExpired) {
+    public CouponGrpcResponse couponEntityToCouponGrpcResponse(CouponEntity couponEntity, Boolean isCouponExpired) {
         return CouponGrpcResponse.newBuilder()
                 .setId(couponEntity.getId().toString())
                 .setShopId(couponEntity.getShopId())
                 .setCode(couponEntity.getCode())
-                .setCouponType(smr.shop.libs.grpc.coupon.CouponType.valueOf(couponEntity.getType().name()))
+                .setCouponType(couponEntity.getType().name())
                 .setPercentage(couponEntity.getPercentage())
                 .setMaxDiscountPrice(couponEntity.getMaxDiscountPrice().doubleValue())
                 .setAmount(couponEntity.getAmount().doubleValue())
-                .setIsUsed(couponUsage)
-                .setIsDeleted(couponEntity.getIsDeleted())
                 .setIsExpired(isCouponExpired)
                 .build();
-        //silindiyini yoxla
     }
 
     public CouponUsageEntity useCouponMessageModelToCouponUsageEntity(UseCouponMessageModel useCouponMessageModel) {

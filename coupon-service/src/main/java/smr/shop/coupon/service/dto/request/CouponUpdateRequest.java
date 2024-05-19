@@ -1,6 +1,7 @@
 package smr.shop.coupon.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
 import java.math.BigDecimal;
@@ -26,9 +27,10 @@ public class CouponUpdateRequest {
 
     Short percentage;
 
+    @NotNull
     BigDecimal maxDiscountPrice;
 
-    @NotBlank
+    @NotNull
     ZonedDateTime endDate;
 
 }

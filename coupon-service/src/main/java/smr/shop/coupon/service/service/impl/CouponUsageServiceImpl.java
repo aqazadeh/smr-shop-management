@@ -31,7 +31,7 @@ public class CouponUsageServiceImpl implements CouponUsageService {
     @Override
     public void createCouponUsage(UseCouponMessageModel useCouponMessageModel) {
         if (couponUsageRepository.findCouponUsageByCouponId(useCouponMessageModel.getCouponId()).isPresent()) {
-            throw new CouponServiceException("This coupon already exist", HttpStatus.BAD_REQUEST);
+            throw new CouponServiceException("This coupon already used ", HttpStatus.BAD_REQUEST);
         }
         CouponUsageEntity couponUsage = couponMapper.useCouponMessageModelToCouponUsageEntity(useCouponMessageModel);
         couponUsageRepository.save(couponUsage);

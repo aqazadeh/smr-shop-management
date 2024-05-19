@@ -4,8 +4,10 @@ import smr.shop.coupon.service.dto.request.CouponCreateRequest;
 import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
 import smr.shop.coupon.service.model.CouponEntity;
-import smr.shop.libs.grpc.coupon.CouponGrpcRequest;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
+import smr.shop.libs.grpc.coupon.CouponUsageGrpcResponse;
+import smr.shop.libs.grpc.object.CouponGrpcCode;
+import smr.shop.libs.grpc.object.CouponUsageGrpc;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,5 +43,7 @@ public interface CouponService {
 
     CouponEntity findByCode(String couponCode);
 
-    CouponGrpcResponse getCouponDetail(CouponGrpcRequest couponCodeGrpcRequest);
+    CouponGrpcResponse getCouponDetail(CouponGrpcCode couponCodeGrpcRequest);
+
+    CouponUsageGrpcResponse getCouponUsage(CouponUsageGrpc couponUsageGrpc);
 }
