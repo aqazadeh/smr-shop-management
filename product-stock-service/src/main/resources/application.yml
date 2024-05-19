@@ -1,5 +1,5 @@
 server:
-  port: 2212
+  port: 8112
 
 spring:
   cloud:
@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9012/product-stockDB?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9012/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
@@ -48,7 +48,7 @@ eureka:
 
 grpc:
   server:
-    port: 7103
+    port: 7112
 
   client:
     upload-service:

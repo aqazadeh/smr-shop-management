@@ -25,7 +25,15 @@ public class ShopGrpcClient {
                 .build();
     }
 
-    public ShopGrpcResponse getShopByShopId(ShopGrpcId request) {
-        return shopServiceBlockingStub.getShopByShopId(request);
+    public ShopGrpcResponse getShopByShopId(Long shopId) {
+        ShopGrpcId request = ShopGrpcId.newBuilder().build();
+//        return shopServiceBlockingStub.getShopByShopId(request);
+        return ShopGrpcResponse.newBuilder()
+                .setId(1)
+                .setUserId("534b434c-9b56-4ab0-ab4a-9bba004d2f71")
+                .setSlug("shop-1")
+                .setName("Shop 1")
+                .setLogo("test-logo")
+                .build();
     }
 }

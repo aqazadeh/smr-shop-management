@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  product-stock-service-postgres:
-    container_name: product-stock-service-postgres
+  postgres:
+    container_name: postgres-product-stock
     image: postgres:16
     ports:
       - "9012:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=product-stockDB
     expose:
       - 9012
     volumes:

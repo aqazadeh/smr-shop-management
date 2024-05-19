@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ProductStock {
+public class ProductStockEntity {
     @Id
     private UUID id;
 

@@ -7,18 +7,19 @@ import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.OrderMessageModel;
 import smr.shop.libs.common.dto.message.ProductStockMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.grpc.client.ProductGrpcClient;
 import smr.shop.libs.grpc.client.ShopGrpcClient;
+import smr.shop.libs.grpc.object.ProductGrpcId;
+import smr.shop.libs.grpc.object.ProductStockGrpcId;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
-import smr.shop.libs.grpc.product.shop.ShopByShopIdGrpcRequest;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
+import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.product.stock.service.dto.request.CreateProductStockRequest;
 import smr.shop.product.stock.service.dto.request.UpdateProductStockRequest;
 import smr.shop.product.stock.service.dto.response.ProductStockResponse;
-import smr.shop.product.stock.service.exception.ProductStockException;
-import smr.shop.product.stock.service.grpc.client.ProductStockGrpcClientService;
-import smr.shop.product.stock.service.helper.ProductStockServiceHelper;
+import smr.shop.product.stock.service.exception.ProductStockServiceException;
 import smr.shop.product.stock.service.mapper.ProductStockServiceMapper;
-import smr.shop.product.stock.service.model.ProductStock;
+import smr.shop.product.stock.service.model.ProductStockEntity;
 import smr.shop.product.stock.service.repository.ProductStockRepository;
 import smr.shop.product.stock.service.service.ProductStockService;
 
@@ -30,117 +31,142 @@ import java.util.UUID;
 
 @Service
 public class ProductStockServiceImpl implements ProductStockService {
+
+    // repository
     private final ProductStockRepository productStockRepository;
+
+    // mappers
     private final ProductStockServiceMapper productStockServiceMapper;
-    private final ProductStockServiceHelper productStockServiceHelper;
+
+    // rpc
     private final ShopGrpcClient shopGrpcClient;
+    private final ProductGrpcClient productGrpcClient;
 
     public ProductStockServiceImpl(ProductStockRepository productStockRepository,
                                    ProductStockServiceMapper productStockServiceMapper,
-                                   ProductStockServiceHelper productStockServiceHelper,
-                                   ProductStockGrpcClientService productStockGrpcClientService, ShopGrpcClient shopGrpcClient) {
+                                   ShopGrpcClient shopGrpcClient,
+                                   ProductGrpcClient productGrpcClient) {
         this.productStockRepository = productStockRepository;
         this.productStockServiceMapper = productStockServiceMapper;
-        this.productStockServiceHelper = productStockServiceHelper;
         this.shopGrpcClient = shopGrpcClient;
+        this.productGrpcClient = productGrpcClient;
     }
+
 
     @Override
     @Transactional
     public void create(CreateProductStockRequest request) {
-        ProductStock productStock = productStockServiceMapper.createProductStockRequestToProductStockEntity(request);
-        productStock.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        productStock.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        productStockRepository.save(productStock);
+        ProductStockEntity productStockEntity = productStockServiceMapper.createProductStockRequestToProductStockEntity(request);
+        productStockEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        productStockEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+        productStockRepository.save(productStockEntity);
     }
 
     @Override
     @Transactional
     public void createAll(List<ProductStockMessageModel> productStockMessageModel) {
-        List<ProductStock> productStocks = productStockMessageModel.stream()
+        List<ProductStockEntity> productStockEntities = productStockMessageModel.stream()
                 .map(request -> {
-                    ProductStock productStock = productStockServiceMapper.productStockMessageModelToProductStockEntity(request);
-                    productStock.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-                    return productStock;
+                    ProductStockEntity productStockEntity = productStockServiceMapper.productStockMessageModelToProductStockEntity(request);
+                    productStockEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+                    return productStockEntity;
                 }).toList();
-        productStockRepository.saveAll(productStocks);
+        productStockRepository.saveAll(productStockEntities);
     }
 
     @Override
     public ProductStockResponse getById(UUID id) {
-        ProductStock productStock = productStockServiceHelper.findById(id);
-        return productStockServiceMapper.productStockEntityToProductStockResponse(productStock);
+        ProductStockEntity productStockEntity = findById(id);
+        return productStockServiceMapper.productStockEntityToProductStockResponse(productStockEntity);
     }
 
     @Override
     public List<ProductStockResponse> getByProductId(Long productId) {
-        List<ProductStock> productStockList = productStockServiceHelper.getByProductId(productId);
-        List<ProductStockResponse> productStockResponseList = productStockList.stream().map(productStockServiceMapper::productStockEntityToProductStockResponse).toList();
-        return productStockResponseList;
+        List<ProductStockEntity> productStockEntityList = findByProductId(productId);
+        return productStockEntityList.stream().map(productStockServiceMapper::productStockEntityToProductStockResponse).toList();
+    }
+
+    @Override
+    public List<ProductStockGrpcResponse> getStocks(ProductGrpcId request) {
+        List<ProductStockEntity> productStockEntityList = findByProductId(request.getId());
+        return productStockEntityList.stream().map(productStockServiceMapper::productStockEntityToProductStockGrpcResponse).toList();
+    }
+
+    @Override
+    public ProductStockGrpcResponse getStock(ProductStockGrpcId request) {
+        ProductStockEntity productStockEntity = findById(UUID.fromString(request.getId()));
+        return productStockServiceMapper.productStockEntityToProductStockGrpcResponse(productStockEntity);
     }
 
     @Override
     @Transactional
     public void delete(UUID stockId) {
-        ProductStock productStock = productStockServiceHelper.findById(stockId);
-        validateProductStock(productStock);
+        ProductStockEntity productStockEntity = findById(stockId);
+        validateProductStock(productStockEntity);
         productStockRepository.deleteById(stockId);
     }
 
     @Override
     @Transactional
     public void deleteByProductId(Long id) {
-        List<ProductStock> productStockList = productStockServiceHelper.getByProductId(id);
-        productStockRepository.deleteAll(productStockList);
+        List<ProductStockEntity> productStockEntityList = findByProductId(id);
+        productStockRepository.deleteAll(productStockEntityList);
     }
 
     @Override
     @Transactional
     public void update(UUID id, UpdateProductStockRequest request) {
-        ProductStock productStock = productStockServiceHelper.findById(id);
-        validateProductStock(productStock);
-        productStockServiceMapper.updateProductStockRequestToProductStockEntity(productStock, request);
-        productStockRepository.save(productStock);
+        ProductStockEntity productStockEntity = findById(id);
+        validateProductStock(productStockEntity);
+        productStockServiceMapper.updateProductStockRequestToProductStockEntity(productStockEntity, request);
+        productStockRepository.save(productStockEntity);
     }
 
     @Override
     @Transactional
     public void updateQuantityDecrease(OrderMessageModel orderMessageModel) {
-        List<ProductStock> productStockList = new ArrayList<>();
+        List<ProductStockEntity> productStockEntityList = new ArrayList<>();
         orderMessageModel.getItems().forEach(item -> {
-            ProductStock productStock = productStockServiceHelper.findById(item.getStockId());
-            productStock.setQuantity(productStock.getQuantity() - item.getQuantity());
-            productStockList.add(productStock);
+            ProductStockEntity productStockEntity = findById(item.getStockId());
+            productStockEntity.setQuantity(productStockEntity.getQuantity() - item.getQuantity());
+            productStockEntityList.add(productStockEntity);
         });
-        productStockRepository.saveAll(productStockList);
+        productStockRepository.saveAll(productStockEntityList);
     }
 
     @Override
     @Transactional
     public void updateQuantityIncrease(OrderMessageModel orderMessageModel) {
-        List<ProductStock> productStockList = new ArrayList<>();
+        List<ProductStockEntity> productStockEntityList = new ArrayList<>();
         orderMessageModel.getItems().forEach(item -> {
-            ProductStock productStock = productStockServiceHelper.findById(item.getStockId());
-            productStock.setQuantity(productStock.getQuantity() + item.getQuantity());
-            productStockList.add(productStock);
+            ProductStockEntity productStockEntity = findById(item.getStockId());
+            productStockEntity.setQuantity(productStockEntity.getQuantity() + item.getQuantity());
+            productStockEntityList.add(productStockEntity);
         });
-        productStockRepository.saveAll(productStockList);
+        productStockRepository.saveAll(productStockEntityList);
 
     }
 
-    private void validateProductStock(ProductStock productStock) {
-        long productId = productStock.getProductId();
-        ProductGrpcResponse productGrpcResponse = shopGrpcClient.getByProductId(productId);
-        UUID userId = UserHelper.getUserId();
+    @Override
+    public ProductStockEntity findById(UUID id) {
+        return productStockRepository.findById(id).orElseThrow(() ->
+                new ProductStockServiceException("Product Stock not found!", HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public List<ProductStockEntity> findByProductId(Long productId) {
+        return productStockRepository.findAllByProductId(productId);
+    }
+
+    private void validateProductStock(ProductStockEntity productStockEntity) {
+        long productId = productStockEntity.getProductId();
+        ProductGrpcResponse productGrpcResponse = productGrpcClient.getProductByProductId(productId);
         long shopId = productGrpcResponse.getShopId();
+        ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByShopId(shopId);
 
-        ShopByShopIdGrpcRequest shopByShopIdGrpcRequest = ShopByShopIdGrpcRequest.newBuilder()
-                .setShopId(shopId)
-                .build();
-        ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByShopId(shopByShopIdGrpcRequest);
-
+        UUID userId = UserHelper.getUserId();
         if (!shopGrpcResponse.getUserId().equals(userId.toString())) {
-            throw new ProductStockException("you dont have a permission delete this stock with id: " + productStock.getId(), HttpStatus.FORBIDDEN);
+            throw new ProductStockServiceException("you dont have a permission delete this stock with id: " + productStockEntity.getId(), HttpStatus.FORBIDDEN);
         }
 
     }

@@ -3,10 +3,11 @@ package smr.shop.product.stock.service.mapper;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ProductStockMessageModel;
+import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.product.stock.service.dto.request.CreateProductStockRequest;
 import smr.shop.product.stock.service.dto.request.UpdateProductStockRequest;
 import smr.shop.product.stock.service.dto.response.ProductStockResponse;
-import smr.shop.product.stock.service.model.ProductStock;
+import smr.shop.product.stock.service.model.ProductStockEntity;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -14,17 +15,17 @@ import java.util.UUID;
 
 @Component
 public class ProductStockServiceMapper {
-    public ProductStockResponse productStockEntityToProductStockResponse(ProductStock productStock) {
+    public ProductStockResponse productStockEntityToProductStockResponse(ProductStockEntity productStockEntity) {
         return ProductStockResponse.builder()
-                .stockId(productStock.getId())
-                .productId(productStock.getProductId())
-                .attributeName(productStock.getAttributeName())
-                .quantity(productStock.getQuantity())
+                .stockId(productStockEntity.getId())
+                .productId(productStockEntity.getProductId())
+                .attributeName(productStockEntity.getAttributeName())
+                .quantity(productStockEntity.getQuantity())
                 .build();
     }
 
-    public ProductStock createProductStockRequestToProductStockEntity(CreateProductStockRequest request) {
-        return ProductStock.builder()
+    public ProductStockEntity createProductStockRequestToProductStockEntity(CreateProductStockRequest request) {
+        return ProductStockEntity.builder()
                 .productId(request.getProductId())
                 .attributeName(request.getAttributeName())
                 .id(UUID.randomUUID())
@@ -33,18 +34,27 @@ public class ProductStockServiceMapper {
                 .build();
     }
 
-    public void updateProductStockRequestToProductStockEntity(ProductStock productStock, UpdateProductStockRequest request) {
+    public void updateProductStockRequestToProductStockEntity(ProductStockEntity productStockEntity, UpdateProductStockRequest request) {
         if (request.getAttributeName() != null)
-            productStock.setAttributeName(request.getAttributeName());
+            productStockEntity.setAttributeName(request.getAttributeName());
         if (request.getQuantity() != null)
-            productStock.setQuantity(request.getQuantity());
+            productStockEntity.setQuantity(request.getQuantity());
     }
 
-    public ProductStock productStockMessageModelToProductStockEntity(ProductStockMessageModel request) {
-        return ProductStock.builder()
+    public ProductStockEntity productStockMessageModelToProductStockEntity(ProductStockMessageModel request) {
+        return ProductStockEntity.builder()
                 .productId(request.getProductId())
                 .attributeName(request.getAttributeName())
                 .quantity(request.getQuantity())
+                .build();
+    }
+
+    public ProductStockGrpcResponse productStockEntityToProductStockGrpcResponse(ProductStockEntity productStockEntity) {
+        return ProductStockGrpcResponse.newBuilder()
+                .setId(productStockEntity.getProductId().toString())
+                .setProductId(productStockEntity.getProductId())
+                .setName(productStockEntity.getAttributeName())
+                .setQuantity(productStockEntity.getQuantity())
                 .build();
     }
 }
