@@ -19,7 +19,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api/v1/flash-deal")
+@RequestMapping("/api/1.0/flash-deal")
 public class FlashDealProductController {
 
     private final FlashDealProductService flashDealProductService;

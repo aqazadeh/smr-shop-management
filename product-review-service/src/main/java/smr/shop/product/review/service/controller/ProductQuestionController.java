@@ -11,7 +11,7 @@ import smr.shop.product.review.service.service.ProductQuestionService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/product-question")
+@RequestMapping("/api/1.0/product-question")
 public class ProductQuestionController {
 
     private final ProductQuestionService procuctQuestionService;

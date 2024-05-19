@@ -13,7 +13,7 @@ import smr.shop.libs.common.dto.response.EmptyResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/delivery")
+@RequestMapping("/api/1.0/delivery")
 public class DeliveryController {
 
     private final DeliveryService deliveryService;

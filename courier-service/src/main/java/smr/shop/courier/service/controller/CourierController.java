@@ -13,7 +13,7 @@ import smr.shop.libs.common.dto.response.EmptyResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/courier")
+@RequestMapping("/api/1.0/courier")
 public class CourierController {
 
     private final CourierService courierService;

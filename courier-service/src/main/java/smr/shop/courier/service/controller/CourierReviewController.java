@@ -8,7 +8,7 @@ import smr.shop.courier.service.service.CourierReviewService;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 
 @RestController
-@RequestMapping("/api/v1/courier-review")
+@RequestMapping("/api/1.0/courier/review")
 public class CourierReviewController {
 
     private final CourierReviewService courierReviewService;

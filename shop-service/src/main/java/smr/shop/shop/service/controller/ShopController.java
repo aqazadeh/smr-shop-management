@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/shop")
+@RequestMapping("/api/1.0/shop")
 public class ShopController {
 
     private final ShopService shopService;

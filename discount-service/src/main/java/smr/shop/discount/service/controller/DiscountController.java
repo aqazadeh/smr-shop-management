@@ -9,7 +9,7 @@ import smr.shop.discount.service.service.DiscountService;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 
 @RestController
-@RequestMapping("/api/v1/discount")
+@RequestMapping("/api/1.0/discount")
 public class DiscountController {
     private final DiscountService discountService;
 

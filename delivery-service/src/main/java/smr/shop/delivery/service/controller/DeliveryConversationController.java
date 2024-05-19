@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/delivery-conversation")
+@RequestMapping("/api/1.0/delivery-conversation")
 public class DeliveryConversationController {
 
     private final DeliveryConversationService deliveryConversationService;

@@ -12,7 +12,7 @@ import smr.shop.product.review.service.service.ProductReviewService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/product-review")
+@RequestMapping("/api/1.0/product-review")
 public class ProductReviewController {
 
     private final ProductReviewService productReviewService;
