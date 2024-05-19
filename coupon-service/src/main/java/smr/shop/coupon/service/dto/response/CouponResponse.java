@@ -2,7 +2,7 @@ package smr.shop.coupon.service.dto.response;
 
 import lombok.Builder;
 import lombok.Value;
-import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
+import smr.shop.libs.common.model.valueobject.CouponDiscountType;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;

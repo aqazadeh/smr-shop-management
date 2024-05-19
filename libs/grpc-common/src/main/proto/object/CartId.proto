@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.object";
+option java_multiple_files = true;
+
+message CartGrpcId {
+  string id = 1;
+}
+
+message CartItemGrpcId{
+  string id = 1;
+}

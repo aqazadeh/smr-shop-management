@@ -2,35 +2,26 @@ syntax = "proto3";
 
 option java_package = "smr.shop.libs.grpc.coupon";
 option java_multiple_files = true;
-import "helper/DateTime.proto";
+import "object/CouponId.proto";
 
-enum CouponType {
-  SHOP = 0;
-  ALL = 1;
-}
-enum CouponDiscountType {
-  PERCENT = 0;
-  AMOUNT = 1;
-}
-
-message CouponGrpcRequest {
-  string code = 2;
-  string userId = 3;
-}
 
 message CouponGrpcResponse {
   string id = 1;
   string code = 2;
   int64 shopId = 3;
-  CouponType couponType = 4;
-  double amount = 5;
-  sint32 percentage = 6;
-  double maxDiscountPrice = 7;
-  bool isDeleted = 8;
-  bool isUsed = 9;
-  bool isExpired = 10;
+  string couponType = 4;
+  string discountType = 5;
+  double amount = 6;
+  sint32 percentage = 7;
+  double maxDiscountPrice = 8;
+  bool isExpired = 9;
+}
+
+message CouponUsageGrpcResponse {
+  bool isUsed = 1;
 }
 
 service CouponService {
-  rpc getCouponDetail(CouponGrpcRequest) returns (CouponGrpcResponse);
+  rpc getCouponByCode(CouponGrpcCode) returns (CouponGrpcResponse);
+  rpc getCouponUsage(CouponUsageGrpc) returns (CouponUsageGrpcResponse);
 }

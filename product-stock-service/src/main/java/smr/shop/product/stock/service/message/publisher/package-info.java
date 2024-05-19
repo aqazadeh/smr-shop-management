@@ -1,0 +1,1 @@
+package smr.shop.product.stock.service.message.publisher;

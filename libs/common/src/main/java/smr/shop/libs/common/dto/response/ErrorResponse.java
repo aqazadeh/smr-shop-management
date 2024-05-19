@@ -16,6 +16,14 @@ public class ErrorResponse {
         message = builder.message;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     public static ErrorResponseBuilder builder() {
         return new ErrorResponseBuilder();
     }

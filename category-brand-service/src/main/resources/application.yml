@@ -1,5 +1,5 @@
 server:
-  port: 8103
+  port: 8101
 management:
   endpoints:
     web:
@@ -27,7 +27,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9103/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9101/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -63,7 +63,7 @@ eureka:
 
 grpc:
   server:
-    port: 7103
+    port: 7101
 
   client:
     upload-service:

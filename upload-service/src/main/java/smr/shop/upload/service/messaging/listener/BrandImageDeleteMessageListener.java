@@ -8,18 +8,18 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.MessagingConstants;
-import smr.shop.libs.common.dto.message.BrandDeleteMessageModel;
+import smr.shop.libs.common.dto.message.BrandMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class BrandImageDeleteMessageListener implements MessageListener<BrandDeleteMessageModel> {
+public class BrandImageDeleteMessageListener implements MessageListener<BrandMessageModel> {
 
     @Override
     @KafkaListener(topics = {MessagingConstants.IMAGE_DELETE_TOPIC},
             groupId = MessagingConstants.IMAGE_DELETE_GROUP)
-    public void receive(@Payload BrandDeleteMessageModel message,
+    public void receive(@Payload BrandMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {

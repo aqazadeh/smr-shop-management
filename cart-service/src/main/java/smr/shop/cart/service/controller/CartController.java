@@ -40,8 +40,8 @@ public class CartController {
     @PostMapping("/coupon/{couponCode}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<CartResponse> addCouponToCart(@PathVariable String couponCode) {
-        CartResponse cartResponse = cartService.addCoupon(couponCode);
-        return ResponseEntity.ok(cartResponse);
+        cartService.addCoupon(couponCode);
+        return null;
     }
 
     @PostMapping("/{cartItemId}/increase")
@@ -56,7 +56,7 @@ public class CartController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CartResponse> getUserCart() {
-        CartResponse cartResponse = cartService.getAllCartItems();
+        CartResponse cartResponse = cartService.getUserCart();
         return ResponseEntity.ok(cartResponse);
     }
 
@@ -79,8 +79,8 @@ public class CartController {
     @DeleteMapping("/coupon/remove")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CartResponse> removeCouponFromCart() {
-        CartResponse cartResponse = cartService.removeCoupon();
-        return ResponseEntity.ok(cartResponse);
+        cartService.removeCoupon();
+        return null;
     }
 
     @DeleteMapping

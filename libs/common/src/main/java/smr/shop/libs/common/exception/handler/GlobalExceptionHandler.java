@@ -7,17 +7,19 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.GlobalException;
 
 import java.util.List;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> exception(Exception e) {
         log.error("an error occurred", e);
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -29,6 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GlobalException.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> globalException(GlobalException e) {
         log.error("an error occurred", e);
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -40,6 +43,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException exception) {
         log.error("an error occurred", exception);
 
@@ -55,6 +59,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> handle(AuthenticationException e) {
         log.error("an error occurred", e);
 
@@ -67,6 +72,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> handle(AccessDeniedException e) {
         log.error("an error occurred", e);
 

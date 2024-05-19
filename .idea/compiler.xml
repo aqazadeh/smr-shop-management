@@ -27,7 +27,6 @@
         <module name="common" />
         <module name="discount-service" />
         <module name="gateway-service" />
-        <module name="kafka" />
         <module name="product-review-service" />
         <module name="upload-service" />
         <module name="order-service" />
@@ -37,6 +36,7 @@
       <module name="auth-service" target="17" />
       <module name="brand-service" target="17" />
       <module name="infrastructure" target="17" />
+      <module name="kafka" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>
   </component>

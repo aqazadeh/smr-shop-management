@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
-import java.util.UUID;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,5 +1,5 @@
 server:
-  port: 8102
+  port: 8100
 
 management:
   endpoints:
@@ -28,7 +28,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9102/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9100/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -74,19 +74,19 @@ grpc:
       negotiationType: plaintext
 
     coupon-service:
-      address: 'discovery:///upload-service'
+      address: 'discovery:///coupon-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
     product-service:
-      address: 'discovery:///upload-service'
+      address: 'discovery:///product-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
-    product-attribute-service:
-      address: 'discovery:///upload-service'
+    product-stock-service:
+      address: 'discovery:///product-stock-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext

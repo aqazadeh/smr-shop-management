@@ -14,4 +14,7 @@ import java.util.UUID;
 @Data
 public class ProductStockMessageModel implements BaseMessageModel {
     private UUID id;
+    private Long productId;
+    private String attributeName;
+    private Integer quantity;
 }

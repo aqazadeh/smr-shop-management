@@ -7,13 +7,13 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.MessagingConstants;
-import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
+import smr.shop.libs.common.dto.message.ProductMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 import smr.shop.wishlist.service.service.WishlistService;
 
 @Component
 @Slf4j
-public class ProductDeleteMessageListener implements MessageListener<ProductDeleteMessageModel> {
+public class ProductDeleteMessageListener implements MessageListener<ProductMessageModel> {
 
     private final WishlistService wishlistService;
 
@@ -23,7 +23,7 @@ public class ProductDeleteMessageListener implements MessageListener<ProductDele
 
     @Override
     @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC}, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP)
-    public void receive(@Payload ProductDeleteMessageModel message,
+    public void receive(@Payload ProductMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {

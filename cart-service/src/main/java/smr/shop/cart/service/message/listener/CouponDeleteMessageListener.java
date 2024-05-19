@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import smr.shop.cart.service.service.CartService;
 import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.dto.message.CouponMessageModel;
-import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 
 @Component

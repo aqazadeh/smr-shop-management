@@ -3,21 +3,18 @@ syntax = "proto3";
 option java_package = "smr.shop.libs.grpc.product.stock";
 option java_multiple_files = true;
 
-message ProductStockWithProductIdGrpcRequest {
-  int64 productId = 1;
-}
-message ProductStockWithIdGrpcRequest {
-  string stockId = 1;
-}
+import "object/ProductId.proto";
+import "object/ProductStockId.proto";
+
 
 message ProductStockGrpcResponse {
-  int64 id = 1;
-  string attributeName = 2;
-  int32 quantity = 3;
-
+  string id = 1;
+  int64 productId = 2;
+  string name = 3;
+  int32 quantity = 4;
 }
 
 service ProductStockService {
-  rpc getProductStockWithProductId(ProductStockWithProductIdGrpcRequest) returns  (stream ProductStockGrpcResponse);
-  rpc getProductStockId(ProductStockWithIdGrpcRequest) returns  (ProductStockGrpcResponse);
+  rpc getProductStockByProductId(ProductGrpcId) returns  (stream ProductStockGrpcResponse);
+  rpc getProductStockId(ProductStockGrpcId) returns  (ProductStockGrpcResponse);
 }

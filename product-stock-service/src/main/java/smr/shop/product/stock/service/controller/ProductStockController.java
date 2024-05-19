@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/1.0/product/stock")
+@RequestMapping("/api/1.0/products")
 public class ProductStockController {
     private final ProductStockService productStockService;
 
@@ -24,7 +24,7 @@ public class ProductStockController {
 
 //    ----------------------------------- Post -----------------------------------
 
-    @PostMapping
+    @PostMapping("/stocks")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmptyResponse> create(@RequestBody @Valid CreateProductStockRequest request) {
         productStockService.create(request);
@@ -32,17 +32,9 @@ public class ProductStockController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/create/all")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<EmptyResponse> createAll(@RequestBody @Valid List<CreateProductStockRequest> productStockRequests) {
-        productStockService.createAll(productStockRequests);
-        EmptyResponse response = EmptyResponse.builder().message("Product stock created").build();
-        return ResponseEntity.ok(response);
-    }
-
 //    ----------------------------------- Put or Patch -----------------------------------
 
-    @PutMapping("/{stockId}")
+    @PutMapping("/stocks/{stockId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateById(@PathVariable UUID stockId,
                            @RequestBody @Valid UpdateProductStockRequest request) {
@@ -51,7 +43,7 @@ public class ProductStockController {
 
 //    ----------------------------------- Delete -----------------------------------
 
-    @DeleteMapping("/{stockId}")
+    @DeleteMapping("/stocks/{stockId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable UUID stockId) {
         productStockService.delete(stockId);
@@ -59,14 +51,14 @@ public class ProductStockController {
 
 //    ----------------------------------- Get -----------------------------------
 
-    @GetMapping("/{stockId}")
+    @GetMapping("/stocks/{stockId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProductStockResponse> getById(@PathVariable UUID stockId) {
         ProductStockResponse productStockResponse = productStockService.getById(stockId);
         return ResponseEntity.ok(productStockResponse);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/{productId}/stocks")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductStockResponse> getByProductId(@PathVariable Long productId) {
         return productStockService.getByProductId(productId);

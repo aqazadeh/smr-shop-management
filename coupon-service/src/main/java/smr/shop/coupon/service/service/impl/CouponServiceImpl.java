@@ -13,8 +13,8 @@ import smr.shop.coupon.service.grpc.client.CouponClientGrpcService;
 import smr.shop.coupon.service.mapper.CouponServiceMapper;
 import smr.shop.coupon.service.message.publisher.CouponDeleteMessagePublisher;
 import smr.shop.coupon.service.model.CouponEntity;
-import smr.shop.coupon.service.model.valueobject.CouponDiscountType;
-import smr.shop.coupon.service.model.valueobject.CouponType;
+import smr.shop.libs.common.model.valueobject.CouponDiscountType;
+import smr.shop.libs.common.model.valueobject.CouponType;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.coupon.service.service.CouponUsageService;
@@ -26,7 +26,6 @@ import smr.shop.libs.grpc.coupon.CouponGrpcRequest;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;

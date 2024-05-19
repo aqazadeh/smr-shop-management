@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -14,4 +15,5 @@ import java.util.UUID;
 @Data
 public class OrderMessageModel implements BaseMessageModel {
     private UUID id;
+    private List<OrderItemMessageModel> items;
 }

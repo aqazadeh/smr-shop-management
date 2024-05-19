@@ -1,6 +1,6 @@
 package smr.shop.wishlist.service.service;
 
-import smr.shop.libs.common.dto.message.ProductDeleteMessageModel;
+import smr.shop.libs.common.dto.message.ProductMessageModel;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
 import smr.shop.wishlist.service.model.WishlistEntity;
 
@@ -13,7 +13,7 @@ public interface WishlistService {
 
     void addProductToWishlist(Long productId);
 
-    void deleteProductsInWishlist(ProductDeleteMessageModel productDeleteMessageModel);
+    void deleteProductsInWishlist(ProductMessageModel productMessageModel);
 
     List<WishlistResponse> getAllWishlistProducts(Integer page);
 

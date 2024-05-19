@@ -2,10 +2,7 @@ syntax = "proto3";
 
 option java_package = "smr.shop.libs.grpc.cart";
 option java_multiple_files = true;
-
-message CartGrpcRequest {
-  string userId = 1;
-}
+import "object/CartId.proto";
 
 message CartGrpcResponse {
   int64 id = 1;
@@ -21,5 +18,5 @@ message CartItemsGrpcResponse {
 }
 
 service CartService {
-  rpc GetCart(CartGrpcRequest) returns (CartGrpcResponse);
+  rpc GetCart(CartGrpcId) returns (CartGrpcResponse);
 }

@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
-  cart-service-postgres:
-    container_name: cart-service-postgres
+  postgres:
+    container_name: postgres-cart
     image: postgres:16
     ports:
-      - "9102:5432"
+      - "9100:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
     expose:
-      - 9102
+      - 9100
     volumes:
       - cart-volume:/var/lib/postgresql/data
 volumes:

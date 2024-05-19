@@ -13,7 +13,6 @@
     <artifactId>libs</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>kafka</module>
         <module>grpc-common</module>
         <module>common</module>
     </modules>

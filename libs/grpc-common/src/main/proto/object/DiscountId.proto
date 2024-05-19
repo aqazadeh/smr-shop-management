@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "smr.shop.libs.grpc.object";
+option java_multiple_files = true;
+
+message DiscountGrpcId {
+  string id = 1;
+}
