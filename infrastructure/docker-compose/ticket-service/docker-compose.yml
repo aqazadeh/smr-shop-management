@@ -3,12 +3,12 @@ services:
     container_name: postgres-ticket
     image: postgres:16
     ports:
-      - "9116:5432"
+      - "9114:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
     expose:
-      - 9014
+      - 9114
     volumes:
       - ticket-volume:/var/lib/postgresql/data
 volumes:
