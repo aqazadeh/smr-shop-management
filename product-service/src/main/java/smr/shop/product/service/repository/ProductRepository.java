@@ -1,5 +1,7 @@
 package smr.shop.product.service.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -7,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import smr.shop.product.service.model.ProductEntity;
 import smr.shop.product.service.model.valueobject.ProductStatus;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Author: Ali Gadashov
@@ -17,7 +19,11 @@ import java.util.List;
  */
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-    List<ProductEntity> findByBrandId(Long brandId);
+    Page<ProductEntity> findAllByBrandId(Long brandId, Pageable pageable);
+
+    Page<ProductEntity> findAllByCategoryId(Long categoryId, Pageable pageable);
+
+    Page<ProductEntity> findAllByShopId(Long shopId, Pageable pageable);
 
     @Transactional
     @Modifying
@@ -36,4 +42,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     ProductEntity findBySlug(String slug);
 
+    Optional<ProductEntity> findByIdAndShopId(Long productId, Long shopId);
 }

@@ -125,35 +125,11 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/brand/{brandId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> deleteProductsByBrand(@PathVariable Long brandId){
-        productService.deleteProductsByBrand(brandId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by brand id: " + brandId).build();
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/shop/{shopId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> deleteProductsByShop(@PathVariable Long shopId){
-        productService.deleteProductsByShop(shopId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by shop id: " + shopId).build();
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/category/{categoryId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EmptyResponse> deleteProductsByCategory(@PathVariable Long categoryId){
-        productService.deleteProductsByCategory(categoryId);
-        EmptyResponse response = EmptyResponse.builder().message("successfully deleted products by category id: " + categoryId).build();
-        return ResponseEntity.ok(response);
-    }
-
 //    ---------------------------------- GET ----------------------------------
 
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long productId){
+    public ResponseEntity<ProductResponse> getBrandProducts(@PathVariable Long productId){
         ProductResponse productById = productService.getProductById(productId);
         return ResponseEntity.ok(productById);
 
@@ -165,11 +141,39 @@ public class ProductController {
         ProductResponse productById = productService.getProductBySlug(slug);
         return ResponseEntity.ok(productById);
     }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<ProductResponse>> getAllProducts(@RequestParam(value = "page", defaultValue = "0") Integer page){
         List<ProductResponse> productProducts = productService.getAllProducts(page);
         return ResponseEntity.ok(productProducts);
+    }
+
+    @GetMapping("/shop/{shopId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ProductResponse>> getShopProducts(@PathVariable Long shopId,
+                                                                @RequestParam(name = "page", defaultValue = "0") Integer page){
+        List<ProductResponse> responseList = productService.getAllProductsByShopId(shopId, page);
+        return ResponseEntity.ok(responseList);
+
+    }
+
+    @GetMapping("/brand/{brandId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ProductResponse>> getBrandProducts(@PathVariable Long brandId,
+                                                                  @RequestParam(name = "page", defaultValue = "0") Integer page){
+        List<ProductResponse> responseList = productService.getAllProductsByBrandId(brandId, page);
+        return ResponseEntity.ok(responseList);
+
+    }
+
+    @GetMapping("/category/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ProductResponse>> getCategoryProducts(@PathVariable Long categoryId,
+                                                                     @RequestParam(name = "page", defaultValue = "0") Integer page){
+        List<ProductResponse> responseList = productService.getAllProductsByCategoryId(categoryId, page);
+        return ResponseEntity.ok(responseList);
+
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ProductStockGrpcClient {
 
-    @GrpcClient("product-grpc-service")
+    @GrpcClient("product-stock-service")
     private ProductStockServiceGrpc.ProductStockServiceBlockingStub productStockServiceBlockingStub;
 
     public List<ProductStockGrpcResponse> getProductsStockByProductId(Long productId) {

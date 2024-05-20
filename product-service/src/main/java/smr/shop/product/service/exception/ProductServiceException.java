@@ -10,13 +10,13 @@ import smr.shop.libs.common.exception.GlobalException;
  * Time: 2:03 AM
  */
 
-public class ProductException extends GlobalException {
+public class ProductServiceException extends GlobalException {
 
-    public ProductException(String message, HttpStatus status) {
+    public ProductServiceException(String message, HttpStatus status) {
         super(message, status);
     }
 
-    public ProductException(String message, HttpStatus status, Throwable cause) {
+    public ProductServiceException(String message, HttpStatus status, Throwable cause) {
         super(message, status, cause);
     }
 }

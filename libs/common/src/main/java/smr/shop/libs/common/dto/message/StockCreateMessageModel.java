@@ -1,4 +1,4 @@
-package smr.shop.product.service.dto.messaging;
+package smr.shop.libs.common.dto.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

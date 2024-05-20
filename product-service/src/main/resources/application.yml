@@ -1,5 +1,5 @@
 server:
-  port: 8113
+  port: 8111
 
 management:
   endpoints:
@@ -31,7 +31,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost:9113/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9011/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -66,11 +66,31 @@ eureka:
 
 grpc:
   server:
-    port: 7113
+    port: 7111
 
   client:
     upload-service:
       address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    brand-service:
+      address: 'discovery:///brand-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    category-service:
+      address: 'discovery:///category-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    product-stock-service:
+      address: 'discovery:///product-stock-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    discount-service:
+      address: 'discovery:///discount-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext

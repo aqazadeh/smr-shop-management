@@ -19,8 +19,13 @@ message ProductGrpcResponse {
   DiscountGrpcResponse discount = 8;
 }
 
+message ShopProductGrpcId{
+  ProductGrpcId product = 1;
+  ShopGrpcId shop = 2;
+}
+
 
 service ProductService {
   rpc getProductById(ProductGrpcId) returns (ProductGrpcResponse);
-  rpc getProductByShopId(ShopGrpcId) returns (ProductGrpcResponse);
+  rpc getProductByShopId(ShopProductGrpcId) returns (ProductGrpcResponse);
 }

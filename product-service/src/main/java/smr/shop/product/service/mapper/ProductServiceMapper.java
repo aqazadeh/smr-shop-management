@@ -1,8 +1,10 @@
 package smr.shop.product.service.mapper;
 
 import org.springframework.stereotype.Component;
+import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
 import smr.shop.libs.common.constant.ServiceConstants;
-import smr.shop.product.service.dto.messaging.StockCreateMessageModel;
+import smr.shop.libs.grpc.product.ProductGrpcResponse;
+import smr.shop.libs.common.dto.message.StockCreateMessageModel;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductStockRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
@@ -26,12 +28,9 @@ public class ProductServiceMapper {
     public ProductEntity productCreateRequestToProductEntity(ProductCreateRequest request) {
 
         return ProductEntity.builder()
-                .categoryId(request.getCategoryId())
-                .brandId(request.getBrandId())
                 .name(request.getName())
                 .slug(request.getSlug())
                 .description(request.getDescription())
-                .thumbnail(request.getThumbnail())
                 .imageIds(request.getImageIds())
                 .tags(Arrays.asList(request.getTags().split(",")))
                 .price(request.getPrice())
@@ -76,6 +75,19 @@ public class ProductServiceMapper {
                 .price(product.getPrice())
                 .shippingPrice(product.getShippingPrice())
                 .rating(product.getRating())
+                .build();
+    }
+
+    public ProductGrpcResponse productEntityToProductGrpcResponse(ProductEntity productEntity, DiscountGrpcResponse discountGrpcResponse) {
+        return ProductGrpcResponse.newBuilder()
+                .setId(productEntity.getId())
+                .setSlug(productEntity.getSlug())
+                .setShopId(productEntity.getShopId())
+                .setPrice(productEntity.getPrice())
+                .setShippingPrice(productEntity.getShippingPrice())
+                .setName(productEntity.getName())
+                .setThumbnail(productEntity.getThumbnail())
+                .setDiscount(discountGrpcResponse)
                 .build();
     }
 }

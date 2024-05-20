@@ -26,7 +26,7 @@ public class ProductGrpcClient {
                 .setName("Product 1")
                 .setThumbnail("test-image")
                 .setDiscount(DiscountGrpcResponse.newBuilder()
-                        .setId(1)
+                        .setId("1d017d73-f356-4454-89d7-5123a6c26804")
                         .setAmount(5)
                         .build())
                 .build();
@@ -44,7 +44,7 @@ public class ProductGrpcClient {
                 .setName("Product 1")
                 .setThumbnail("test-image")
                 .setDiscount(DiscountGrpcResponse.newBuilder()
-                        .setId(1)
+                        .setId("1d017d73-f356-4454-89d7-5123a6c26804")
                         .setAmount(5)
                         .build())
                 .build();

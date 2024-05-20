@@ -6,6 +6,7 @@ import smr.shop.product.service.model.valueobject.ProductStatus;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -21,6 +22,8 @@ public class ProductEntity {
     private Long shopId;
 
     private Long categoryId;
+
+    private UUID discountId;
 
     private Long brandId;
 
