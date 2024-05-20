@@ -46,6 +46,4 @@ public class ProductDeleteMessageModel implements BaseMessageModel {
 
 //    private ProductStatus status;
 
-public class UploadMessageModel implements BaseMessageModel {
-    String imageUrl;
 }

@@ -12,11 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BrandImageDeleteMessageModel implements BaseMessageModel {
-
-    private String imageId;
-
 public class ProductMessageModel implements BaseMessageModel {
+
     private Long id;
+
     private List<ProductStockMessageModel> stocks;
+
 }
