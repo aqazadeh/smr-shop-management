@@ -10,6 +10,7 @@ import smr.shop.delivery.service.dto.response.DeliveryConversationResponse;
 import smr.shop.delivery.service.exception.DeliveryConversationException;
 import smr.shop.delivery.service.mapper.DeliveryConversationServiceMapper;
 import smr.shop.delivery.service.model.DeliveryConversation;
+import smr.shop.delivery.service.model.valueobject.DeliveryConversationStatus;
 import smr.shop.delivery.service.repository.DeliveryConversationRepository;
 import smr.shop.delivery.service.service.DeliveryConversationService;
 import smr.shop.libs.common.constant.ServiceConstants;
@@ -61,8 +62,9 @@ public class DeliveryConversationServiceImpl implements DeliveryConversationServ
     @Transactional
     public void deleteDeliveryConversation(UUID id) {
         DeliveryConversation conversation = findById(id);
+        conversation.setStatus(DeliveryConversationStatus.DELETED);
         conversation.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        deliveryConversationRepository.delete(conversation);
+        deliveryConversationRepository.save(conversation);
     }
 
 //    ----------------------------------- Get -----------------------------------

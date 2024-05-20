@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import smr.shop.delivery.service.model.valueobject.DeliveryConversationStatus;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -28,6 +29,9 @@ public class DeliveryConversation {
     private Delivery delivery;
 
     private String message;
+
+    @Builder.Default
+    private DeliveryConversationStatus status = DeliveryConversationStatus.CREATED;
 
     @CreatedDate
     private ZonedDateTime createdAt;
