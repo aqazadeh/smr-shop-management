@@ -4,14 +4,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ProductMessageModel;
+import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.grpc.client.ProductGrpcClient;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.wishlist.service.dto.response.WishlistProductResponse;
 import smr.shop.wishlist.service.dto.response.WishlistResponse;
 import smr.shop.wishlist.service.exception.WishlistServiceException;
-import smr.shop.wishlist.service.grpc.WishlistGrpcClientService;
 import smr.shop.wishlist.service.mapper.WishlistServiceMapper;
 import smr.shop.wishlist.service.model.WishlistEntity;
 import smr.shop.wishlist.service.repository.WishlistRepository;
@@ -26,15 +26,16 @@ public class WishlistServiceImpl implements WishlistService {
 
     private final WishlistServiceMapper wishlistServiceMapper;
     private final WishlistRepository wishlistRepository;
-    private final WishlistGrpcClientService wishlistGrpcClientService;
+    private final ProductGrpcClient productGrpcClient;
 
     public WishlistServiceImpl(WishlistServiceMapper wishlistServiceMapper,
                                WishlistRepository wishlistRepository,
-                               WishlistGrpcClientService wishlistGrpcClientService) {
+                               ProductGrpcClient productGrpcClient) {
         this.wishlistServiceMapper = wishlistServiceMapper;
         this.wishlistRepository = wishlistRepository;
-        this.wishlistGrpcClientService = wishlistGrpcClientService;
+        this.productGrpcClient = productGrpcClient;
     }
+
 
 //    ----------------------------------- Create or Add -----------------------------------
 
@@ -42,7 +43,7 @@ public class WishlistServiceImpl implements WishlistService {
     public void addProductToWishlist(Long productId) {
         UUID userId = UserHelper.getUserId();
         if (wishlistRepository.findByUserIdAndProductId(userId, productId).isEmpty()) {
-            ProductGrpcResponse productGrpcResponse = wishlistGrpcClientService.getProduct(productId);
+            ProductGrpcResponse productGrpcResponse = productGrpcClient.getProductByProductId(productId);
             WishlistEntity wishlistEntity = wishlistServiceMapper.productIdAndUserIdToWishlist(productGrpcResponse.getId(), userId);
             wishlistEntity.setId(UUID.randomUUID());
             wishlistEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
@@ -54,7 +55,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public void deleteProductsInWishlist(ProductMessageModel productMessageModel) {
-        wishlistRepository.deleteByProductId(productMessageModel.getId());
+        wishlistRepository.deleteAllByProductId(productMessageModel.getId());
     }
 
     @Override
@@ -75,7 +76,7 @@ public class WishlistServiceImpl implements WishlistService {
         List<WishlistEntity> wishlistEntityList = wishlistRepository.findAll(pageable).stream().toList();
         return wishlistEntityList.stream().map(wishlistEntity -> {
             WishlistResponse wishlistResponse = wishlistServiceMapper.wishlistEntityToWishlistResponse(wishlistEntity);
-            ProductGrpcResponse product = wishlistGrpcClientService.getProduct(wishlistEntity.getProductId());
+            ProductGrpcResponse product = productGrpcClient.getProductByProductId(wishlistEntity.getProductId());
             WishlistProductResponse wishlistProductResponse = wishlistServiceMapper.productGrpcResponseToWishlistProductResponse(product);
             wishlistResponse.setProduct(wishlistProductResponse);
             return wishlistResponse;

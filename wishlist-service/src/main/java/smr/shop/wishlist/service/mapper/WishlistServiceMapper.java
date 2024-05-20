@@ -35,7 +35,7 @@ public class WishlistServiceMapper {
                 .slug(productGrpcResponse.getSlug())
                 .thumbnail(productGrpcResponse.getThumbnail())
                 .price(BigDecimal.valueOf(productGrpcResponse.getPrice()))
-                .discountPrice(productGrpcResponse.getDiscountPrice())
+                .discountPrice(productGrpcResponse.getDiscount().getAmount())
                 .build();
     }
 }

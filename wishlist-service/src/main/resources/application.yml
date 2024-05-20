@@ -1,34 +1,33 @@
 server:
-  port: 8118
+  port: 8117
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   cloud:
     config:
       enabled: false
 
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:9091
-      auto-offset-reset: earliest
-      enable-auto-commit: true
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
-
-    producer:
-      bootstrap-servers: localhost:9091
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: all
-      batch-size: 16384
-
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9018/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9017/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
@@ -48,7 +47,7 @@ eureka:
 
 grpc:
   server:
-    port: 7018
+    port: 7117
 
   client:
     product-service:
