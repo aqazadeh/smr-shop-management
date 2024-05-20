@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -14,4 +15,14 @@ import java.util.UUID;
 @Data
 public class ProductReviewMessageModel implements BaseMessageModel {
     private UUID id;
+
+    private UUID userId;
+
+    private Long productId;
+
+    private Byte rating;
+
+    private String comment;
+
+//    private List<String> images;
 }

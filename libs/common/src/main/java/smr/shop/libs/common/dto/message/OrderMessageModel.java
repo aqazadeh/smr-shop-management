@@ -15,5 +15,15 @@ import java.util.UUID;
 @Data
 public class OrderMessageModel implements BaseMessageModel {
     private UUID id;
+
+    private UUID userId;
+
+//    private OrderAddress address;
+
+    private Double shippingCost;
+
+    private List<UUID> couponId;
+
+//    private PaymentStatus paymentStatus;
     private List<OrderItemMessageModel> items;
 }

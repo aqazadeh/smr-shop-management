@@ -13,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class UseCouponMessageModel implements BaseMessageModel {
+
     private UUID couponId;
+
     private UUID userId;
 }

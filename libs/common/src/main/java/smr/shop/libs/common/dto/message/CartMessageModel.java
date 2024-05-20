@@ -12,4 +12,8 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class CartMessageModel implements BaseMessageModel {
     private UUID id;
+
+    private UUID userId;
+
+    private String coupon;
 }

@@ -13,5 +13,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class PaymentMessageModel implements BaseMessageModel {
+
     private UUID id;
+
+    private UUID orderId;
+
+//    private PaymentStatus paymentStatus;
+
+    private Double amount;
+
+//    private PaymentMethod method;
+
 }

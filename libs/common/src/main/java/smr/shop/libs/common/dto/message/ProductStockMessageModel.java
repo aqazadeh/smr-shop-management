@@ -13,8 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class ProductStockMessageModel implements BaseMessageModel {
+
     private UUID id;
+
     private Long productId;
+    
     private String attributeName;
+    
     private Integer quantity;
 }
