@@ -13,5 +13,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class DeliveryMessageModel  implements BaseMessageModel {
+
     private UUID id;
+
+    private Long courierId;
+
+    private UUID orderId;
+
+//    private DeliveryStatus status;
+
 }

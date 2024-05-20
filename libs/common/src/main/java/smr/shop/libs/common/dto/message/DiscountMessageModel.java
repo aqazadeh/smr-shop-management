@@ -13,5 +13,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class DiscountMessageModel implements BaseMessageModel {
+
     private UUID id;
+
+    private Long productId;
+
+//    private DiscountType type;
+
+    private Float percent;
+
+    private Double amount;
 }

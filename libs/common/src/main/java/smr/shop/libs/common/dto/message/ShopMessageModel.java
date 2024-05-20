@@ -13,5 +13,22 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class ShopMessageModel implements BaseMessageModel {
+
     private Long id;
+
+    private UUID userId;
+
+    private String shopName;
+
+    private String slug;
+
+    private String description;
+
+    private String logo;
+
+    private String phone;
+
+//    private ShopAddress address;
+
+//    private ShopStatus status;
 }

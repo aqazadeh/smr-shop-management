@@ -14,4 +14,13 @@ import smr.shop.libs.common.messaging.BaseMessageModel;
 @Data
 public class BrandDeleteMessageModel implements BaseMessageModel {
     private Long id;
+
+    private String firstName;
+
+    private String imageUrl;
+
+    private String slug;
+
+    private String description;
+
 }

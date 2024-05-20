@@ -11,5 +11,7 @@ import smr.shop.libs.common.messaging.BaseMessageModel;
 @NoArgsConstructor
 @Data
 public class BrandImageDeleteMessageModel implements BaseMessageModel {
+
     private String imageId;
+
 }
