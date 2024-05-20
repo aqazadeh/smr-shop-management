@@ -12,6 +12,7 @@ import smr.shop.delivery.service.dto.response.DeliveryResponse;
 import smr.shop.delivery.service.exception.DeliveryServiceException;
 import smr.shop.delivery.service.mapper.DeliveryServiceMapper;
 import smr.shop.delivery.service.model.Delivery;
+import smr.shop.delivery.service.model.valueobject.DeliveryStatus;
 import smr.shop.delivery.service.repository.DeliveryRepository;
 import smr.shop.delivery.service.service.DeliveryService;
 import smr.shop.libs.common.constant.ServiceConstants;
@@ -71,8 +72,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public void deleteDelivery(Long id) {
         Delivery delivery = findById(id);
+        delivery.setStatus(DeliveryStatus.FAILED);
         delivery.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        deliveryRepository.delete(delivery);
+        deliveryRepository.save(delivery);
     }
 
 //    ----------------------------------- Get -----------------------------------

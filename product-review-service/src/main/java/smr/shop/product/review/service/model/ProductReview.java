@@ -4,6 +4,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
+import smr.shop.product.review.service.model.valueobject.ProductReviewStatus;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -26,6 +27,9 @@ public class ProductReview {
     private Byte rating;
 
     private String comment;
+
+    @Builder.Default
+    private ProductReviewStatus status = ProductReviewStatus.CREATED;
 
     @ElementCollection
     private List<String> images;

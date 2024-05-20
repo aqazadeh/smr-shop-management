@@ -12,6 +12,7 @@ import smr.shop.courier.service.dto.response.CourierResponse;
 import smr.shop.courier.service.exception.CourierServiceException;
 import smr.shop.courier.service.mapper.CourierServiceMapper;
 import smr.shop.courier.service.model.CourierEntity;
+import smr.shop.courier.service.model.valueobject.CourierActiveType;
 import smr.shop.courier.service.repository.CourierRepository;
 import smr.shop.courier.service.service.CourierService;
 import smr.shop.libs.common.constant.ServiceConstants;
@@ -72,8 +73,9 @@ public class CourierServiceImpl implements CourierService {
     @Transactional
     public void deleteCourier(Long id) {
         CourierEntity courierEntity = findById(id);
+        courierEntity.setActiveType(CourierActiveType.INACTIVE);
         courierEntity.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        courierRepository.delete(courierEntity);
+        courierRepository.save(courierEntity);
     }
 
 //    ----------------------------------- Get -----------------------------------

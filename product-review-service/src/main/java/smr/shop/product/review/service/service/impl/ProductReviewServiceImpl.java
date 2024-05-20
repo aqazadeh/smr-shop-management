@@ -9,6 +9,7 @@ import smr.shop.product.review.service.dto.request.UpdateProductReviewRequest;
 import smr.shop.product.review.service.exception.ProductReviewServiceException;
 import smr.shop.product.review.service.mapper.ProductReviewServiceMapper;
 import smr.shop.product.review.service.model.ProductReview;
+import smr.shop.product.review.service.model.valueobject.ProductReviewStatus;
 import smr.shop.product.review.service.repository.ProductReviewRepository;
 import smr.shop.product.review.service.service.ProductReviewService;
 
@@ -70,8 +71,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     @Transactional
     public void deleteProductReview(UUID id) {
         ProductReview productReview = findById(id);
+        productReview.setStatus(ProductReviewStatus.DELETED);
         productReview.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        productReviewRepository.delete(productReview);
+        productReviewRepository.save(productReview);
     }
 
 //    ----------------------------------- Extra -----------------------------------

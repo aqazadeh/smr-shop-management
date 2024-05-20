@@ -9,6 +9,7 @@ import smr.shop.product.review.service.dto.request.UpdateProductQuestionRequest;
 import smr.shop.product.review.service.exception.ProductQuestionServiceException;
 import smr.shop.product.review.service.mapper.ProductReviewServiceMapper;
 import smr.shop.product.review.service.model.ProductQuestion;
+import smr.shop.product.review.service.model.valueobject.ProductQuestionStatus;
 import smr.shop.product.review.service.repository.ProductQuestionRepository;
 import smr.shop.product.review.service.repository.ProductReviewRepository;
 import smr.shop.product.review.service.service.ProductQuestionService;
@@ -58,8 +59,9 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     @Transactional
     public void deleteProductQuestion(UUID id) {
         ProductQuestion question = findById(id);
+        question.setStatus(ProductQuestionStatus.DELETED);
         question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        productQuestionRepository.delete(question);
+        productQuestionRepository.save(question);
     }
 
 //    ----------------------------------- Delete -----------------------------------
