@@ -1,5 +1,21 @@
 server:
-  port: 8116
+  port: 8114
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   cloud:
@@ -10,8 +26,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
   datasource:
-    url: jdbc:postgresql://localhost:9116/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:9114/postgres?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:

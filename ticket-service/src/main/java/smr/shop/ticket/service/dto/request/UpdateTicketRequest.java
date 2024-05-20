@@ -1,6 +1,6 @@
 package smr.shop.ticket.service.dto.request;
 
-import lombok.*;
+import lombok.Data;
 
 
 @Data

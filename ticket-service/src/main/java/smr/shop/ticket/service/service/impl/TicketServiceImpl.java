@@ -4,11 +4,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import smr.shop.libs.common.helper.UserHelper;
-import smr.shop.ticket.service.dto.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.response.TicketMessageResponse;
+import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.exception.TicketServiceException;
 import smr.shop.ticket.service.helper.TicketServiceHelper;
 import smr.shop.ticket.service.mapper.TicketServiceMapper;
@@ -42,6 +43,7 @@ public class TicketServiceImpl implements TicketService {
 //    ----------------------------------- Create or Add -----------------------------------
 
     @Override
+    @Transactional
     public CreateTicketRequest createTicket(CreateTicketRequest request) {
         Ticket ticket = ticketServiceMapper.createTicketRequestToTicket(request);
         System.out.println(ticket.getUserId());
@@ -53,6 +55,7 @@ public class TicketServiceImpl implements TicketService {
 //    ----------------------------------- Update -----------------------------------
 
     @Override
+    @Transactional
     public void updateTicketStatus(UUID ticketId, TicketStatus status) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
         ticket.setTicketStatus(status);
@@ -82,6 +85,7 @@ public class TicketServiceImpl implements TicketService {
 //    ----------------------------------- Extra -----------------------------------
 
     @Override
+    @Transactional
     public void sendMessageByUser(UUID ticketId, CreateTicketMessageRequest request) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
         if(ticket.getTicketStatus() == TicketStatus.CLOSED) {
@@ -94,6 +98,8 @@ public class TicketServiceImpl implements TicketService {
         ticketMessageRepository.save(ticketMessage);
     }
 
+    @Override
+    @Transactional
     public void sendMessageByAdmin(UUID ticketId, CreateTicketMessageRequest request) {
         Ticket ticket = ticketServiceHelper.getById(ticketId);
         TicketMessage ticketMessage = ticketServiceMapper.createTicketMessageRequestToTicketMessageResponse(request);

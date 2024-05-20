@@ -1,6 +1,7 @@
 package smr.shop.ticket.service.dto.response;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.UUID;
 @Data

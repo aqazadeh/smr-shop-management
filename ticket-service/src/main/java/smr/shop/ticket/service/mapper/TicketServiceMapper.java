@@ -3,10 +3,10 @@ package smr.shop.ticket.service.mapper;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.helper.UserHelper;
-import smr.shop.ticket.service.dto.request.CreateTicketRequest;
-import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
+import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.response.TicketMessageResponse;
+import smr.shop.ticket.service.dto.response.TicketResponse;
 import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.model.TicketMessage;
 
