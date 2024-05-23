@@ -20,7 +20,7 @@ public class ProductReviewMessageModel implements BaseMessageModel {
 
     private Long productId;
 
-    private Byte rating;
+    private float rating;
 
     private String comment;
 

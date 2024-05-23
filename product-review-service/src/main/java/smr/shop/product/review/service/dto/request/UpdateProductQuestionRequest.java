@@ -1,14 +1,15 @@
 package smr.shop.product.review.service.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
-import java.util.UUID;
-
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateProductQuestionRequest {
-    @JsonProperty("user_id") UUID userId;
-    @JsonProperty("product_id") Long productId;
-    String question;
-    @JsonProperty("question_id") UUID questionId;
+    @NotBlank
+    private String question;
 }

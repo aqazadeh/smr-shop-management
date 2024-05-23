@@ -10,6 +10,8 @@ public final class MessagingConstants {
 
 
     public static final String COUPON_USAGE_TOPIC = "coupon-usage-topic";
+    public static final String PRODUCT_REVIEW_UPDATE_TOPIC = "product-review-update-topic";
+    public static final String PRODUCT_REVIEW_CHANGE_TOPIC = "product-review-change-topic";
 
 
     public static final String PRODUCT_DELETE_TOPIC = "product-delete-topic";
@@ -27,7 +29,9 @@ public final class MessagingConstants {
     public static final String PRODUCT_SERVICE_CATEGORY_DELETE_GROUP = "product-service-category-delete-group"; ;
     public static final String PRODUCT_SERVICE_BRAND_DELETE_GROUP = "product-service-brand-delete-group";
     public static final String PRODUCT_SERVICE_DISCOUNT_DELETE_GROUP = "product-service-discount-delete-group";
+    public static final String PRODUCT_SERVICE_UPDATE_REVIEW_GROUP = "product-service-update-review-group";
 
+    public static final String PRODUCT_REVIEW_SERVICE_UPDATE_REVIEW_GROUP = "product-review-service-update-review-group";
     public static final String PRODUCT_PRODUCT_STOCK_DELETE_GROUP = "product-product-stock-delete-group";
     public static final String WISHLIST_PRODUCT_DELETE_GROUP = "wishlist-product-delete-group";
 

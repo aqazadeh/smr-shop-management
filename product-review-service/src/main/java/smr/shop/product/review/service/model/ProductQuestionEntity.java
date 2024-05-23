@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ProductQuestion {
+public class ProductQuestionEntity {
     @Id
     private UUID id;
 

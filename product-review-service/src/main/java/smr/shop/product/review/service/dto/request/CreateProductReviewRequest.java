@@ -9,9 +9,7 @@ import java.util.UUID;
 
 @Value
 public class CreateProductReviewRequest {
-    @JsonProperty("user_id") UUID userId;
-    @NotBlank @JsonProperty("product_id") Long productId;
     @NotBlank Byte rating;
     @NotBlank String comment;
-    List<String> images;
+    List<UUID> images;
 }

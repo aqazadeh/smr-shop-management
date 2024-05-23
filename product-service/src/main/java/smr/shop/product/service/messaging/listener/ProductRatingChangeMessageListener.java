@@ -9,10 +9,10 @@ import smr.shop.libs.common.messaging.listener.MessageListener;
 import smr.shop.product.service.service.ProductService;
 
 @Component
-public class RatingChangeMessageListener implements MessageListener<RatingMessageModel> {
+public class ProductRatingChangeMessageListener implements MessageListener<RatingMessageModel> {
     private final ProductService productService;
 
-    public RatingChangeMessageListener(ProductService productService) {
+    public ProductRatingChangeMessageListener(ProductService productService) {
         this.productService = productService;
     }
 

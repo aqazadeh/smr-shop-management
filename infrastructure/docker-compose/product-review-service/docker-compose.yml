@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  product-review-service-postgres:
-    container_name: product-review-service-postgres
+  postgres:
+    container_name: postgres-product-review
     image: postgres:16
     ports:
       - "9010:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=product-reviewDB
     expose:
       - 9010
     volumes:
