@@ -1,21 +1,21 @@
 server:
   port: 8100
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  zipkin:
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
-  tracing:
-    enabled: true
-    sampling:
-      probability: 1.0
-  endpoint:
-    health:
-      show-details: always
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  zipkin:
+#    tracing:
+#      endpoint: http://localhost:9411/api/v2/spans
+#  tracing:
+#    enabled: true
+#    sampling:
+#      probability: 1.0
+#  endpoint:
+#    health:
+#      show-details: always
 
 spring:
   application:
@@ -54,7 +54,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/master
+          issuer-uri: http://localhost:8180/realms/microservice-auth
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 eureka:
@@ -64,7 +64,7 @@ eureka:
     prefer-ip-address: true
   client:
     register-with-eureka: false
-    fetch-registry: true
+    fetch-registry: false
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
