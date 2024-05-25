@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+    ports:
+      - "4444:5432"
 
   keycloak:
     image: quay.io/keycloak/keycloak

@@ -1,6 +1,9 @@
 package smr.shop.cart.service.service.impl;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
@@ -28,6 +31,7 @@ import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

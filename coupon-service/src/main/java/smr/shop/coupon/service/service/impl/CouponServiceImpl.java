@@ -209,7 +209,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     private Boolean isCouponExpired(CouponEntity couponEntity){
-        return couponEntity.getExpirationTime().compareTo(ZonedDateTime.now(ServiceConstants.ZONE_ID)) > 0;
+        return couponEntity.getExpirationTime().isAfter(ZonedDateTime.now(ServiceConstants.ZONE_ID));
     }
 
     private void validateCoupon(CouponEntity couponEntity) {
