@@ -30,7 +30,6 @@
         <module>user-service</module>
         <module>shop-service</module>
         <module>product-service</module>
-        <module>delivery-service</module>
         <module>ticket-service</module>
         <module>payment-service</module>
         <module>order-service</module>
@@ -41,7 +40,6 @@
         <module>product-stock-service</module>
         <module>product-review-service</module>
         <module>wishlist-service</module>
-        <module>courier-service</module>
         <module>discount-service</module>
         <module>category-brand-service</module>
         <module>libs</module>

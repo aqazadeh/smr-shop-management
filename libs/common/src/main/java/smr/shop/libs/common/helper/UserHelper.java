@@ -1,10 +1,15 @@
 package smr.shop.libs.common.helper;
 
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.util.UUID;
 
 public class UserHelper {
       public static UUID getUserId() {
-          return UUID.fromString("534b434c-9b56-4ab0-ab4a-9bba004d2f71");
+          Authentication authentication = SecurityContextHolder.getContext()
+                  .getAuthentication();
+          return UUID.fromString(authentication.getName());
       }
 }

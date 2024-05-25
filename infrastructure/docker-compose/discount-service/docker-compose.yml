@@ -1,17 +1,16 @@
 version: '3.8'
 
 services:
-  discount-service-postgres:
-    container_name: discount-service-postgres
+  postgres:
+    container_name: postgres-discount
     image: postgres:16
     ports:
-      - "9005:5432"
+      - "9104:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=discountDB
     expose:
-      - 9005
+      - 9104
     volumes:
       - discount-volume:/var/lib/postgresql/data
 volumes:

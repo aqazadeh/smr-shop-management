@@ -6,7 +6,8 @@ import "object/DiscountId.proto";
 
 message DiscountGrpcResponse {
   string id = 1;
-  double amount = 3;
+  double amount = 2;
+  bool isDeleted= 3;
 
 }
 

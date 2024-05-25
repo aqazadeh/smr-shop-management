@@ -1,4 +1,4 @@
-package smr.shop.courier.service.configuration;
+package smr.shop.discount.service.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -13,15 +13,15 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("cart")
-                .packagesToScan("smr.shop.courier.service.controller")
+                .group("discount")
+                .packagesToScan("smr.shop.discount.service.controller")
                 .build();
     }
 
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Courier Service API")
+                .info(new Info().title("Discount Service API")
                         .description("cloud API")
                         .version("1.0")
                         .license(new License().name("Apache 2.0").url("http://div.com")));

@@ -49,6 +49,14 @@ spring:
       acks: all
       batch-size: 16384
 
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
 eureka:
   instance:
     hostname: localhost
@@ -90,3 +98,4 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+

@@ -1,17 +1,21 @@
 package smr.shop.discount.service.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Value;
-import smr.shop.discount.service.model.valueobject.DiscountType;
+
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Value
 @Builder
 public class DiscountResponse {
-    Long id;
-    Long productId;
-    DiscountType type;
-    Float percent;
+    UUID id;
+
+    Long shopId;
+
+    @JsonProperty
+    ZonedDateTime expireDate;
+
     Double amount;
-
-
 }

@@ -1,19 +1,15 @@
 package smr.shop.discount.service.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Value;
-import smr.shop.discount.service.model.valueobject.DiscountType;
+
+import java.time.ZonedDateTime;
 
 @Value
 public class DiscountCreateRequest {
-    @NotBlank
-    Long productId;
-
-    @NotBlank
-    DiscountType type;
-
-    Float percent;
-
+    @NotNull
     Double amount;
 
+    @NotNull
+    ZonedDateTime expireDate;
 }

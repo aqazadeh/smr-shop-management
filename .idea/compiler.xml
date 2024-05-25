@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="delivery-service" />
         <module name="cart-service" />
         <module name="config-service" />
         <module name="coupon-service" />
@@ -18,7 +17,6 @@
         <module name="product-stock-service" />
         <module name="user-service" />
         <module name="wishlist-service" />
-        <module name="courier-service" />
         <module name="discovery-service" />
         <module name="grpc-common" />
         <module name="notification-service" />
@@ -35,6 +33,8 @@
     <bytecodeTargetLevel>
       <module name="auth-service" target="17" />
       <module name="brand-service" target="17" />
+      <module name="courier-service" target="17" />
+      <module name="delivery-service" target="17" />
       <module name="infrastructure" target="17" />
       <module name="kafka" target="17" />
       <module name="rpc" target="17" />
