@@ -14,5 +14,4 @@ public class CategoryBrandServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(CategoryBrandServiceApplication.class, args);
     }
-    // TODO Slug field generation fix
 }

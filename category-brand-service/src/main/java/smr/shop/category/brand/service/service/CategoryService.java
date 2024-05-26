@@ -20,7 +20,7 @@ public interface CategoryService {
 
     void createCategory(CategoryCreateRequest request);
 
-    void updateCategory(Long categoryIdId, CategoryUpdateRequest request);
+    void updateCategory(Long categoryId, CategoryUpdateRequest request);
 
     void deleteCategory(Long categoryId);
 

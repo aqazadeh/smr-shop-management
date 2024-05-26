@@ -22,6 +22,14 @@ spring:
   cloud:
     config:
       enabled: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/microservice-auth
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
   jpa:
     show-sql: true
     hibernate:
@@ -71,3 +79,10 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
