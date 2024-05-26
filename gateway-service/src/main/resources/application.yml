@@ -12,10 +12,16 @@ spring:
 
     gateway:
       routes:
+
+        - id: cart-service
+          uri: lb://cart-service
+          predicates:
+            - Path=/api/1.0/cart/**, /v3/api-docs/cart
+
         - id: category-brand-service
           uri: lb://category-brand-service
           predicates:
-            - Path=/api/1.0/brands/**, /api/1.0/category/**, /v3/api-docs/category-brand
+            - Path=/api/1.0/brands/**, /api/1.0/categories/**, /v3/api-docs/category-brand
 
         - id: coupon-service
           uri: lb://coupon-service
@@ -26,9 +32,8 @@ eureka:
   instance:
     hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
-    prefer-ip-address: true
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
