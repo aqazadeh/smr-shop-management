@@ -23,6 +23,7 @@
         <module name="ticket-service" />
         <module name="payment-service" />
         <module name="common" />
+        <module name="outbox-common" />
         <module name="discount-service" />
         <module name="gateway-service" />
         <module name="product-review-service" />
@@ -61,6 +62,7 @@
       <module name="management" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
+      <module name="outbox-common" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="product-review-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
