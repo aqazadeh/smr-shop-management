@@ -15,6 +15,8 @@
     <modules>
         <module>grpc-common</module>
         <module>common</module>
+        <module>outbox-common</module>
     </modules>
+
 
 </project>
