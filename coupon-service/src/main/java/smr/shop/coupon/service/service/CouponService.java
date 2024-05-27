@@ -4,6 +4,7 @@ import smr.shop.coupon.service.dto.request.CouponCreateRequest;
 import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
 import smr.shop.coupon.service.model.CouponEntity;
+import smr.shop.libs.common.dto.message.ShopMessageModel;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 import smr.shop.libs.grpc.coupon.CouponUsageGrpcResponse;
 import smr.shop.libs.grpc.object.CouponGrpcCode;
@@ -46,4 +47,6 @@ public interface CouponService {
     CouponGrpcResponse getCouponDetail(CouponGrpcCode couponCodeGrpcRequest);
 
     CouponUsageGrpcResponse getCouponUsage(CouponUsageGrpc couponUsageGrpc);
+
+    void deleteCoupons(ShopMessageModel message);
 }

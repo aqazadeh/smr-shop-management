@@ -10,11 +10,10 @@ import smr.shop.category.brand.service.dto.request.BrandUpdateRequest;
 import smr.shop.category.brand.service.dto.response.BrandResponse;
 import smr.shop.category.brand.service.exception.CategoryBrandServiceException;
 import smr.shop.category.brand.service.mapper.CategoryBrandServiceMapper;
-import smr.shop.category.brand.service.messaging.publisher.BrandDeleteMessagePublisher;
-import smr.shop.category.brand.service.messaging.publisher.ImageDeleteMessagePublisher;
 import smr.shop.category.brand.service.model.BrandEntity;
 import smr.shop.category.brand.service.repository.BrandRepository;
 import smr.shop.category.brand.service.service.BrandService;
+import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.BrandMessageModel;
 import smr.shop.libs.common.dto.message.UploadMessageModel;
@@ -22,6 +21,7 @@ import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.client.UploadGrpcClient;
 import smr.shop.libs.grpc.object.BrandGrpcId;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
+import smr.shop.libs.outbox.service.OutboxService;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -35,9 +35,7 @@ public class BrandServiceImpl implements BrandService {
     // service mapper
     private final CategoryBrandServiceMapper categoryBrandServiceMapper;
 
-    // Message Broker
-    private final ImageDeleteMessagePublisher imageDeleteMessagePublisher;
-    private final BrandDeleteMessagePublisher brandDeleteMessagePublisher;
+    private final OutboxService outboxService;
 
     //grpc clients
     private final UploadGrpcClient uploadGrpcClient;
@@ -45,14 +43,12 @@ public class BrandServiceImpl implements BrandService {
 
     public BrandServiceImpl(BrandRepository brandRepository,
                             CategoryBrandServiceMapper categoryBrandServiceMapper,
-                            ImageDeleteMessagePublisher imageDeleteMessagePublisher,
-                            BrandDeleteMessagePublisher brandDeleteMessagePublisher,
+                            OutboxService outboxService,
                             UploadGrpcClient uploadGrpcClient) {
         this.brandRepository = brandRepository;
         this.categoryBrandServiceMapper = categoryBrandServiceMapper;
+        this.outboxService = outboxService;
         this.uploadGrpcClient = uploadGrpcClient;
-        this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
-        this.brandDeleteMessagePublisher = brandDeleteMessagePublisher;
     }
 
 //    ----------------------------------- Create or Add -----------------------------------
@@ -90,14 +86,14 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
 
-        UploadMessageModel brandImageDeleteMessageModel =
+        UploadMessageModel uploadMessageModel =
                 categoryBrandServiceMapper.brandEntityToUploadMessageModel(brandEntity);
 
         UploadGrpcResponse image = uploadGrpcClient.getUploadById(imageId.toString());
         brandEntity.setImageUrl(image.getUrl());
         brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandRepository.save(brandEntity);
-        imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
+        outboxService.save(uploadMessageModel, MessagingConstants.IMAGE_DELETE_TOPIC);
     }
 
 //    ----------------------------------- Delete -----------------------------------
@@ -110,7 +106,7 @@ public class BrandServiceImpl implements BrandService {
         brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandRepository.save(brandEntity);
         BrandMessageModel brandMessageModel = categoryBrandServiceMapper.brandEntityToBrandDeleteMessageModel(brandEntity);
-        brandDeleteMessagePublisher.publish(brandMessageModel);
+        outboxService.save(brandMessageModel, MessagingConstants.BRAND_DELETE_TOPIC);
     }
 
     @Override
@@ -118,12 +114,11 @@ public class BrandServiceImpl implements BrandService {
     public void deleteBrandImage(Long id) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
-        UploadMessageModel brandImageDeleteMessageModel =
-                categoryBrandServiceMapper.brandEntityToUploadMessageModel(brandEntity);
+        UploadMessageModel uploadMessageModel = categoryBrandServiceMapper.brandEntityToUploadMessageModel(brandEntity);
         brandEntity.setImageUrl(null);
         brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandRepository.save(brandEntity);
-        imageDeleteMessagePublisher.publish(brandImageDeleteMessageModel);
+        outboxService.save(uploadMessageModel, MessagingConstants.IMAGE_DELETE_TOPIC);
     }
 
 //    ----------------------------------- Get -----------------------------------

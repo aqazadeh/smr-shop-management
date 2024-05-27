@@ -77,17 +77,19 @@
                 <artifactId>grpc-client-spring-boot-starter</artifactId>
                 <version>${spring-grpc.version}</version>
             </dependency>
+            <dependency>
+                <groupId>smr.shop.libs</groupId>
+                <artifactId>outbox-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <release>17</release>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+
             </plugin>
         </plugins>
     </build>

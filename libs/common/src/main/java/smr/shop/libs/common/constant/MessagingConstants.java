@@ -6,6 +6,7 @@ public final class MessagingConstants {
     public static final String IMAGE_DELETE_TOPIC = "image-delete-topic";
     public static final String CATEGORY_DELETE_TOPIC = "category-delete-topic";
     public static final String BRAND_DELETE_TOPIC = "brand-delete-topic";
+
     public static final String DISCOUNT_DELETE_TOPIC = "discount-delete-topic";
 
 
@@ -22,9 +23,15 @@ public final class MessagingConstants {
     public static final String ORDER_CANCEL_TOPIC = "order-cancel-topic";
 
 
-    // Groups
-    public static final String CART_COUPON_DELETE_GROUP = "cart-coupon-delete-group";
-    public static final String CART_PRODUCT_DELETE_GROUP = "cart-product-delete-group";
+    // Groups Cart Service
+    public static final String CART_SERVICE_COUPON_DELETE_GROUP = "cart-service-coupon-delete-group";
+    public static final String CART_SERVICE_PRODUCT_DELETE_GROUP = "cart-service-product-delete-group";
+    public static final String CART_SERVICE_PRODUCT_STOCK_DELETE_GROUP = "cart-service-product-stock-delete-group";
+
+    // Groups Coupon Service
+    public static final String COUPON_SERVICE_SHOP_STATUS_CHANGE_GROUP = "shop-service-shop-status-change-group";
+    public static final String COUPON_SERVICE_COUPON_USAGE_GROUP = "coupon-service-coupon-usage-group";
+
 
     public static final String PRODUCT_SERVICE_CATEGORY_DELETE_GROUP = "product-service-category-delete-group"; ;
     public static final String PRODUCT_SERVICE_BRAND_DELETE_GROUP = "product-service-brand-delete-group";
@@ -37,7 +44,6 @@ public final class MessagingConstants {
 
     public static final String IMAGE_DELETE_GROUP = "brand-image-delete-group";
     public static final String ORDER_PRODUCT_STOCK_GROUP = "order-product-stock-delete-group";
-    public static final String COUPON_SERVICE_COUPON_USAGE_GROUP = "coupon-service-coupon-usage-group";
 
     private MessagingConstants() {}
 }

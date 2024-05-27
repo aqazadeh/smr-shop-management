@@ -1,6 +1,7 @@
 package smr.shop.libs.common.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.GlobalException;
 
@@ -43,8 +46,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
         log.error(exception.getMessage(), exception);
 
         List<String> errors = exception.getBindingResult().getFieldErrors()
@@ -55,31 +58,5 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(exception.getStatusCode()).body(errorResponse);
-    }
-
-
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handle(AuthenticationException exception) {
-        log.error(exception.getMessage(), exception);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(HttpStatus.UNAUTHORIZED)
-                .message(exception.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handle(AccessDeniedException exception) {
-        log.error(exception.getMessage(), exception);
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(HttpStatus.FORBIDDEN)
-                .message(exception.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 }

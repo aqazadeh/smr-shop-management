@@ -1,9 +1,6 @@
 package smr.shop.cart.service.service.impl;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
@@ -31,7 +28,6 @@ import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -88,12 +84,9 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void addProductToCart(Long productId, UUID stockId) {
         UUID userId = UserHelper.getUserId();
-        if(productId == 0) {
-
-            throw new CartServiceException("Test exception", HttpStatus.BAD_REQUEST);
-        }
         ProductGrpcResponse productGrpcResponse = productGrpcClient.getProductByProductId(productId);
         ProductStockGrpcResponse productStockGrpcResponse = productStockGrpcClient.getProductByStockId(stockId.toString());
+
         if (productStockGrpcResponse.getProductId() != productGrpcResponse.getId()) {
             throw new CartServiceException("this attribute not found in product", HttpStatus.BAD_REQUEST);
         }
@@ -197,7 +190,7 @@ public class CartServiceImpl implements CartService {
         if (cartItemEntity.getQuantity() > 1) {
             cartItemEntity.setQuantity(cartItemEntity.getQuantity() - 1);
             cartItemRepository.save(cartItemEntity);
-        }else {
+        } else {
             deleteCartItem(cartItemEntity.getId());
         }
 

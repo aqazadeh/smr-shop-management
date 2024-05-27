@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
-import smr.shop.shop.service.model.valueobject.ShopStatus;
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

@@ -1,1 +1,0 @@
-package smr.shop.category.brand.service.messaging.listener;

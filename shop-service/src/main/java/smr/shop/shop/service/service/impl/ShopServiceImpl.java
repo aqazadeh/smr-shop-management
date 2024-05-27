@@ -25,7 +25,7 @@ import smr.shop.shop.service.message.publisher.ImageDeleteMessagePublisher;
 import smr.shop.shop.service.message.publisher.ShopStatusChangeMessagePublisher;
 import smr.shop.shop.service.model.ShopEntity;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
-import smr.shop.shop.service.model.valueobject.ShopStatus;
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 import smr.shop.shop.service.repository.ShopRepository;
 import smr.shop.shop.service.service.ShopService;
 

@@ -25,7 +25,6 @@ public class CategoryUpdateRequest {
     @Size(min = 50)
     String description;
 
-    @NotBlank
     Long parentId;
 
 }

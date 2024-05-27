@@ -3,10 +3,11 @@ package smr.shop.libs.outbox.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import smr.shop.libs.common.messaging.BaseMessageModel;
 
 public class OutboxHelper {
 
-    public static <T> String convertToString(T obj)  {
+    public static <T extends BaseMessageModel> String convertToString(T obj)  {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.writeValueAsString(obj);
@@ -15,7 +16,7 @@ public class OutboxHelper {
         }
     }
 
-    public static <T> T convertToObject(String json, Class<T> clazz) {
+    public static <T  extends BaseMessageModel> T convertToObject(String json, Class<T> clazz) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(json, clazz);

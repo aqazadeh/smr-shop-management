@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 
 import java.util.UUID;
 
@@ -30,5 +31,5 @@ public class ShopMessageModel implements BaseMessageModel {
 
 //    private ShopAddress address;
 
-//    private ShopStatus status;
+    private ShopStatus status;
 }

@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>outbox-common</artifactId>
-
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -33,5 +33,4 @@
             <artifactId>common</artifactId>
         </dependency>
     </dependencies>
-
 </project>

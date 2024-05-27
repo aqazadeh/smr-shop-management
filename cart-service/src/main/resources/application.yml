@@ -1,21 +1,21 @@
 server:
-  port: 8100
+  port: ${SERVER_PORT:8100}
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-#  zipkin:
-#    tracing:
-#      endpoint: http://localhost:9411/api/v2/spans
-#  tracing:
-#    enabled: true
-#    sampling:
-#      probability: 1.0
-#  endpoint:
-#    health:
-#      show-details: always
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411}/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   application:
@@ -28,13 +28,13 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9100/postgres?binaryTransfer=true&reWriteBatchedInserts=true
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://${DATABASE_URL:localhost:9100}/${DB_NAME:postgres}?binaryTransfer=true&reWriteBatchedInserts=true
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:admin}
 
   kafka:
     consumer:
-      bootstrap-servers: localhost:9091
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9091}
       auto-offset-reset: earliest
       enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -42,19 +42,12 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
 
-    producer:
-      bootstrap-servers: localhost:9091
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: all
-      batch-size: 16384
-
 
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/microservice-auth
+          issuer-uri: ${AUTHORIZATION_URL:http://localhost:8180}/realms/microservice-auth
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 eureka:
@@ -65,7 +58,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://${eureka.instance.hostname}:8761/}eureka/
 
 
 

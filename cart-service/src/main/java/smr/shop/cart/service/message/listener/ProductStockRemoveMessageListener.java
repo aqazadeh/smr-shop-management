@@ -20,7 +20,7 @@ public class ProductStockRemoveMessageListener implements MessageListener<Produc
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.PRODUCT_STOCK_DELETE_TOPIC, groupId = MessagingConstants.CART_PRODUCT_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.PRODUCT_STOCK_DELETE_TOPIC, groupId = MessagingConstants.CART_SERVICE_PRODUCT_STOCK_DELETE_GROUP)
     public void receive(@Payload ProductStockMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

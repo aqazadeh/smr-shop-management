@@ -58,8 +58,8 @@
       <module name="grpc-common" options="-parameters" />
       <module name="infrastructure" options="-parameters" />
       <module name="kafka" options="-parameters" />
-      <module name="libs" options="-parameters" />
-      <module name="management" options="-parameters" />
+      <module name="libs" options="" />
+      <module name="management" options="" />
       <module name="notification-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
       <module name="outbox-common" options="-parameters" />

@@ -4,6 +4,9 @@ import com.netflix.appinfo.ApplicationInfoManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import smr.shop.coupon.service.model.CouponEntity;
 
 import java.util.Optional;
@@ -25,4 +28,10 @@ public interface CouponRepository extends JpaRepository<CouponEntity, UUID> {
     Optional<CouponEntity> findByIdAndIsDeletedFalse(UUID couponId);
 
     Page<CouponEntity> findAllByShopIdAndIsDeletedFalse(long shopId, Pageable pageable);
+
+
+    @Transactional
+    @Modifying
+    @Query("update CouponEntity c set c.isDeleted = true where c.shopId = ?1 and c.isDeleted = false")
+    void updateIsDeletedTrueByShopIdAndIsDeletedFalse(Long shopId);
 }

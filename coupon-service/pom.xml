@@ -106,6 +106,10 @@
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>smr.shop.libs</groupId>
+            <artifactId>outbox-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
