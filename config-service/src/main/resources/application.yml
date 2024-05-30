@@ -1,4 +1,11 @@
 spring:
+  profiles:
+    active: native
   cloud:
     config:
-      enabled: false
+      server:
+        native:
+          search-locations: classpath:/config
+server:
+  port: 2121
+

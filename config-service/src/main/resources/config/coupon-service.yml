@@ -1,0 +1,81 @@
+server:
+  port: 8102
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+  application:
+    name: coupon-service
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+
+  cloud:
+    config:
+      enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coupon?binaryTransfer=true&reWriteBatchedInserts=true
+    username: postgres
+    password: admin
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+
+
+
+grpc:
+  server:
+    port: 7102
+
+  client:
+    shop-service:
+      address: 'discovery:///shop-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

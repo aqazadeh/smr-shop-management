@@ -1,0 +1,77 @@
+server:
+  port: 8101
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/category_brand?binaryTransfer=true&reWriteBatchedInserts=true
+    username: postgres
+    password: admin
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+grpc:
+  server:
+    port: 7101
+
+  client:
+    upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+springdoc:
+
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha

@@ -7,9 +7,9 @@ services:
     ports:
       - "9008:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=orderDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_MULTIPLE_DATABASES: users, products, orders
     expose:
       - 9008
     volumes:

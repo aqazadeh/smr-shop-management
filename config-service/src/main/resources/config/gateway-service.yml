@@ -1,0 +1,115 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+
+    discovery:
+      locator:
+        enabled: true
+
+    gateway:
+      routes:
+        - id: cart-service
+          uri: lb://cart-service
+          predicates:
+            - Path=/api/1.0/cart/**, /v3/api-docs/cart
+
+        - id: category-brand-service
+          uri: lb://category-brand-service
+          predicates:
+            - Path=/api/1.0/brands/**, /api/1.0/categories/**, /v3/api-docs/category-brand
+
+        - id: coupon-service
+          uri: lb://coupon-service
+          predicates:
+            - Path=/api/1.0/coupon/**, /v3/api-docs/coupon
+
+        - id: discount-service
+          uri: lb://discount-service
+          predicates:
+            - Path=/api/1.0/discount/**, /v3/api-docs/discount
+
+        - id: flash-service
+          uri: lb://flash-service
+          predicates:
+            - Path=/api/1.0/flash/**, /v3/api-docs/flash
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/1.0/orders/**, /v3/api-docs/order
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/1.0/payments/**, /v3/api-docs/payment
+
+        - id: product-review-service
+          uri: lb://product-review-service
+          predicates:
+            - Path=/api/1.0/product/review/**, /v3/api-docs/product-review
+
+        - id: products-service
+          uri: lb://products-service
+          predicates:
+            - Path=/api/1.0/products/**, /v3/api-docs/product
+
+        - id: product-stock-service
+          uri: lb://product-stock-service
+          predicates:
+            - Path=/api/1.0/product/stock/**, /v3/api-docs/product-stock
+
+        - id: shop-service
+          uri: lb://shop-service
+          predicates:
+            - Path=/api/1.0/shop/**, /v3/api-docs/shop
+
+        - id: ticket-service
+          uri: lb://ticket-service
+          predicates:
+            - Path=/api/1.0/tickets/**, /v3/api-docs/ticket
+
+        - id: upload-service
+          uri: lb://upload-service
+          predicates:
+            - Path=/api/1.0/uploads/**, /v3/api-docs/upload
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/1.0/users/**, /v3/api-docs/user
+
+        - id: wishlist-service
+          uri: lb://wishlist-service
+          predicates:
+            - Path=/api/1.0/wishlists/**, /v3/api-docs/wishlist
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/

@@ -34,7 +34,6 @@
         <module>payment-service</module>
         <module>order-service</module>
         <module>upload-service</module>
-        <module>notification-service</module>
         <module>coupon-service</module>
         <module>flash-service</module>
         <module>product-stock-service</module>
@@ -89,7 +88,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

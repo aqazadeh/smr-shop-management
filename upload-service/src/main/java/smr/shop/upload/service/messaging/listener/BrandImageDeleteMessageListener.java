@@ -18,7 +18,7 @@ public class BrandImageDeleteMessageListener implements MessageListener<BrandMes
 
     @Override
     @KafkaListener(topics = {MessagingConstants.IMAGE_DELETE_TOPIC},
-            groupId = MessagingConstants.IMAGE_DELETE_GROUP)
+            groupId = MessagingConstants.UPLOAD_SERVICE_IMAGE_DELETE_GROUP)
     public void receive(@Payload BrandMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

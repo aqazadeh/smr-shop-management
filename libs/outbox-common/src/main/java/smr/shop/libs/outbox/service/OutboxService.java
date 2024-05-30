@@ -29,7 +29,7 @@ public class OutboxService {
         outboxRepository.delete(outboxEntity);
     }
 
-    public List<OutboxEntity> findAll() {
-        return outboxRepository.findAll();
+    public List<OutboxEntity> findAll(List<String> events) {
+        return outboxRepository.findAllByEventIn(events);
     }
 }

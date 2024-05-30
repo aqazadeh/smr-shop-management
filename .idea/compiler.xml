@@ -19,7 +19,6 @@
         <module name="wishlist-service" />
         <module name="discovery-service" />
         <module name="grpc-common" />
-        <module name="notification-service" />
         <module name="ticket-service" />
         <module name="payment-service" />
         <module name="common" />
@@ -38,6 +37,7 @@
       <module name="delivery-service" target="17" />
       <module name="infrastructure" target="17" />
       <module name="kafka" target="17" />
+      <module name="notification-service" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>
   </component>

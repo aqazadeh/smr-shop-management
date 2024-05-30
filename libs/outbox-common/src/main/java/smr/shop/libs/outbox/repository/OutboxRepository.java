@@ -7,4 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OutboxRepository extends JpaRepository<OutboxEntity, UUID> {
+
+    List<OutboxEntity> findAllByEventIn(List<String> event);
 }

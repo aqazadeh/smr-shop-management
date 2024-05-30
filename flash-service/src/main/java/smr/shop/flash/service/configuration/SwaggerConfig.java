@@ -1,4 +1,4 @@
-package smr.shop.cart.service.configuration;
+package smr.shop.flash.service.configuration;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.OAUTH2,
         flows = @OAuthFlows(
                 authorizationCode = @OAuthFlow(
-                        authorizationUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/auth",
-                        tokenUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/token",
-                        refreshUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/token",
+                        authorizationUrl = "http://localhost:8180/realms/master/protocol/openid-connect/auth",
+                        tokenUrl = "http://localhost:8180/realms/master/protocol/openid-connect/token",
+                        refreshUrl = "http://localhost:8180/realms/master/protocol/openid-connect/token",
                         scopes = {
                                 @OAuthScope(name = "openid")}
                 )))
@@ -29,16 +29,16 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("cart")
-                .packagesToScan("smr.shop.cart.service.controller")
+                .group("flash")
+                .packagesToScan("smr.shop.flash.service.controller")
                 .build();
     }
 
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Cart Service API")
-                        .description("Cart Service Cloud API")
+                .info(new Info().title("Flash Service API")
+                        .description("Flash Service Cloud API")
                         .version("1.0")
                         .license(new License().name("Apache 2.0").url("http://div.com")));
     }

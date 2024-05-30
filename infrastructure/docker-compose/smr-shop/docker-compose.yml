@@ -1,0 +1,42 @@
+services:
+  postgres:
+    container_name: postgres-smr
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_MULTIPLE_DATABASES=cart, category_brand, coupon, discount, flash, orders, payment, product_review, product, product_stock, shop, ticket, upload, users, tickets, keycloak
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
+      - smr-volume:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    container_name: keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: admin
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+    command: start-dev --import-realm
+    depends_on:
+      - postgres
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json
+volumes:
+  smr-volume:

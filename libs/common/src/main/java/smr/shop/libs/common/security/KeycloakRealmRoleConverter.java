@@ -28,7 +28,6 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
         if (roles.isEmpty()) {
             return Collections.emptyList();
         }
-
         return roles.stream()
                 .flatMap(Collection::stream)
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))

@@ -1,0 +1,98 @@
+server:
+  port: 8100
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+  profiles:
+    active: default
+
+  application:
+    name: cart-service
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cart?binaryTransfer=true&reWriteBatchedInserts=true
+    username: postgres
+    password: admin
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    producer:
+      bootstrap-servers: localhost:9091
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      batch-size: 16384
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+
+eureka:
+  instance:
+    hostname: localhost
+    instanceId: ${spring.application.name}:${random.int}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+grpc:
+  server:
+    port: 7100
+
+  client:
+    upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    coupon-service:
+      address: 'discovery:///coupon-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-service:
+      address: 'discovery:///product-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-stock-service:
+      address: 'discovery:///product-stock-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+

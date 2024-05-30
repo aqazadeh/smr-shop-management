@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/1.0/product")
+@RequestMapping("/api/1.0/discount")
 public class DiscountController {
     private final DiscountService discountService;
 
@@ -21,7 +21,7 @@ public class DiscountController {
 
 //    ----------------------------------- Post -----------------------------------
 
-    @PostMapping("/{productId}/discount")
+    @PostMapping("/{productId}/product")
     public ResponseEntity<EmptyResponse> createDiscount(@PathVariable Long productId, @RequestBody DiscountCreateRequest request) {
         discountService.createDiscount(productId, request);
         EmptyResponse emptyResponse = EmptyResponse.builder().message("Discount created successfully").build();
@@ -30,7 +30,7 @@ public class DiscountController {
 
 //    ----------------------------------- Delete -----------------------------------
 
-    @DeleteMapping("/discount/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<EmptyResponse> deleteDiscount(@PathVariable UUID id) {
         discountService.deleteDiscount(id);
         EmptyResponse emptyResponse = EmptyResponse.builder().message("Discount deleted successfully").build();
@@ -39,13 +39,13 @@ public class DiscountController {
 
 //    ----------------------------------- Get -----------------------------------
 
-    @GetMapping("/discount/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DiscountResponse> getDiscountById(@PathVariable UUID id) {
         DiscountResponse discountResponse = discountService.getDiscountById(id);
         return ResponseEntity.ok(discountResponse);
     }
 
-    @GetMapping("/discount/shop/{shopId}")
+    @GetMapping("/shop/{shopId}")
     public ResponseEntity<List<DiscountResponse>> getShopDiscounts(@PathVariable Long shopId,
                                                                    @RequestParam(value = "page", defaultValue = "0") Integer page) {
         List<DiscountResponse> discountResponse = discountService.getShopDiscounts(shopId, page);

@@ -39,7 +39,12 @@ public class CategoryBrandServiceOutboxProcessor {
     @Scheduled(fixedRate = 10000) // run every 10 second
     @Transactional
     public void processOutboxEvents() {
-        List<OutboxEntity> outboxEvents = outboxService.findAll();
+        List<String> events = List.of(MessagingConstants.IMAGE_DELETE_TOPIC,
+                MessagingConstants.BRAND_DELETE_TOPIC,
+                MessagingConstants.CATEGORY_DELETE_TOPIC);
+
+        List<OutboxEntity> outboxEvents = outboxService.findAll(events);
+
         outboxEvents.forEach(outboxEntity -> {
             outboxService.remove(outboxEntity);
             switch (outboxEntity.getEvent()){
@@ -54,6 +59,9 @@ public class CategoryBrandServiceOutboxProcessor {
                 case MessagingConstants.CATEGORY_DELETE_TOPIC -> {
                     CategoryMessageModel uploadMessageModel = OutboxHelper.convertToObject(outboxEntity.getPayload(), CategoryMessageModel.class);
                     categoryDeleteMessagePublisher.publish(uploadMessageModel);
+                }
+                default -> {
+                    throw new RuntimeException("Unsupported outbox event: " + outboxEntity.getEvent());
                 }
             }
         });
