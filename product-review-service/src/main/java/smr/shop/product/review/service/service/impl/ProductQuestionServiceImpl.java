@@ -8,14 +8,15 @@ import org.springframework.stereotype.Service;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.grpc.client.ProductGrpcClient;
+import smr.shop.libs.grpc.client.ShopGrpcClient;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.product.review.service.dto.request.CreateProductQuestionRequest;
 import smr.shop.product.review.service.dto.request.UpdateProductQuestionRequest;
 import smr.shop.product.review.service.dto.response.ProductQuestionResponse;
 import smr.shop.product.review.service.exception.ProductReviewServiceException;
 import smr.shop.product.review.service.mapper.ProductReviewServiceMapper;
 import smr.shop.product.review.service.model.ProductQuestionEntity;
-import smr.shop.product.review.service.model.valueobject.ProductQuestionStatus;
 import smr.shop.product.review.service.repository.ProductQuestionRepository;
 import smr.shop.product.review.service.service.ProductQuestionService;
 
@@ -36,13 +37,16 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
 
     // grpc
     private final ProductGrpcClient productGrpcClient;
+    private final ShopGrpcClient shopGrpcClient;
 
     public ProductQuestionServiceImpl(ProductQuestionRepository productQuestionRepository,
                                       ProductReviewServiceMapper productReviewServiceMapper,
-                                      ProductGrpcClient productGrpcClient) {
+                                      ProductGrpcClient productGrpcClient,
+                                      ShopGrpcClient shopGrpcClient) {
         this.productQuestionRepository = productQuestionRepository;
         this.productReviewServiceMapper = productReviewServiceMapper;
         this.productGrpcClient = productGrpcClient;
+        this.shopGrpcClient = shopGrpcClient;
     }
 
 
@@ -53,10 +57,16 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     public void createProductQuestion(Long productId, CreateProductQuestionRequest request) {
         ProductGrpcResponse productGrpcResponse = productGrpcClient.getProductByProductId(productId);
         ProductQuestionEntity productQuestionEntity = productReviewServiceMapper.createProductQuestionRequestToProductQuestionEntity(request);
-        if (request.getQuestionId() != null) {
-            ProductQuestionEntity parentQuestion = findById(request.getQuestionId());
-            productQuestionEntity.setQuestion(parentQuestion.getQuestion());
-
+        if (request.getParentId() != null) {
+            if (UserHelper.isSeller()) {
+                ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(UserHelper.getUserId().toString());
+                if (shopGrpcResponse.getId() == productGrpcResponse.getShopId()) {
+                    ProductQuestionEntity parentQuestion = findById(request.getParentId());
+                    productQuestionEntity.setParentId(parentQuestion.getId());
+                }
+                throw new ProductReviewServiceException("this product is not yours. you can not answer it", HttpStatus.FORBIDDEN);
+            }
+            throw new ProductReviewServiceException("only sellers can answer the questions", HttpStatus.FORBIDDEN);
         }
         productQuestionEntity.setId(UUID.randomUUID());
         productQuestionEntity.setProductId(productGrpcResponse.getId());
@@ -97,9 +107,7 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     public void deleteProductQuestion(UUID id) {
         ProductQuestionEntity question = findById(id);
         validateQuestion(id, question);
-        question.setStatus(ProductQuestionStatus.DELETED);
-        question.setUpdatedAt(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(ServiceConstants.UTC)));
-        productQuestionRepository.save(question);
+        productQuestionRepository.delete(question);
     }
 
 //    ----------------------------------- Helper -----------------------------------
@@ -110,7 +118,7 @@ public class ProductQuestionServiceImpl implements ProductQuestionService {
     }
 
     private static void validateQuestion(UUID id, ProductQuestionEntity question) {
-        if (!question.getUserId().equals(UserHelper.getUserId()) ) {
+        if (!question.getUserId().equals(UserHelper.getUserId())) {
             throw new ProductReviewServiceException("You dont have a permission to update question with id: " + id, HttpStatus.FORBIDDEN);
         }
     }

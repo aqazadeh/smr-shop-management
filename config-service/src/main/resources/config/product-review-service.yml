@@ -1,5 +1,5 @@
 server:
-  port: 8110
+  port: 8105
 
 management:
   endpoints:
@@ -20,15 +20,14 @@ management:
 spring:
   application:
     name: product-review-service
-  cloud:
-    config:
-      enabled: false
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+
   datasource:
-    url: jdbc:postgresql://localhost:9010/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/product_review?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -49,6 +48,12 @@ spring:
       acks: all
       batch-size: 16384
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+
 eureka:
   instance:
     hostname: localhost
@@ -60,10 +65,9 @@ eureka:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
-
 grpc:
   server:
-    port: 7110
+    port: 7105
 
   client:
     upload-service:

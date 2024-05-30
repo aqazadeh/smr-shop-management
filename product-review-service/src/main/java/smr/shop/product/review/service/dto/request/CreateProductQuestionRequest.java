@@ -15,5 +15,5 @@ public class CreateProductQuestionRequest {
 
     @JsonProperty("question_id")
     @NotNull
-    UUID questionId;
+    UUID parentId;
 }

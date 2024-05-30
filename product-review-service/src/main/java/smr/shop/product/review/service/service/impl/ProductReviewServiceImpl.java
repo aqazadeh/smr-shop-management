@@ -5,16 +5,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ProductReviewMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.outbox.service.OutboxService;
 import smr.shop.product.review.service.dto.request.CreateProductReviewRequest;
 import smr.shop.product.review.service.dto.request.UpdateProductReviewRequest;
 import smr.shop.product.review.service.dto.response.ProductReviewResponse;
 import smr.shop.product.review.service.exception.ProductReviewServiceException;
 import smr.shop.product.review.service.mapper.ProductReviewServiceMapper;
-import smr.shop.product.review.service.message.publisher.ProductRatingChangeMessagePublisher;
-import smr.shop.product.review.service.message.publisher.ProductReviewUpdateMessagePublisher;
 import smr.shop.product.review.service.model.ProductReviewEntity;
 import smr.shop.product.review.service.repository.ProductReviewRepository;
 import smr.shop.product.review.service.service.ProductReviewService;
@@ -30,19 +30,14 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
     private final ProductReviewServiceMapper productReviewServiceMapper;
     private final ProductReviewRepository productReviewRepository;
-
-    // message broker
-    private final ProductRatingChangeMessagePublisher productRatingChangeMessagePublisher;
-    private final ProductReviewUpdateMessagePublisher productReviewUpdateMessagePublisher;
+    private final OutboxService outboxService;
 
     public ProductReviewServiceImpl(ProductReviewServiceMapper productReviewServiceMapper,
                                     ProductReviewRepository productReviewRepository,
-                                    ProductRatingChangeMessagePublisher productRatingChangeMessagePublisher,
-                                    ProductReviewUpdateMessagePublisher productReviewUpdateMessagePublisher) {
+                                    OutboxService outboxService) {
         this.productReviewServiceMapper = productReviewServiceMapper;
         this.productReviewRepository = productReviewRepository;
-        this.productRatingChangeMessagePublisher = productRatingChangeMessagePublisher;
-        this.productReviewUpdateMessagePublisher = productReviewUpdateMessagePublisher;
+        this.outboxService = outboxService;
     }
 
 //    ----------------------------------- Create or Add -----------------------------------
@@ -75,7 +70,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         ProductReviewEntity reviewEntity = productReviewRepository.save(productReviewEntity);
 
         ProductReviewMessageModel productReviewMessageModel = ProductReviewMessageModel.builder().productId(reviewEntity.getProductId()).build();
-        productReviewUpdateMessagePublisher.publish(productReviewMessageModel);
+        outboxService.save(productReviewMessageModel, MessagingConstants.PRODUCT_REVIEW_CHANGE_TOPIC);
     }
 
 
@@ -104,9 +99,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
                 .productId(message.getProductId())
                 .rating(totalRating)
                 .build();
-
-        productRatingChangeMessagePublisher.publish(productReviewMessageModel);
-
+        outboxService.save(productReviewMessageModel, MessagingConstants.PRODUCT_REVIEW_UPDATE_TOPIC);
     }
 
 

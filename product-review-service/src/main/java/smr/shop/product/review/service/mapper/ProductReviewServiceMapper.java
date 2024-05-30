@@ -47,7 +47,7 @@ public class ProductReviewServiceMapper {
                 .userId(productQuestionEntity.getUserId())
                 .productId(productQuestionEntity.getProductId())
                 .question(productQuestionEntity.getQuestion())
-                .questionId(productQuestionEntity.getQuestionId())
+                .parentId(productQuestionEntity.getParentId())
                 .build();
     }
 

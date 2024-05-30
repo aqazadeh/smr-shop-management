@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.OAUTH2,
         flows = @OAuthFlows(
                 authorizationCode = @OAuthFlow(
-                        authorizationUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/auth",
-                        tokenUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/token",
-                        refreshUrl = "http://localhost:8180/realms/microservice-auth/protocol/openid-connect/token",
+                        authorizationUrl = "http://localhost:8180/realms/master/protocol/openid-connect/auth",
+                        tokenUrl = "http://localhost:8180/realms/master/protocol/openid-connect/token",
+                        refreshUrl = "http://localhost:8180/realms/master/protocol/openid-connect/token",
                         scopes = {
                                 @OAuthScope(name = "openid")}
                 )))
