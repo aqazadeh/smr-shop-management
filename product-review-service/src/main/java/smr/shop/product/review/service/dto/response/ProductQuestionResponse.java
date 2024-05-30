@@ -20,5 +20,5 @@ public class ProductQuestionResponse {
     String question;
 
     @JsonProperty("question_id")
-    UUID questionId;
+    UUID parentId;
 }
