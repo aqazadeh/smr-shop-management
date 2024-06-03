@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=admin
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+    volumes:
+      - redis-volume:/root/redis
+volumes:
+  redis-volume:

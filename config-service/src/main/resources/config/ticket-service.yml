@@ -1,5 +1,5 @@
 server:
-  port: 8114
+  port: 8111
 
 management:
   endpoints:
@@ -18,9 +18,14 @@ management:
       show-details: always
 
 spring:
-  cloud:
-    config:
-      enabled: false
+  application:
+    name: ticket-service
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
 
   jpa:
     show-sql: true
@@ -28,18 +33,15 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost:9114/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/ticket?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
-  application:
-    name: ticket-service
 
 
 eureka:
   instance:
     hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
-  #    prefer-ip-address: true
   client:
     register-with-eureka: true
     fetch-registry: true

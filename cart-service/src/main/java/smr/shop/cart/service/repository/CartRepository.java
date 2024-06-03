@@ -28,6 +28,6 @@ public interface CartRepository extends JpaRepository<CartEntity, UUID> {
 
     @Transactional
     @Modifying
-    @Query("update CartEntity c set c.coupon = null where c.coupon = ?1")
-    void removeCouponInCart(String coupon);
+    @Query("update CartEntity c set c.coupon = null where c.id = ?1")
+    void removeCouponInCart(UUID id);
 }

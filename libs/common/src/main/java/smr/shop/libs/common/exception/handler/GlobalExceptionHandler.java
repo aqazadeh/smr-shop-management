@@ -1,17 +1,15 @@
 package smr.shop.libs.common.exception.handler;
 
+import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.GlobalException;
 
@@ -58,5 +56,22 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(exception.getStatusCode()).body(errorResponse);
+    }
+
+    @ExceptionHandler(StatusRuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleStatusRuntimeException(StatusRuntimeException exception) {
+        log.error(exception.getMessage());
+        HttpStatus status;
+        switch (exception.getStatus().getCode()) {
+            case NOT_FOUND -> status = HttpStatus.NOT_FOUND;
+            case INVALID_ARGUMENT -> status = HttpStatus.BAD_REQUEST;
+            default -> status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(status)
+                .message(exception.getMessage())
+                .build();
+
+        return ResponseEntity.status(status).body(errorResponse);
     }
 }

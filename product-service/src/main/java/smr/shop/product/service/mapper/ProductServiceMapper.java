@@ -3,17 +3,24 @@ package smr.shop.product.service.mapper;
 import org.springframework.stereotype.Component;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
 import smr.shop.libs.common.constant.ServiceConstants;
-import smr.shop.libs.grpc.product.ProductGrpcResponse;
+import smr.shop.libs.common.dto.message.ProductStockMessageModel;
 import smr.shop.libs.common.dto.message.StockCreateMessageModel;
+import smr.shop.libs.grpc.brand.BrandGrpcResponse;
+import smr.shop.libs.grpc.category.CategoryGrpcResponse;
+import smr.shop.libs.grpc.product.ProductGrpcResponse;
+import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
+import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductStockRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
-import smr.shop.product.service.dto.response.ProductResponse;
+import smr.shop.product.service.dto.response.*;
 import smr.shop.product.service.model.ProductEntity;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Author: Ali Gadashov
@@ -31,7 +38,6 @@ public class ProductServiceMapper {
                 .name(request.getName())
                 .slug(request.getSlug())
                 .description(request.getDescription())
-                .imageIds(request.getImageIds())
                 .tags(Arrays.asList(request.getTags().split(",")))
                 .price(request.getPrice())
                 .minPrice(request.getMinPrice())
@@ -43,11 +49,12 @@ public class ProductServiceMapper {
 
     }
 
-    public StockCreateMessageModel productStockRequestToStockCreateMessageModel(ProductStockRequest stock) {
-        return StockCreateMessageModel.builder()
+    public StockCreateMessageModel productStockRequestToStockCreateMessageModel(List<ProductStockRequest> stocks) {
+        List<ProductStockMessageModel> productStockMessageModelList = stocks.stream().map(stock -> ProductStockMessageModel.builder()
                 .attributeName(stock.getAttributeName())
                 .quantity(stock.getQuantity())
-                .build();
+                .build()).toList();
+        return StockCreateMessageModel.builder().stocks(productStockMessageModelList).build();
     }
 
     public ProductEntity productUpdateRequestToProductEntity(ProductEntity product, ProductUpdateRequest request) {
@@ -63,7 +70,40 @@ public class ProductServiceMapper {
         return product;
     }
 
-    public ProductResponse productEntityToProductResponse(ProductEntity product) {
+    public ProductResponse productEntityToProductResponse(ProductEntity product,
+                                                          CategoryGrpcResponse categoryGrpcResponse,
+                                                          BrandGrpcResponse brandGrpcResponse,
+                                                          ShopGrpcResponse shopGrpcResponse,
+                                                          DiscountGrpcResponse discountGrpcResponse,
+                                                          List<ProductStockGrpcResponse> productStockGrpcResponse) {
+
+        ProductCategoryResponse categoryResponse = ProductCategoryResponse.builder()
+                .categoryName(categoryGrpcResponse.getName())
+                .categorySlug(categoryGrpcResponse.getSlug())
+                .build();
+        ProductBrandResponse productBrandResponse = ProductBrandResponse.builder()
+                .brandName(brandGrpcResponse.getName()).brandSlug(brandGrpcResponse.getSlug()).brandThumbNail(brandGrpcResponse.getImageUrl()).build();
+        ProductDiscountResponse productDiscountResponse = null;
+        if (product.getDiscountId() != null) {
+            productDiscountResponse = ProductDiscountResponse.builder()
+                    .discountId(UUID.fromString(discountGrpcResponse.getId()))
+                    .discountPrice(discountGrpcResponse.getAmount())
+                    .build();
+        }
+
+        ProductShopResponse productShopResponse = ProductShopResponse.builder()
+                .shopName(shopGrpcResponse.getName())
+                .shopSlug(shopGrpcResponse.getSlug())
+                .shopThumbNail(shopGrpcResponse.getLogo())
+                .build();
+        List<ProductStockResponse> productStockResponseList = productStockGrpcResponse.stream()
+                .map(stock -> ProductStockResponse.builder()
+                        .id(UUID.fromString(stock.getId()))
+                        .name(stock.getName())
+                        .quantity(stock.getQuantity())
+                        .build())
+                .toList();
+
         return ProductResponse.builder()
                 .id(product.getId())
                 .productName(product.getName())
@@ -75,6 +115,11 @@ public class ProductServiceMapper {
                 .price(product.getPrice())
                 .shippingPrice(product.getShippingPrice())
                 .rating(product.getRating())
+                .shopDetail(productShopResponse)
+                .category(categoryResponse)
+                .brand(productBrandResponse)
+                .discount(productDiscountResponse)
+                .stocks(productStockResponseList)
                 .build();
     }
 

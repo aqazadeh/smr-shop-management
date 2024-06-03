@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import smr.shop.libs.common.messaging.BaseMessageModel;
 
+import java.util.List;
+
 /**
  * Author: Ali Gadashov
  * Version: v1.0
@@ -18,8 +20,6 @@ import smr.shop.libs.common.messaging.BaseMessageModel;
 @Data
 public class StockCreateMessageModel implements BaseMessageModel {
 
-    String attributeName;
-
-    Integer quantity;
+    List<ProductStockMessageModel> stocks;
 
 }

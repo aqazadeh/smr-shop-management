@@ -13,7 +13,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("cart")
+                .group("stock")
                 .packagesToScan("smr.shop.product.stock.service.controller")
                 .build();
     }
@@ -21,7 +21,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Product Stock API")
+                .info(new Info().title("Brand Category API")
                         .description("cloud API")
                         .version("1.0")
                         .license(new License().name("Apache 2.0").url("http://div.com")));

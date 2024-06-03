@@ -11,10 +11,10 @@ import smr.shop.libs.common.messaging.listener.MessageListener;
 import smr.shop.product.service.service.ProductService;
 
 @Component
-public class DiscountExpiredMessageListener implements MessageListener<DiscountMessageModel> {
+public class DiscountDeleteMessageListener implements MessageListener<DiscountMessageModel> {
     private final ProductService productService;
 
-    public DiscountExpiredMessageListener(ProductService productService) {
+    public DiscountDeleteMessageListener(ProductService productService) {
         this.productService = productService;
     }
 

@@ -41,6 +41,7 @@ public class ProductResponse {
 
     Double shippingPrice;
 
-    Float rating;
+    List<ProductStockResponse> stocks;
 
+    Float rating;
 }

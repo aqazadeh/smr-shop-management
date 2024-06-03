@@ -1,5 +1,5 @@
 server:
-  port: 8113
+  port: 8109
 
 management:
   endpoints:
@@ -19,11 +19,13 @@ management:
 
 spring:
   application:
-    name: product-service
+    name: product-stock-service
 
-  cloud:
-    config:
-      enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
 
   jpa:
     show-sql: true
@@ -31,7 +33,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost:9113/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/product_stock?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -56,16 +58,18 @@ eureka:
   instance:
     hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
-  #    prefer-ip-address: true
+    prefer-ip-address: true
   client:
-    register-with-eureka: true
+    register-with-eureka: false
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
+
+
 grpc:
   server:
-    port: 7113
+    port: 7109
 
   client:
     upload-service:

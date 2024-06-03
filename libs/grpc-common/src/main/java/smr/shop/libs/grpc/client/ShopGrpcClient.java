@@ -18,7 +18,7 @@ public class ShopGrpcClient {
 //       return shopServiceBlockingStub.getShopByUserId(request);
         return ShopGrpcResponse.newBuilder()
                 .setId(1)
-                .setUserId("4d88de81-c88b-418e-8a9b-7fc2d4cc14ee")
+                .setUserId("151a7daa-2160-4a08-971f-dff2f892cfa4")
                 .setSlug("shop-1")
                 .setName("Shop 1")
                 .setLogo("test-logo")
@@ -30,7 +30,7 @@ public class ShopGrpcClient {
 //        return shopServiceBlockingStub.getShopByShopId(request);
         return ShopGrpcResponse.newBuilder()
                 .setId(1)
-                .setUserId("534b434c-9b56-4ab0-ab4a-9bba004d2f71")
+                .setUserId("151a7daa-2160-4a08-971f-dff2f892cfa4")
                 .setSlug("shop-1")
                 .setName("Shop 1")
                 .setLogo("test-logo")

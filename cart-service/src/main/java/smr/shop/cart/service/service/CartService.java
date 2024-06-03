@@ -28,7 +28,7 @@ public interface CartService {
 
     void deleteCartItem(UUID cartItemId);
 
-    CartResponse getUserCart();
+    CartResponse getUserCart(UUID userId);
 
     void increase(UUID cartItemId);
 

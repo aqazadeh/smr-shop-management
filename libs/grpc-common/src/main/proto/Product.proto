@@ -3,7 +3,6 @@ syntax = "proto3";
 option java_package = "smr.shop.libs.grpc.product";
 option java_multiple_files = true;
 
-import "ProductStock.proto";
 import "Discount.proto";
 import "object/ProductId.proto";
 import "object/ShopId.proto";

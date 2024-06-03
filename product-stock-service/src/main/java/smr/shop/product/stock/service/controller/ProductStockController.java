@@ -3,6 +3,7 @@ package smr.shop.product.stock.service.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.stock.service.dto.request.CreateProductStockRequest;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/1.0/products")
+@RequestMapping("/api/1.0/stocks")
 public class ProductStockController {
     private final ProductStockService productStockService;
 
@@ -24,8 +25,9 @@ public class ProductStockController {
 
 //    ----------------------------------- Post -----------------------------------
 
-    @PostMapping("/stocks")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ROLE_SELLER')")
     public ResponseEntity<EmptyResponse> create(@RequestBody @Valid CreateProductStockRequest request) {
         productStockService.create(request);
         EmptyResponse response = EmptyResponse.builder().message("Product stock created").build();
@@ -34,8 +36,9 @@ public class ProductStockController {
 
 //    ----------------------------------- Put or Patch -----------------------------------
 
-    @PutMapping("/stocks/{stockId}")
+    @PutMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_SELLER')")
     public void updateById(@PathVariable UUID stockId,
                            @RequestBody @Valid UpdateProductStockRequest request) {
         productStockService.update(stockId, request);
@@ -43,22 +46,23 @@ public class ProductStockController {
 
 //    ----------------------------------- Delete -----------------------------------
 
-    @DeleteMapping("/stocks/{stockId}")
+    @DeleteMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_SELLER')")
     public void deleteById(@PathVariable UUID stockId) {
         productStockService.delete(stockId);
     }
 
 //    ----------------------------------- Get -----------------------------------
 
-    @GetMapping("/stocks/{stockId}")
+    @GetMapping("/{stockId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProductStockResponse> getById(@PathVariable UUID stockId) {
         ProductStockResponse productStockResponse = productStockService.getById(stockId);
         return ResponseEntity.ok(productStockResponse);
     }
 
-    @GetMapping("/{productId}/stocks")
+    @GetMapping("/product/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductStockResponse> getByProductId(@PathVariable Long productId) {
         return productStockService.getByProductId(productId);

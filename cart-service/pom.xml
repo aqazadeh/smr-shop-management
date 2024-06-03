@@ -11,7 +11,7 @@
 
     <artifactId>cart-service</artifactId>
     <packaging>jar</packaging>
-
+    <version>1.0-BETA</version>
     <dependencies>
 
         <!-- Spring Boot -->
@@ -115,6 +115,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <!--        Cache-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 </project>

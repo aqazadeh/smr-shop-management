@@ -8,6 +8,7 @@ import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockServiceGrpc;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ProductStockGrpcClient {
@@ -20,14 +21,14 @@ public class ProductStockGrpcClient {
 //        Iterator<ProductStockGrpcResponse> productStockGrpcResponseIterator = productStockServiceBlockingStub.getProductStockByProductId(request);
 //        return GrpcHelper.iteratorToList(productStockGrpcResponseIterator);
         ProductStockGrpcResponse xl = ProductStockGrpcResponse.newBuilder()
-                .setId("df0e1429-71fc-4932-825c-77849b4ccd19")
+                .setId(UUID.randomUUID().toString())
                 .setProductId(1)
                 .setName("xl")
                 .setQuantity(100)
                 .build();
 
         ProductStockGrpcResponse xs = ProductStockGrpcResponse.newBuilder()
-                .setId("9c0e1429-sd44-4932-825c-77849b4ccd19")
+                .setId(UUID.randomUUID().toString())
                 .setProductId(1)
                 .setName("xs")
                 .setQuantity(100)

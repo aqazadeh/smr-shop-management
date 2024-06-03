@@ -3,6 +3,7 @@ package smr.shop.ticket.service.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
@@ -29,12 +30,14 @@ public class TicketController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_SELLER')")
     public CreateTicketRequest add(@RequestBody @Valid CreateTicketRequest request) {
         return ticketService.createTicket(request);
     }
 
     @PostMapping("/{ticketId}/messages/")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_SELLER')")
     public void sendMessage(@PathVariable UUID ticketId,
                             @RequestBody @Valid CreateTicketMessageRequest request) {
         ticketService.sendMessageByUser(ticketId, request);
@@ -42,6 +45,7 @@ public class TicketController {
 
     @PostMapping("/{ticketId}/messages/admin")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void sendMessageByAdmin(@PathVariable UUID ticketId,
                                    @RequestBody @Valid CreateTicketMessageRequest request) {
         ticketService.sendMessageByAdmin(ticketId, request);
@@ -51,6 +55,7 @@ public class TicketController {
 
     @PutMapping("/{ticketId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> updateStatus(@PathVariable UUID ticketId,
                                                       @RequestParam("ticketStatus") @Valid TicketStatus ticketstatus) {
         ticketService.updateTicketStatus(ticketId, ticketstatus);

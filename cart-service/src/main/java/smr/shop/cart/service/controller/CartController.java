@@ -12,6 +12,7 @@ import smr.shop.cart.service.dto.response.CartResponse;
 import smr.shop.cart.service.service.CartService;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.libs.common.dto.response.ErrorResponse;
+import smr.shop.libs.common.helper.UserHelper;
 
 import java.util.UUID;
 
@@ -92,7 +93,8 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Not found!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<CartResponse> getUserCart() {
-        CartResponse cartResponse = cartService.getUserCart();
+        UUID userId = UserHelper.getUserId();
+        CartResponse cartResponse = cartService.getUserCart(userId);
         return ResponseEntity.ok(cartResponse);
     }
 

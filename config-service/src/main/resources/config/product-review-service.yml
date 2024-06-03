@@ -1,5 +1,5 @@
 server:
-  port: 8105
+  port: 8107
 
 management:
   endpoints:
@@ -67,7 +67,7 @@ eureka:
 
 grpc:
   server:
-    port: 7105
+    port: 7107
 
   client:
     upload-service:

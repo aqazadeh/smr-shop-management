@@ -51,6 +51,6 @@ public class ProductCreateRequest {
     Double shippingPrice;
 
     @NotBlank
-    ProductStockRequest stock;
+    List<ProductStockRequest> stocks;
 
 }

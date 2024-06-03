@@ -49,7 +49,8 @@ public class ProductEntity {
 
     private Double shippingPrice;
 
-    private Float rating;
+    @Builder.Default
+    private Float rating = 5.0F;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default

@@ -1,8 +1,8 @@
 package smr.shop.cart.service.dto.response;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -13,16 +13,18 @@ import java.util.UUID;
  * Date: 5/10/2024
  * Time: 1:11 PM
  */
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CartResponse {
-    UUID id;
+public class CartResponse implements Serializable {
+    private UUID id;
 
-    String couponCode;
+    private String couponCode;
 
-    Double price;
+    private Double price;
 
-    BigDecimal discountPrice;
+    private BigDecimal discountPrice;
 
-    List<CartItemResponse> items;
+    private List<CartItemResponse> items;
 }

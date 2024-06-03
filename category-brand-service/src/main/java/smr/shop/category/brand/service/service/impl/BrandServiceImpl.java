@@ -1,5 +1,8 @@
 package smr.shop.category.brand.service.service.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ import smr.shop.category.brand.service.mapper.CategoryBrandServiceMapper;
 import smr.shop.category.brand.service.model.BrandEntity;
 import smr.shop.category.brand.service.repository.BrandRepository;
 import smr.shop.category.brand.service.service.BrandService;
+import smr.shop.libs.common.constant.CacheConstants;
 import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.BrandMessageModel;
@@ -55,6 +59,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
     public void createBrand(BrandCreateRequest request) {
         UploadGrpcResponse uploadGrpcResponse = uploadGrpcClient.getUploadById(request.getImageId().toString());
 
@@ -72,6 +77,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
+    })
     public void updateBrand(Long id, BrandUpdateRequest request) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
@@ -82,6 +91,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
+    })
     public void updateBrandImage(Long id, UUID imageId) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
@@ -100,6 +113,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
+    })
     public void deleteBrand(Long id) {
         BrandEntity brandEntity = findById(id);
         brandEntity.setIsDeleted(Boolean.TRUE);
@@ -111,6 +128,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
+    })
     public void deleteBrandImage(Long id) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
@@ -124,6 +145,7 @@ public class BrandServiceImpl implements BrandService {
 //    ----------------------------------- Get -----------------------------------
 
     @Override
+    @Cacheable(value = CacheConstants.BRAND_LIST, key = "#page", sync = true)
     public List<BrandResponse> getAllBrands(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         return brandRepository.findAllByIsDeletedFalse(pageable).map(categoryBrandServiceMapper::brandEntityToBrandResponse).toList();
@@ -131,6 +153,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
+    @Cacheable(value = CacheConstants.BRAND, key = "#id", sync = true)
     public BrandResponse getBrand(Long id) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
@@ -138,6 +161,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable(value = CacheConstants.BRAND, key = "#request.id", sync = true)
     public BrandGrpcResponse getBrandInformation(BrandGrpcId request) {
         BrandEntity brandEntity = findById(request.getId());
         return categoryBrandServiceMapper.brandEntityToBrandGrpcResponse(brandEntity);

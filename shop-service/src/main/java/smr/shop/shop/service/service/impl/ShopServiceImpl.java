@@ -5,15 +5,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.ShopMessageModel;
 import smr.shop.libs.common.dto.message.UploadMessageModel;
 import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 import smr.shop.libs.grpc.client.UploadGrpcClient;
 import smr.shop.libs.grpc.object.ShopGrpcId;
 import smr.shop.libs.grpc.object.UserGrpcId;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
+import smr.shop.libs.outbox.service.OutboxService;
 import smr.shop.shop.service.dto.request.CreateShopRequest;
 import smr.shop.shop.service.dto.request.UpdateShopAddressRequest;
 import smr.shop.shop.service.dto.request.UpdateShopRequest;
@@ -21,11 +24,8 @@ import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
 import smr.shop.shop.service.exception.ShopServiceException;
 import smr.shop.shop.service.mapper.ShopServiceMapper;
-import smr.shop.shop.service.message.publisher.ImageDeleteMessagePublisher;
-import smr.shop.shop.service.message.publisher.ShopStatusChangeMessagePublisher;
 import smr.shop.shop.service.model.ShopEntity;
 import smr.shop.shop.service.model.valueobject.ShopAddress;
-import smr.shop.libs.common.model.valueobject.ShopStatus;
 import smr.shop.shop.service.repository.ShopRepository;
 import smr.shop.shop.service.service.ShopService;
 
@@ -45,20 +45,16 @@ public class ShopServiceImpl implements ShopService {
     // rpc
     private final UploadGrpcClient uploadGrpcClient;
 
-    // message Broker
-    private final ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher;
-    private final ImageDeleteMessagePublisher imageDeleteMessagePublisher;
+    private final OutboxService outboxService;
 
     public ShopServiceImpl(ShopRepository shopRepository,
                            ShopServiceMapper shopServiceMapper,
                            UploadGrpcClient uploadGrpcClient,
-                           ShopStatusChangeMessagePublisher shopStatusChangeMessagePublisher,
-                           ImageDeleteMessagePublisher imageDeleteMessagePublisher) {
+                           OutboxService outboxService) {
         this.shopRepository = shopRepository;
         this.shopServiceMapper = shopServiceMapper;
         this.uploadGrpcClient = uploadGrpcClient;
-        this.shopStatusChangeMessagePublisher = shopStatusChangeMessagePublisher;
-        this.imageDeleteMessagePublisher = imageDeleteMessagePublisher;
+        this.outboxService = outboxService;
     }
 
 
@@ -100,7 +96,7 @@ public class ShopServiceImpl implements ShopService {
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         ShopEntity savedShopEntity = shopRepository.save(shopEntity);
         ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
-        shopStatusChangeMessagePublisher.publish(shopMessageModel);
+        outboxService.save(shopMessageModel, MessagingConstants.SHOP_STATUS_CHANGE_TOPIC);
     }
 
     @Override
@@ -114,7 +110,7 @@ public class ShopServiceImpl implements ShopService {
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         shopRepository.save(shopEntity);
         UploadMessageModel uploadMessageModel = shopServiceMapper.shopEntityToUploadMessageModel(oldImage);
-        imageDeleteMessagePublisher.publish(uploadMessageModel);
+        outboxService.save(uploadMessageModel, MessagingConstants.IMAGE_DELETE_TOPIC);
     }
 
     @Override
@@ -143,7 +139,7 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(shopEntity);
         ShopEntity savedShopEntity = shopRepository.save(shopEntity);
         ShopMessageModel shopMessageModel = shopServiceMapper.shopEntityToShopMessageModel(savedShopEntity);
-        shopStatusChangeMessagePublisher.publish(shopMessageModel);
+        outboxService.save(shopMessageModel, MessagingConstants.SHOP_STATUS_CHANGE_TOPIC);
     }
 
     @Override
@@ -156,7 +152,7 @@ public class ShopServiceImpl implements ShopService {
         shopEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         ShopEntity savedShopEntity = shopRepository.save(shopEntity);
         UploadMessageModel uploadMessageModel = shopServiceMapper.shopEntityToUploadMessageModel(savedShopEntity.getLogo());
-        imageDeleteMessagePublisher.publish(uploadMessageModel);
+        outboxService.save(uploadMessageModel, MessagingConstants.IMAGE_DELETE_TOPIC);
     }
 
 //    ----------------------------------- Get -----------------------------------

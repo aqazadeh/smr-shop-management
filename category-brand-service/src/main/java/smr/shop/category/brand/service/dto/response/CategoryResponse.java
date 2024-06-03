@@ -1,8 +1,11 @@
 package smr.shop.category.brand.service.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,17 +14,19 @@ import java.util.List;
  * Date: 5/14/2024
  * Time: 4:27 PM
  */
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CategoryResponse {
+public class CategoryResponse implements Serializable {
 
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    String slug;
+    private String slug;
 
-    String description;
+    private String description;
 
-    List<CategoryResponse> children;
+    private List<CategoryResponse> children;
 }

@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
 import smr.shop.libs.common.constant.ServiceConstants;
-import smr.shop.libs.common.dto.message.CategoryMessageModel;
-import smr.shop.libs.common.dto.message.DiscountMessageModel;
-import smr.shop.libs.common.dto.message.RatingMessageModel;
-import smr.shop.libs.common.dto.message.ShopMessageModel;
+import smr.shop.libs.common.dto.message.*;
 import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
@@ -21,7 +18,6 @@ import smr.shop.libs.grpc.product.ShopProductGrpcId;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
-import smr.shop.libs.common.dto.message.StockCreateMessageModel;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
 import smr.shop.product.service.dto.response.ProductResponse;
@@ -43,8 +39,6 @@ import java.util.List;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
-
-    // TODO Fix discount id problem
 
     // repository
     private final ProductRepository productRepository;
@@ -93,8 +87,9 @@ public class ProductServiceImpl implements ProductService {
         BrandGrpcResponse brandGrpcResponse = brandGrpcClient.getBrandByBrandId(request.getBrandId());
         UploadGrpcResponse uploadGrpcResponse = uploadGrpcClient.getUploadById(request.getThumbnail());
         ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(UserHelper.getUserId().toString());
-
+        List<String> images = request.getImageIds().stream().map(imageId -> uploadGrpcClient.getUploadById(imageId).getUrl()).toList();
         ProductEntity product = productServiceMapper.productCreateRequestToProductEntity(request);
+        product.setImageIds(images);
         product.setShopId(shopGrpcResponse.getId());
         product.setCategoryId(categoryGrpcResponse.getId());
         product.setBrandId(brandGrpcResponse.getId());
@@ -102,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
 
-        StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStock());
+        StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStocks());
         productStockCreateMessagePublisher.publish(model);
     }
 
@@ -182,30 +177,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getProductById(Long productId) {
         ProductEntity product = findById(productId);
-        CategoryGrpcResponse categoryGrpcResponse = categoryGrpcClient.getCategoryById(product.getCategoryId());
-        BrandGrpcResponse brandGrpcResponse = brandGrpcClient.getBrandByBrandId(product.getBrandId());
-        ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByShopId(product.getShopId());
-        DiscountGrpcResponse discountGrpcResponse = null;
-        if (product.getDiscountId() != null) {
-            discountGrpcResponse = discountGrpcClient.getDiscountById(product.getDiscountId().toString());
-        }
-        List<ProductStockGrpcResponse> productStockGrpcResponse = productStockGrpcClient.getProductsStockByProductId(product.getId());
-
-        //TODO set other information's   productResponse
-        return productServiceMapper.productEntityToProductResponse(product);
+        return getProductResponse(product);
     }
 
     @Override
     public ProductResponse getProductBySlug(String slug) {
         ProductEntity product = productRepository.findBySlug(slug);
-        return productServiceMapper.productEntityToProductResponse(product);
+        return getProductResponse(product);
     }
 
     @Override
     public List<ProductResponse> getAllProducts(Integer page) {
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<ProductEntity> productEntities = productRepository.findAll(pageable).stream().toList();
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+        return productEntities.stream().map(this::getProductResponse).toList();
     }
 
     @Override
@@ -251,7 +236,7 @@ public class ProductServiceImpl implements ProductService {
         BrandGrpcResponse brandGrpcResponse = brandGrpcClient.getBrandByBrandId(brandId);
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<ProductEntity> productEntities = productRepository.findAllByBrandId(brandGrpcResponse.getId(), pageable).stream().toList();
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+        return productEntities.stream().map(this::getProductResponse).toList();
 
     }
 
@@ -260,7 +245,7 @@ public class ProductServiceImpl implements ProductService {
         CategoryGrpcResponse categoryGrpcResponse = categoryGrpcClient.getCategoryById(categoryId);
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<ProductEntity> productEntities = productRepository.findAllByCategoryId(categoryGrpcResponse.getId(), pageable).stream().toList();
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+        return productEntities.stream().map(this::getProductResponse).toList();
     }
 
     @Override
@@ -268,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
         ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByShopId(shopId);
         Pageable pageable = PageRequest.of(page, ServiceConstants.pageSize);
         List<ProductEntity> productEntities = productRepository.findAllByShopId(shopGrpcResponse.getId(), pageable).stream().toList();
-        return productEntities.stream().map(productServiceMapper::productEntityToProductResponse).toList();
+        return productEntities.stream().map(this::getProductResponse).toList();
     }
 
 // --------------------------------------- Update ---------------------------------------
@@ -329,5 +314,17 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    private ProductResponse getProductResponse(ProductEntity product) {
+        CategoryGrpcResponse categoryGrpcResponse = categoryGrpcClient.getCategoryById(product.getCategoryId());
+        BrandGrpcResponse brandGrpcResponse = brandGrpcClient.getBrandByBrandId(product.getBrandId());
+        ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByShopId(product.getShopId());
+        DiscountGrpcResponse discountGrpcResponse = null;
+        if (product.getDiscountId() != null) {
+            discountGrpcResponse = discountGrpcClient.getDiscountById(product.getDiscountId().toString());
+        }
+        List<ProductStockGrpcResponse> productStockGrpcResponse = productStockGrpcClient.getProductsStockByProductId(product.getId());
+
+        return productServiceMapper.productEntityToProductResponse(product, categoryGrpcResponse, brandGrpcResponse, shopGrpcResponse, discountGrpcResponse, productStockGrpcResponse);
+    }
 
 }

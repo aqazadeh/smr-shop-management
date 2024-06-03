@@ -2,6 +2,7 @@ package smr.shop.product.service.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
@@ -19,7 +20,7 @@ import java.util.List;
  * Time: 6:42 AM
  */
 @RestController
-@RequestMapping("/api/1.0/product")
+@RequestMapping("/api/1.0/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -32,6 +33,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> createProduct(@RequestBody ProductCreateRequest request){
         productService.createProduct(request);
         EmptyResponse response = EmptyResponse.builder().message("successfully created product").build();
@@ -40,6 +42,7 @@ public class ProductController {
 
     @PostMapping("/{productId}/thumbnail/{imageId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> addProductThumbNail(@PathVariable Long productId,
                                                              @PathVariable String imageId){
         productService.addProductThumbNail(productId, imageId);
@@ -50,6 +53,7 @@ public class ProductController {
 
     @PostMapping("/{productId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> addProductImage(@PathVariable Long productId,
                                                          @PathVariable String imageId){
 
@@ -60,8 +64,9 @@ public class ProductController {
 
 //    ---------------------------------- PATCH ----------------------------------
 
-    @PatchMapping("/{productId}")
+    @PutMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> updateProduct(@PathVariable Long productId,
                                                        @RequestBody ProductUpdateRequest request){
         productService.updateProduct(productId, request);
@@ -69,8 +74,9 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{productId}/category/{categoryId}")
+    @PutMapping("/{productId}/category/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse>  updateProductCategory(@PathVariable Long productId,
                                                                 @PathVariable Long categoryId){
         productService.updateProductCategory(productId, categoryId);
@@ -78,8 +84,9 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{productId}/brand/{brandId}")
+    @PutMapping("/{productId}/brand/{brandId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> updateProductBrand(@PathVariable Long productId,
                                                             @PathVariable Long brandId){
         productService.updateProductBrand(productId, brandId);
@@ -87,8 +94,9 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{productId}/status")
+    @PutMapping("/{productId}/status")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> updateProductStatus(@PathVariable Long productId,
                                                              @RequestParam ProductStatus productStatus){
         productService.updateProductStatus(productId, productStatus);
@@ -101,6 +109,7 @@ public class ProductController {
 
     @DeleteMapping("/{productId}/thumbnail")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> removeProductThumbNail(@PathVariable Long productId){
         productService.removeProductThumbNail(productId);
         EmptyResponse response = EmptyResponse.builder().message("successfully removed thumbnail from product productId:" + productId).build();
@@ -110,6 +119,7 @@ public class ProductController {
 
     @DeleteMapping("/{productId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> removeProductImage(@PathVariable Long productId,
                                                             @PathVariable String imageId){
         productService.removeProductImage(productId,imageId);
@@ -119,6 +129,7 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<EmptyResponse> deleteProduct(@PathVariable Long productId){
         productService.deleteProduct(productId);
         EmptyResponse response = EmptyResponse.builder().message("successfully deleted product productId:" + productId).build();
@@ -129,7 +140,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProductResponse> getBrandProducts(@PathVariable Long productId){
+    public ResponseEntity<ProductResponse> getProductId(@PathVariable Long productId){
         ProductResponse productById = productService.getProductById(productId);
         return ResponseEntity.ok(productById);
 

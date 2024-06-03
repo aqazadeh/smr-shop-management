@@ -19,6 +19,8 @@ public final class MessagingConstants {
 
     public static final String PRODUCT_DELETE_TOPIC = "product-delete-topic";
 
+    public static final String CREATE_STOCK_TOPIC = "create-stock-topic";
+
     public static final String PRODUCT_STOCK_DELETE_TOPIC = "product-stock-delete-topic";
 
     public static final String SHOP_STATUS_CHANGE_TOPIC = "shop-status-change-topic";

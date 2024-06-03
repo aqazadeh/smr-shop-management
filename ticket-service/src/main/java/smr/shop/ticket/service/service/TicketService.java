@@ -4,6 +4,7 @@ import smr.shop.ticket.service.dto.request.CreateTicketMessageRequest;
 import smr.shop.ticket.service.dto.request.CreateTicketRequest;
 import smr.shop.ticket.service.dto.response.TicketMessageResponse;
 import smr.shop.ticket.service.dto.response.TicketResponse;
+import smr.shop.ticket.service.model.Ticket;
 import smr.shop.ticket.service.model.valueobject.TicketStatus;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface TicketService {
     void sendMessageByUser(UUID ticketId, CreateTicketMessageRequest request); //check ticket is valid user
     void updateTicketStatus(UUID ticketId, TicketStatus status);
     void sendMessageByAdmin(UUID ticketId,CreateTicketMessageRequest request);
+
+    Ticket getById(UUID id);
 }

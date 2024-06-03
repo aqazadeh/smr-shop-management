@@ -11,5 +11,12 @@ services:
       - 9100
     volumes:
       - cart-volume:/var/lib/postgresql/data
+
+  cart-service:
+    image: aqazadeh/cart-service:1.0-BETA
+    ports:
+      - "8100:8100"
+    environment:
+      - CONFIG_SERVER_URL: http://192.168.0.150/
 volumes:
   cart-volume:
