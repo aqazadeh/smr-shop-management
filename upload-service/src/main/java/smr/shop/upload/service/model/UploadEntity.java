@@ -14,15 +14,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Upload {
+public class UploadEntity {
     @Id
     private UUID id;
 
-    private String fileOriginalName;
-
-    private Integer fileSize;
-
-    private String extension;
+    private String url;
 
     private UploadStatus status;
 

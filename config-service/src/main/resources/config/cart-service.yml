@@ -26,7 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/master
+          issuer-uri: http://192.168.0.150:8180/realms/master
 
   cache:
     type: redis
@@ -42,7 +42,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost/cart?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://192.168.0.150:5432/cart?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -65,7 +65,7 @@ spring:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: 192.168.0.150
     instanceId: ${spring.application.name}:${random.int}
   client:
     register-with-eureka: true

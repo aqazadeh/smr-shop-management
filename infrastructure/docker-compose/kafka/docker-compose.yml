@@ -50,7 +50,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker-1:29091,EXTERNAL://localhost:9091
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1 # change if so many brokers have
-      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_NUM_PARTITIONS: 1
     networks:
       - kafka
 

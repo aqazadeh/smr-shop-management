@@ -1,16 +1,4 @@
 services:
-  upload-service-postgres:
-    container_name: postgres
-    image: postgres:16
-    ports:
-      - "9017:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
-    expose:
-      - 9017
-    volumes:
-      - upload-volume:/var/lib/postgresql/data
 
 
   minio:

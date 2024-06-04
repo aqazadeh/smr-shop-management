@@ -6,6 +6,20 @@ spring:
     config:
       enabled: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/master
+
+  cache:
+    type: redis
+    host: localhost
+    port: 6379
+    password: admin
+    redis:
+      time-to-live: 60000
+
   kafka:
     consumer:
       bootstrap-servers: localhost:9091
@@ -22,6 +36,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       acks: all
       batch-size: 16384
+    streams:
+      replication-factor: 1
 
   jpa:
     show-sql: true
@@ -45,6 +61,14 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+
+minio:
+  endpoint: http://localhost:9050
+  access-key: minio-admin
+  secret-key: minio-admin
+
+
 
 grpc:
   server:

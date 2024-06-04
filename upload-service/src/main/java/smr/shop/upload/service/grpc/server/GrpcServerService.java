@@ -1,4 +1,4 @@
-package smr.shop.upload.service.grpc;
+package smr.shop.upload.service.grpc.server;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -18,7 +18,7 @@ public class GrpcServerService extends UploadServiceGrpc.UploadServiceImplBase {
 
     @Override
     public void getUploadById(UploadGrpcId request, StreamObserver<UploadGrpcResponse> responseObserver) {
-        uploadService.error();
+//        UploadGrpcResponse response = uploadService.findImageById(request);
         UploadGrpcResponse response = UploadGrpcResponse.newBuilder()
                 .setId("asdasdas")
                 .setUrl("sdhajhkfb").build();
