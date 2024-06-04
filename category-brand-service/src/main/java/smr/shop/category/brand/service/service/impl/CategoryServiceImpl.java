@@ -1,5 +1,6 @@
 package smr.shop.category.brand.service.service.impl;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -18,6 +19,7 @@ import smr.shop.category.brand.service.service.CategoryService;
 import smr.shop.libs.common.constant.CacheConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.CategoryMessageModel;
+import smr.shop.libs.common.helper.Slugify;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
 import smr.shop.libs.grpc.object.CategoryGrpcId;
 
@@ -40,12 +42,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryDeleteMessagePublisher categoryDeleteMessagePublisher;
 
+    private final CacheManager cacheManager;
+
     public CategoryServiceImpl(CategoryRepository categoryRepository,
                                CategoryBrandServiceMapper categoryBrandServiceMapper,
-                               CategoryDeleteMessagePublisher categoryDeleteMessagePublisher) {
+                               CategoryDeleteMessagePublisher categoryDeleteMessagePublisher,
+                               CacheManager cacheManager) {
         this.categoryRepository = categoryRepository;
         this.categoryBrandServiceMapper = categoryBrandServiceMapper;
         this.categoryDeleteMessagePublisher = categoryDeleteMessagePublisher;
+        this.cacheManager = cacheManager;
     }
 
 //    ----------------------------------- Create or Add -----------------------------------
@@ -59,7 +65,9 @@ public class CategoryServiceImpl implements CategoryService {
             CategoryEntity parentCategoryEntity = findById(request.getParentId());
             validateCategory(parentCategoryEntity);
             categoryEntity.setParent(parentCategoryEntity);
+            cacheManager.getCache(CacheConstants.CATEGORY).evict(categoryEntity.getParent());
         }
+        categoryEntity.setSlug(Slugify.make(categoryEntity.getName()));
         categoryEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         categoryEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         categoryRepository.save(categoryEntity);
@@ -71,6 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.CATEGORY, key = "#categoryId"),
+            @CacheEvict(value = CacheConstants.CATEGORY_GRPC, key = "#categoryId"),
             @CacheEvict(value = CacheConstants.CATEGORY_LIST, allEntries = true)
     })
     public void updateCategory(Long categoryId, CategoryUpdateRequest request) {
@@ -82,8 +91,10 @@ public class CategoryServiceImpl implements CategoryService {
             validateCategory(parentCategoryEntity);
             updatedCategory.setParent(parentCategoryEntity);
         }
+        categoryEntity.setSlug(Slugify.make(categoryEntity.getName()));
         categoryEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         categoryRepository.save(updatedCategory);
+        clearParentCache(categoryEntity);
     }
 
 //    ----------------------------------- Get -----------------------------------
@@ -123,6 +134,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.CATEGORY, key = "#categoryId"),
+            @CacheEvict(value = CacheConstants.CATEGORY_GRPC, key = "#categoryId"),
             @CacheEvict(value = CacheConstants.CATEGORY_LIST, allEntries = true)
     })
     public void deleteCategory(Long categoryId) {
@@ -133,6 +145,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(categoryEntity);
         CategoryMessageModel categoryMessageModel = categoryBrandServiceMapper.categoryEntityToCategoryMessageModel(categoryEntity);
         categoryDeleteMessagePublisher.publish(categoryMessageModel);
+        clearParentCache(categoryEntity);
     }
 
 //    ----------------------------------- Extra -----------------------------------
@@ -145,6 +158,17 @@ public class CategoryServiceImpl implements CategoryService {
     private void validateCategory(CategoryEntity categoryEntity) {
         if (categoryEntity.getIsDeleted().equals(Boolean.TRUE)) {
             throw new CategoryBrandServiceException("Category is deleted With id : " + categoryEntity.getId(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void clearParentCache(CategoryEntity categoryEntity) {
+        CategoryEntity parent = categoryEntity.getParent();
+        if (parent != null) {
+            cacheManager.getCache(CacheConstants.CATEGORY).evict(parent.getId());
+            cacheManager.getCache(CacheConstants.CATEGORY_GRPC).evict(parent.getId());
+            if (parent.getParent() != null) {
+                clearParentCache(parent.getParent());
+            }
         }
     }
 

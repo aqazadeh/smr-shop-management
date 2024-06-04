@@ -19,7 +19,7 @@ public class BrandEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
+    private String name;
 
     private String imageUrl;
 

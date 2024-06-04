@@ -1,5 +1,8 @@
 package smr.shop.coupon.service.service.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import smr.shop.coupon.service.model.CouponEntity;
 import smr.shop.coupon.service.repository.CouponRepository;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.coupon.service.service.CouponUsageService;
+import smr.shop.libs.common.constant.CacheConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.dto.message.ShopMessageModel;
@@ -76,52 +80,41 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public void createCouponWithAdmin(CouponCreateRequest request) {
-        CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
-        validateCoupon(couponEntity);
-        couponEntity.setId(UUID.randomUUID());
-        couponEntity.setType(CouponType.ALL);
-        couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        couponRepository.save(couponEntity);
-    }
-
-    @Override
-    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.COUPONS, allEntries = true)
+    })
     public void createCoupon(CouponCreateRequest request) {
         UUID userId = UserHelper.getUserId();
-        ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(userId.toString());
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
-        validateCoupon(couponEntity);
         couponEntity.setId(UUID.randomUUID());
-        couponEntity.setType(CouponType.SHOP);
-        couponEntity.setShopId(shopGrpcResponse.getId());
+        validateCoupon(couponEntity);
+
+        if(UserHelper.isAdmin()){
+            couponEntity.setType(CouponType.ALL);
+        } else if (UserHelper.isSeller()) {
+            ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(userId.toString());
+            couponEntity.setType(CouponType.SHOP);
+            couponEntity.setShopId(shopGrpcResponse.getId());
+        }
         couponEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         couponRepository.save(couponEntity);
+
     }
 
 //    ----------------------------------- Update -----------------------------------
 
-    @Override
-    @Transactional
-    public void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request) {
-        CouponEntity couponEntity = findById(couponId);
-        couponEntity.setAmount(null);
-        couponEntity.setPercentage(null);
-        CouponEntity couponEntityUpdated = couponMapper.couponUpdateRequestToCouponEntity(request, couponEntity);
-        validateCoupon(couponEntityUpdated);
-        couponEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        couponRepository.save(couponEntityUpdated);
-    }
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.COUPONS, allEntries = true)
+    })
     public void updateCoupon(UUID couponId, CouponUpdateRequest request) {
         UUID userId = UserHelper.getUserId();
         ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(userId.toString());
         CouponEntity couponEntity = findById(couponId);
-        if (!couponEntity.getShopId().equals(shopGrpcResponse.getId())) {
+        if (!couponEntity.getShopId().equals(shopGrpcResponse.getId()) && !UserHelper.isAdmin()) {
             throw new CouponServiceException("you dont have a access to update coupon with id: " + couponId, HttpStatus.NOT_FOUND);
         }
         couponEntity.setAmount(null);
@@ -140,7 +133,8 @@ public class CouponServiceImpl implements CouponService {
         UUID userId = UserHelper.getUserId();
         ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(userId.toString());
         CouponEntity couponEntity = findById(couponId);
-        if (!couponEntity.getShopId().equals(shopGrpcResponse.getId())) {
+
+        if (!couponEntity.getShopId().equals(shopGrpcResponse.getId()) && !UserHelper.isAdmin()) {
             throw new CouponServiceException("you dont have a access to delete coupon with id: " + couponId, HttpStatus.NOT_FOUND);
         }
         couponEntity.setIsDeleted(Boolean.TRUE);
@@ -149,14 +143,11 @@ public class CouponServiceImpl implements CouponService {
         couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
     }
 
-    @Override
-    @Transactional
-    public void deleteCouponWithAdmin(UUID couponId) {
-        CouponEntity couponEntity = findById(couponId);
-        couponEntity.setIsDeleted(Boolean.TRUE);
-        couponEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
-        couponRepository.save(couponEntity);
-        couponDeleteMessagePublisher.publish(CouponMessageModel.builder().id(couponId).build());
+    public void deleteCoupons(ShopMessageModel message) {
+        Long shopId = message.getId();
+        if (message.getStatus() != ShopStatus.CONFIRMED) {
+            couponRepository.updateIsDeletedTrueByShopIdAndIsDeletedFalse(shopId);
+        }
     }
 
 //    ----------------------------------- Get -----------------------------------
@@ -176,25 +167,15 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    @Cacheable(value = CacheConstants.COUPON, key = "#couponId.toString()", sync = true)
     public CouponResponse getCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
 
         return couponMapper.couponEntityToCouponResponse(couponEntity);
     }
 
-//    ----------------------------------- Extra -----------------------------------
-
     @Override
-    public CouponEntity findById(UUID couponId) {
-        return couponRepository.findByIdAndIsDeletedFalse(couponId).orElseThrow(() -> new CouponServiceException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public CouponEntity findByCode(String couponCode) {
-        return couponRepository.findByCode(couponCode).orElseThrow(() -> new CouponServiceException("Coupon Not found With code : " + couponCode, HttpStatus.NOT_FOUND));
-    }
-
-    @Override
+    @Cacheable(value = CacheConstants.USER_CART, key = "#userId.toString()", sync = true)
     public CouponGrpcResponse getCouponDetail(CouponGrpcCode couponGrpcCode) {
         CouponEntity couponEntity;
         couponEntity = findByCode(couponGrpcCode.getCode());
@@ -210,12 +191,16 @@ public class CouponServiceImpl implements CouponService {
         return CouponUsageGrpcResponse.newBuilder().setIsUsed(isCouponUsed).build();
     }
 
+//    ----------------------------------- Extra -----------------------------------
+
     @Override
-    public void deleteCoupons(ShopMessageModel message) {
-        Long shopId = message.getId();
-        if (message.getStatus() != ShopStatus.CONFIRMED) {
-            couponRepository.updateIsDeletedTrueByShopIdAndIsDeletedFalse(shopId);
-        }
+    public CouponEntity findById(UUID couponId) {
+        return couponRepository.findByIdAndIsDeletedFalse(couponId).orElseThrow(() -> new CouponServiceException("Coupon Not found With id : " + couponId, HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public CouponEntity findByCode(String couponCode) {
+        return couponRepository.findByCode(couponCode).orElseThrow(() -> new CouponServiceException("Coupon Not found With code : " + couponCode, HttpStatus.NOT_FOUND));
     }
 
     private Boolean isCouponExpired(CouponEntity couponEntity) {

@@ -1,5 +1,6 @@
 package smr.shop.category.brand.service.service.impl;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -21,6 +22,7 @@ import smr.shop.libs.common.constant.MessagingConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.BrandMessageModel;
 import smr.shop.libs.common.dto.message.UploadMessageModel;
+import smr.shop.libs.common.helper.Slugify;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.client.UploadGrpcClient;
 import smr.shop.libs.grpc.object.BrandGrpcId;
@@ -44,15 +46,18 @@ public class BrandServiceImpl implements BrandService {
     //grpc clients
     private final UploadGrpcClient uploadGrpcClient;
 
+    private final CacheManager cacheManager;
 
     public BrandServiceImpl(BrandRepository brandRepository,
                             CategoryBrandServiceMapper categoryBrandServiceMapper,
                             OutboxService outboxService,
-                            UploadGrpcClient uploadGrpcClient) {
+                            UploadGrpcClient uploadGrpcClient,
+                            CacheManager cacheManager) {
         this.brandRepository = brandRepository;
         this.categoryBrandServiceMapper = categoryBrandServiceMapper;
         this.outboxService = outboxService;
         this.uploadGrpcClient = uploadGrpcClient;
+        this.cacheManager = cacheManager;
     }
 
 //    ----------------------------------- Create or Add -----------------------------------
@@ -64,6 +69,7 @@ public class BrandServiceImpl implements BrandService {
         UploadGrpcResponse uploadGrpcResponse = uploadGrpcClient.getUploadById(request.getImageId().toString());
 
         BrandEntity brandEntity = categoryBrandServiceMapper.brandCreateResponseToBrandEntity(request);
+        brandEntity.setSlug(Slugify.make(brandEntity.getName()));
         brandEntity.setImageUrl(uploadGrpcResponse.getUrl());
         brandEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
@@ -79,12 +85,14 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_GRPC, key = "#id"),
             @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
     })
     public void updateBrand(Long id, BrandUpdateRequest request) {
         BrandEntity brandEntity = findById(id);
         validateBrand(brandEntity);
         BrandEntity brandEntityUpdated = categoryBrandServiceMapper.brandUpdateRequestToBrandEntity(request, brandEntity);
+        brandEntity.setSlug(Slugify.make(brandEntityUpdated.getSlug()));
         brandEntityUpdated.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
         brandRepository.save(brandEntityUpdated);
     }
@@ -93,6 +101,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_GRPC, key = "#id"),
             @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
     })
     public void updateBrandImage(Long id, UUID imageId) {
@@ -115,6 +124,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_GRPC, key = "#id"),
             @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
     })
     public void deleteBrand(Long id) {
@@ -130,6 +140,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConstants.BRAND, key = "#id"),
+            @CacheEvict(value = CacheConstants.BRAND_GRPC, key = "#id"),
             @CacheEvict(value = CacheConstants.BRAND_LIST, allEntries = true)
     })
     public void deleteBrandImage(Long id) {
@@ -161,7 +172,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    @Cacheable(value = CacheConstants.BRAND, key = "#request.id", sync = true)
+    @Cacheable(value = CacheConstants.BRAND_GRPC, key = "#request.id", sync = true)
     public BrandGrpcResponse getBrandInformation(BrandGrpcId request) {
         BrandEntity brandEntity = findById(request.getId());
         return categoryBrandServiceMapper.brandEntityToBrandGrpcResponse(brandEntity);
