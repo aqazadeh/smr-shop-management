@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import smr.shop.libs.common.dto.response.EmptyResponse;
@@ -34,8 +35,9 @@ public class ShopController {
 
 //    ----------------------------------- Post -----------------------------------
 
-    @PostMapping
+    @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Operation(summary = "Created shop", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
@@ -72,6 +74,7 @@ public class ShopController {
 
     @PutMapping("/{shopId}/status")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Updated shop status", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
@@ -89,6 +92,7 @@ public class ShopController {
 
     @PutMapping("/{shopId}/address")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_SELLER')")
     @Operation(summary = "Updated shop address", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
@@ -106,6 +110,7 @@ public class ShopController {
 
     @PutMapping("/{shopId}/image/{imageId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_SELLER')")
     @Operation(summary = "Updated shop logo", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
@@ -125,6 +130,7 @@ public class ShopController {
 
     @DeleteMapping("/{shopId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SELLER')")
     @Operation(summary = "Deleted shop", description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),

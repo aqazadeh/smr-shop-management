@@ -15,10 +15,9 @@ class SecurityConfig {
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/stocks/**").permitAll()
-                .anyRequest()
-                .authenticated());
+                .anyRequest().authenticated());
         http.oauth2ResourceServer((oauth2) -> oauth2
                 .jwt(Customizer.withDefaults()));
         return http.build();

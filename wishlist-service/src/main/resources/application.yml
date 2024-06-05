@@ -1,5 +1,5 @@
 server:
-  port: 8117
+  port: 8080
 
 management:
   endpoints:
@@ -22,12 +22,27 @@ spring:
     config:
       enabled: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.0.160:8180/realms/master
+          jwk-set-uri: http://localhost:8180/realms/master/protocol/openid-connect/certs
+
+  cache:
+    type: redis
+    host: localhost
+    port: 6379
+    password: admin
+    redis:
+      time-to-live: 60000
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:9017/postgres?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/wishlist?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
   application:
