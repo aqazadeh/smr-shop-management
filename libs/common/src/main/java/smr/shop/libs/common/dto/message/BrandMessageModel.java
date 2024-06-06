@@ -15,7 +15,7 @@ import smr.shop.libs.common.messaging.BaseMessageModel;
 public class BrandMessageModel implements BaseMessageModel {
     private Long id;
 
-    private String firstName;
+    private String name;
 
     private String imageUrl;
 

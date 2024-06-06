@@ -5,7 +5,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_MULTIPLE_DATABASES=cart, category_brand, coupon, discount, flash, orders, payment, product_review, product, product_stock, shop, ticket, upload, users, tickets, keycloak
+      - POSTGRES_MULTIPLE_DATABASES=cart, category_brand, coupon, discount, flash, orders, payment, product_review, product, product_stock, shop, ticket, upload, users, tickets, wishlist, keycloak
     ports:
       - "5432:5432"
     volumes:

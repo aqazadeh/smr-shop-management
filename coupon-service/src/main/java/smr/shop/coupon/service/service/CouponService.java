@@ -22,17 +22,14 @@ import java.util.UUID;
 
 public interface CouponService {
 
-    void createCouponWithAdmin(CouponCreateRequest request);
 
     void createCoupon(CouponCreateRequest request);
 
     void updateCoupon(UUID couponId, CouponUpdateRequest request);
 
-    void updateCouponWithAdmin(UUID couponId, CouponUpdateRequest request);
 
     void deleteCoupon(UUID couponId);
 
-    void deleteCouponWithAdmin(UUID couponId);
 
     List<CouponResponse> getAllCoupons(Integer page);
 

@@ -56,22 +56,6 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/admin")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "ADMIN Create coupon", description = "")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Authentication required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Permission required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    public ResponseEntity<EmptyResponse> createCouponWithAdmin(@RequestBody @Valid CouponCreateRequest request) {
-        couponService.createCouponWithAdmin(request);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Coupon created successfully!")
-                .build();
-        return ResponseEntity.ok(response);
-    }
 
 //    ----------------------------------- Patch -----------------------------------
 
@@ -93,24 +77,6 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/admin/{couponId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "ADMIN update Coupon with couponId", description = "")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Updated successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Authentication required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Permission required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not found!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    public ResponseEntity<EmptyResponse> updateCouponWithAdmin(@PathVariable UUID couponId, @RequestBody @Valid CouponUpdateRequest request) {
-        couponService.updateCouponWithAdmin(couponId, request);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Coupon updated successfully with id: " + couponId)
-                .build();
-        return ResponseEntity.ok(response);
-    }
-
 //    ----------------------------------- Delete -----------------------------------
 
     @DeleteMapping("/{couponId}")
@@ -125,25 +91,6 @@ public class CouponController {
     })
     public ResponseEntity<EmptyResponse> deleteCoupon(@PathVariable UUID couponId) {
         couponService.deleteCoupon(couponId);
-        EmptyResponse response = EmptyResponse.builder()
-                .message("Coupon deleted successfully with id: " + couponId)
-                .build();
-        return ResponseEntity.ok(response);
-    }
-
-
-    @DeleteMapping("/admin/{couponId}")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @Operation(summary = "ADMIN delete Coupon with id", description = "")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deleted successfully!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmptyResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Authentication required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Permission required!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not found!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    public ResponseEntity<EmptyResponse> deleteCouponWithAdmin(@PathVariable UUID couponId) {
-        couponService.deleteCouponWithAdmin(couponId);
         EmptyResponse response = EmptyResponse.builder()
                 .message("Coupon deleted successfully with id: " + couponId)
                 .build();
