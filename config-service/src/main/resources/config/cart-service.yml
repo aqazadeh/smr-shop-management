@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 management:
   endpoints:
     web:
@@ -23,15 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://192.168.0.160:8180/realms/master
-
-  cache:
-    type: redis
-    host: localhost
-    port: 6379
-    password: admin
-    redis:
-      time-to-live: 60000
+          issuer-uri: http://localhost:8180/realms/master
 
   jpa:
     show-sql: true
@@ -39,7 +34,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://192.168.0.160:5432/cart?binaryTransfer=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/cart?binaryTransfer=true&reWriteBatchedInserts=true
     username: postgres
     password: admin
 
@@ -62,14 +57,14 @@ spring:
 
 eureka:
   instance:
-    hostname: 192.168.0.175
+    hostname: localhost
     instanceId: ${spring.application.name}:${random.int}
 #    prefer-ip-address: true
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://192.168.0.160:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 grpc:
   server:
