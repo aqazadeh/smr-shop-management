@@ -1,7 +1,5 @@
 package smr.shop.cart.service.service.impl;
 
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +14,6 @@ import smr.shop.cart.service.model.CartItemEntity;
 import smr.shop.cart.service.repository.CartItemRepository;
 import smr.shop.cart.service.repository.CartRepository;
 import smr.shop.cart.service.service.CartService;
-import smr.shop.libs.common.constant.CacheConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.CouponMessageModel;
 import smr.shop.libs.common.dto.message.ProductMessageModel;
@@ -35,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,17 +62,13 @@ public class CartServiceImpl implements CartService {
     private final CouponGrpcClient couponGrpcClient;
 
 
-    // cache
-    private final CacheManager cacheManager;
-
     public CartServiceImpl(CartRepository cartRepository,
                            CartItemRepository cartItemRepository,
                            CartServiceMapper cartServiceMapper,
                            CartServiceHelper cartServiceHelper,
                            ProductGrpcClient productGrpcClient,
                            ProductStockGrpcClient productStockGrpcClient,
-                           CouponGrpcClient couponGrpcClient,
-                           CacheManager cacheManager) {
+                           CouponGrpcClient couponGrpcClient) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.cartServiceMapper = cartServiceMapper;
@@ -84,7 +76,6 @@ public class CartServiceImpl implements CartService {
         this.productGrpcClient = productGrpcClient;
         this.productStockGrpcClient = productStockGrpcClient;
         this.couponGrpcClient = couponGrpcClient;
-        this.cacheManager = cacheManager;
     }
 
 
@@ -129,7 +120,6 @@ public class CartServiceImpl implements CartService {
                     .build();
         }
         cartItemRepository.save(cartItem);
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
     }
 
     @Override
@@ -140,7 +130,6 @@ public class CartServiceImpl implements CartService {
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseGet(CartEntity::new);
         cartEntity.setCoupon(couponDetailWithCode.getCode());
         cartRepository.save(cartEntity);
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
     }
 
     @Override
@@ -153,7 +142,6 @@ public class CartServiceImpl implements CartService {
         }
         cartItemEntity.setQuantity(cartItemEntity.getQuantity() + 1);
         cartItemRepository.save(cartItemEntity);
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
 
     }
 
@@ -169,7 +157,6 @@ public class CartServiceImpl implements CartService {
             cartEntity.setCoupon(null);
             cartRepository.save(cartEntity);
         }
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
     }
 
     @Override
@@ -178,7 +165,6 @@ public class CartServiceImpl implements CartService {
         UUID userId = UserHelper.getUserId();
         Optional<CartEntity> cartEntity = cartRepository.findByUserId(userId);
         cartEntity.ifPresent(entity -> cartItemRepository.deleteAllByCartId(entity.getId()));
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
 
     }
 
@@ -191,7 +177,6 @@ public class CartServiceImpl implements CartService {
             throw new CartServiceException("Item not found with id:" + cartItemId, HttpStatus.NOT_FOUND);
         }
         cartItemRepository.deleteById(cartItemId);
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
 
     }
 
@@ -209,7 +194,6 @@ public class CartServiceImpl implements CartService {
         } else {
             deleteCartItem(cartItemEntity.getId());
         }
-        Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(userId);
 
     }
 
@@ -217,27 +201,20 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void removeItemByProduct(ProductMessageModel productMessageModel) {
         Long productId = productMessageModel.getId();
-        cartItemRepository.findByProductId(productId).forEach(item -> {
-            Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(item.getUserId().toString());
-            cartItemRepository.delete(item);
-        });
+        cartItemRepository.deleteAll(cartItemRepository.findByProductId(productId));
     }
 
     @Override
     @Transactional
     public void removeItemByStock(ProductStockMessageModel productStockMessageModel) {
         UUID stockId = productStockMessageModel.getId();
-        cartItemRepository.findByStockId(stockId).forEach(item -> {
-            Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(item.getUserId().toString());
-            cartItemRepository.delete(item);
-        });
+        cartItemRepository.deleteAll(cartItemRepository.findByStockId(stockId));
     }
 
     @Override
     @Transactional
     public void removeCouponInItems(CouponMessageModel message) {
         cartRepository.findByCoupon(message.getCode()).forEach(cart -> {
-            Objects.requireNonNull(cacheManager.getCache(CacheConstants.USER_CART)).evict(cart.getUserId().toString());
             cartRepository.removeCouponInCart(cart.getId());
         });
     }
@@ -245,7 +222,6 @@ public class CartServiceImpl implements CartService {
 //    ----------------------------------- Get -----------------------------------
 
     @Override
-    @Cacheable(value = CacheConstants.USER_CART, key = "#userId.toString()", sync = true)
     public CartResponse getUserCart(UUID userId) {
         Optional<CartEntity> cart = cartRepository.findByUserId(userId);
         CartEntity cartEntity;

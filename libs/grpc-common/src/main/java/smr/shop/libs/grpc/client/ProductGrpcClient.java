@@ -16,37 +16,19 @@ public class ProductGrpcClient {
 
     public ProductGrpcResponse getProductByProductId(Long productId) {
         ProductGrpcId request = ProductGrpcId.newBuilder().setId(productId).build();
-//        return productServiceBlockingStub.getProductById(request);
-        return ProductGrpcResponse.newBuilder()
-                .setId(1)
-                .setSlug("product-1")
-                .setShopId(1)
-                .setPrice(110)
-                .setShippingPrice(3)
-                .setName("Product 1")
-                .setThumbnail("test-image")
-                .setDiscount(DiscountGrpcResponse.newBuilder()
-                        .setId("1d017d73-f356-4454-89d7-5123a6c26804")
-                        .setAmount(5)
-                        .build())
-                .build();
-    }
-
-
-    public ProductGrpcResponse getProductByShopId(ShopGrpcId productGrpcRequest) {
-//        return productServiceBlockingStub.getProductByShopId(productGrpcRequest);
-        return ProductGrpcResponse.newBuilder()
-                .setId(1)
-                .setSlug("product-1")
-                .setShopId(1)
-                .setPrice(110)
-                .setShippingPrice(3)
-                .setName("Product 1")
-                .setThumbnail("test-image")
-                .setDiscount(DiscountGrpcResponse.newBuilder()
-                        .setId("1d017d73-f356-4454-89d7-5123a6c26804")
-                        .setAmount(5)
-                        .build())
-                .build();
+        return productServiceBlockingStub.getProductById(request);
+//        return ProductGrpcResponse.newBuilder()
+//                .setId(1)
+//                .setSlug("product-1")
+//                .setShopId(1)
+//                .setPrice(110)
+//                .setShippingPrice(3)
+//                .setName("Product 1")
+//                .setThumbnail("test-image")
+//                .setDiscount(DiscountGrpcResponse.newBuilder()
+//                        .setId("1d017d73-f356-4454-89d7-5123a6c26804")
+//                        .setAmount(5)
+//                        .build())
+//                .build();
     }
 }

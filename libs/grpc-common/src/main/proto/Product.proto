@@ -5,7 +5,6 @@ option java_multiple_files = true;
 
 import "Discount.proto";
 import "object/ProductId.proto";
-import "object/ShopId.proto";
 
 message ProductGrpcResponse {
   int64 id = 1;
@@ -18,13 +17,8 @@ message ProductGrpcResponse {
   DiscountGrpcResponse discount = 8;
 }
 
-message ShopProductGrpcId{
-  ProductGrpcId product = 1;
-  ShopGrpcId shop = 2;
-}
 
 
 service ProductService {
   rpc getProductById(ProductGrpcId) returns (ProductGrpcResponse);
-  rpc getProductByShopId(ShopProductGrpcId) returns (ProductGrpcResponse);
 }

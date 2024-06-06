@@ -2,13 +2,14 @@ package smr.shop.libs.grpc.client;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
+import smr.shop.libs.common.helper.GrpcHelper;
 import smr.shop.libs.grpc.object.ProductGrpcId;
 import smr.shop.libs.grpc.object.ProductStockGrpcId;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockServiceGrpc;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class ProductStockGrpcClient {
@@ -18,32 +19,13 @@ public class ProductStockGrpcClient {
 
     public List<ProductStockGrpcResponse> getProductsStockByProductId(Long productId) {
         ProductGrpcId request = ProductGrpcId.newBuilder().setId(productId).build();
-//        Iterator<ProductStockGrpcResponse> productStockGrpcResponseIterator = productStockServiceBlockingStub.getProductStockByProductId(request);
-//        return GrpcHelper.iteratorToList(productStockGrpcResponseIterator);
-        ProductStockGrpcResponse xl = ProductStockGrpcResponse.newBuilder()
-                .setId(UUID.randomUUID().toString())
-                .setProductId(1)
-                .setName("xl")
-                .setQuantity(100)
-                .build();
-
-        ProductStockGrpcResponse xs = ProductStockGrpcResponse.newBuilder()
-                .setId(UUID.randomUUID().toString())
-                .setProductId(1)
-                .setName("xs")
-                .setQuantity(100)
-                .build();
-        return List.of(xl, xs);
+        Iterator<ProductStockGrpcResponse> productStockGrpcResponseIterator =
+                productStockServiceBlockingStub.getProductStockByProductId(request);
+        return GrpcHelper.iteratorToList(productStockGrpcResponseIterator);
     }
 
     public ProductStockGrpcResponse getProductByStockId(String stockId) {
         ProductStockGrpcId request = ProductStockGrpcId.newBuilder().build();
-//        return productStockServiceBlockingStub.getProductStockId(request);
-        return ProductStockGrpcResponse.newBuilder()
-                .setId("df0e1429-71fc-4932-825c-77849b4ccd19")
-                .setProductId(1)
-                .setName("xl")
-                .setQuantity(100)
-                .build();
+        return productStockServiceBlockingStub.getProductStockId(request);
     }
 }

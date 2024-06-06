@@ -1,8 +1,5 @@
 package smr.shop.category.brand.service.service.impl;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +12,6 @@ import smr.shop.category.brand.service.messaging.publisher.CategoryDeleteMessage
 import smr.shop.category.brand.service.model.CategoryEntity;
 import smr.shop.category.brand.service.repository.CategoryRepository;
 import smr.shop.category.brand.service.service.CategoryService;
-import smr.shop.libs.common.constant.CacheConstants;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.CategoryMessageModel;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
@@ -52,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheConstants.CATEGORY_LIST, allEntries = true)
     public void createCategory(CategoryCreateRequest request) {
         CategoryEntity categoryEntity = categoryBrandServiceMapper.categoryCreateRequestToCategoryEntity(request);
         if (request.getParentId() != null) {
@@ -69,10 +64,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = CacheConstants.CATEGORY, key = "#categoryId"),
-            @CacheEvict(value = CacheConstants.CATEGORY_LIST, allEntries = true)
-    })
     public void updateCategory(Long categoryId, CategoryUpdateRequest request) {
         CategoryEntity categoryEntity = findById(categoryId);
         validateCategory(categoryEntity);
@@ -89,7 +80,6 @@ public class CategoryServiceImpl implements CategoryService {
 //    ----------------------------------- Get -----------------------------------
 
     @Override
-    @Cacheable(value = CacheConstants.CATEGORY, key = "#categoryId", sync = true)
     public CategoryResponse getCategoryById(Long categoryId) {
         CategoryEntity categoryEntity = findById(categoryId);
         validateCategory(categoryEntity);
@@ -97,21 +87,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = CacheConstants.CATEGORY, key = "#slug", sync = true)
     public CategoryResponse getCategoryBySlug(String slug) {
         CategoryEntity category = categoryRepository.findBySlug(slug);
         return categoryBrandServiceMapper.categoryEntityToCategoryResponse(category);
     }
 
     @Override
-    @Cacheable(value = CacheConstants.CATEGORY_LIST, sync = true)
     public List<CategoryResponse> getAllCategories() {
         List<CategoryEntity> categories = categoryRepository.findByParentIdIsNullAndIsDeletedFalse();
         return categories.stream().map(categoryBrandServiceMapper::categoryEntityToCategoryResponse).toList();
     }
 
     @Override
-    @Cacheable(value = CacheConstants.CATEGORY, key = "#request.id", sync = true)
     public CategoryGrpcResponse getCategoryInformation(CategoryGrpcId request) {
         CategoryEntity categoryEntity = findById(request.getId());
         return categoryBrandServiceMapper.categoryEntityToCategoryGrpcResponse(categoryEntity);
@@ -121,10 +108,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = CacheConstants.CATEGORY, key = "#categoryId"),
-            @CacheEvict(value = CacheConstants.CATEGORY_LIST, allEntries = true)
-    })
     public void deleteCategory(Long categoryId) {
         CategoryEntity categoryEntity = findById(categoryId);
         validateCategory(categoryEntity);

@@ -14,14 +14,6 @@ public class BrandGrpcClient {
 
     public BrandGrpcResponse getBrandByBrandId(Long brandId) {
         BrandGrpcId request = BrandGrpcId.newBuilder().setId(brandId).build();
-//        return brandServiceBlockingStub.getBrandByBrandId(request);
-
-        return BrandGrpcResponse.newBuilder()
-                .setId(1)
-                .setName("brand 1")
-                .setSlug("brand-1")
-                .setDescription("brand description")
-                .setImageUrl("test-image")
-                .build();
+        return brandServiceBlockingStub.getBrandByBrandId(request);
     }
 }
