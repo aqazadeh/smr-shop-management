@@ -18,10 +18,7 @@ public class GrpcServerService extends UploadServiceGrpc.UploadServiceImplBase {
 
     @Override
     public void getUploadById(UploadGrpcId request, StreamObserver<UploadGrpcResponse> responseObserver) {
-//        UploadGrpcResponse response = uploadService.findImageById(request);
-        UploadGrpcResponse response = UploadGrpcResponse.newBuilder()
-                .setId("asdasdas")
-                .setUrl("sdhajhkfb").build();
+        UploadGrpcResponse response = uploadService.getImageById(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

@@ -11,18 +11,6 @@ public class GlobalGrpcExceptionHandler {
 
     @GrpcExceptionHandler(GlobalException.class)
     public StatusException handleGrpcException(GlobalException exception) {
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
-        System.out.println(exception.getStatus());
         Status status;
         switch (exception.getStatus()) {
             case NOT_FOUND -> {

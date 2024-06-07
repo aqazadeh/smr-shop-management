@@ -1,6 +1,7 @@
 package smr.shop.coupon.service.grpc.server;
 
 import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import smr.shop.coupon.service.service.CouponService;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
@@ -9,7 +10,7 @@ import smr.shop.libs.grpc.coupon.CouponUsageGrpcResponse;
 import smr.shop.libs.grpc.object.CouponGrpcCode;
 import smr.shop.libs.grpc.object.CouponUsageGrpc;
 
-@Service
+@GrpcService
 public class CouponGrpcServer extends CouponServiceGrpc.CouponServiceImplBase {
 
     private final CouponService couponService;

@@ -2,14 +2,12 @@ package smr.shop.libs.common.exception.handler;
 
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.GlobalException;
 
@@ -60,7 +58,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(StatusRuntimeException.class)
     public ResponseEntity<ErrorResponse> handleStatusRuntimeException(StatusRuntimeException exception) {
-        log.error(exception.getMessage());
+        String message = exception.getMessage();
+        String string = message.split(":")[0];
+        message = message.replace(string + ":", "").trim();
+
+        log.error(message, exception);
         HttpStatus status;
         switch (exception.getStatus().getCode()) {
             case NOT_FOUND -> status = HttpStatus.NOT_FOUND;
@@ -69,7 +71,7 @@ public class GlobalExceptionHandler {
         }
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(status)
-                .message(exception.getMessage())
+                .message(message)
                 .build();
 
         return ResponseEntity.status(status).body(errorResponse);

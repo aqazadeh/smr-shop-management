@@ -1,6 +1,7 @@
 package smr.shop.shop.service.grpc.server;
 
 import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Component;
 import smr.shop.libs.grpc.object.ShopGrpcId;
 import smr.shop.libs.grpc.object.UserGrpcId;
@@ -8,7 +9,7 @@ import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.product.shop.ShopServiceGrpc;
 import smr.shop.shop.service.service.ShopService;
 
-@Component
+@GrpcService
 public class ShopGrpcServerService extends ShopServiceGrpc.ShopServiceImplBase {
     private final ShopService shopService;
 

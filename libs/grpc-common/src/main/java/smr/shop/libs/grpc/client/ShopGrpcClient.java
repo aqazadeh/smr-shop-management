@@ -19,7 +19,7 @@ public class ShopGrpcClient {
     }
 
     public ShopGrpcResponse getShopByShopId(Long shopId) {
-        ShopGrpcId request = ShopGrpcId.newBuilder().build();
+        ShopGrpcId request = ShopGrpcId.newBuilder().setId(shopId).build();
         return shopServiceBlockingStub.getShopByShopId(request);
     }
 }
