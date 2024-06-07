@@ -6,7 +6,6 @@ import smr.shop.libs.common.dto.message.RatingMessageModel;
 import smr.shop.libs.common.dto.message.ShopMessageModel;
 import smr.shop.libs.grpc.object.ProductGrpcId;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
-import smr.shop.libs.grpc.product.ShopProductGrpcId;
 import smr.shop.product.service.dto.request.ProductCreateRequest;
 import smr.shop.product.service.dto.request.ProductUpdateRequest;
 import smr.shop.product.service.dto.response.ProductResponse;
@@ -67,5 +66,4 @@ public interface ProductService {
 
     ProductGrpcResponse getProductInformation(ProductGrpcId request);
 
-    ProductGrpcResponse getProductInformation(ShopProductGrpcId request);
 }

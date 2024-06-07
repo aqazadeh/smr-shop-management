@@ -1,8 +1,6 @@
 package smr.shop.user.service.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -16,11 +14,10 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class UserAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
-    UUID userId;
-    String name;
-    String street;
-    String city;
-    String state;
+    private UUID id;
+    private UUID userId;
+    private String name;
+    private String street;
+    private String city;
+    private String state;
 }

@@ -2,8 +2,8 @@ package smr.shop.shop.service.dto.response;
 
 import lombok.Builder;
 import lombok.Value;
-import smr.shop.shop.service.model.valueobject.ShopAddress;
 import smr.shop.libs.common.model.valueobject.ShopStatus;
+import smr.shop.shop.service.model.valueobject.ShopAddress;
 
 @Value
 @Builder

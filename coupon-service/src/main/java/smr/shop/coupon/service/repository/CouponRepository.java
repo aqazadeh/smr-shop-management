@@ -1,6 +1,5 @@
 package smr.shop.coupon.service.repository;
 
-import com.netflix.appinfo.ApplicationInfoManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

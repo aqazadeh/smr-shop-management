@@ -1,5 +1,6 @@
 package smr.shop.shop.service.service;
 
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 import smr.shop.libs.grpc.object.ShopGrpcId;
 import smr.shop.libs.grpc.object.UserGrpcId;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
@@ -9,7 +10,6 @@ import smr.shop.shop.service.dto.request.UpdateShopRequest;
 import smr.shop.shop.service.dto.response.ShopAddressResponse;
 import smr.shop.shop.service.dto.response.ShopResponse;
 import smr.shop.shop.service.model.ShopEntity;
-import smr.shop.libs.common.model.valueobject.ShopStatus;
 
 import java.util.List;
 import java.util.UUID;

@@ -15,8 +15,6 @@ import smr.shop.libs.common.dto.message.UploadMessageModel;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
 
-import java.util.List;
-
 @Component
 public class CategoryBrandServiceMapper {
     public BrandEntity brandCreateResponseToBrandEntity(BrandCreateRequest request) {

@@ -2,6 +2,7 @@ package smr.shop.user.service.service.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import smr.shop.libs.common.helper.UserHelper;
 import smr.shop.user.service.dto.request.CreateUserAddressRequest;
 import smr.shop.user.service.dto.request.UpdateUserAddressRequest;
 import smr.shop.user.service.dto.response.GetUserAddressResponse;
@@ -11,7 +12,6 @@ import smr.shop.user.service.mapper.UserAddressServiceMapper;
 import smr.shop.user.service.model.UserAddress;
 import smr.shop.user.service.repository.UserAddressRepository;
 import smr.shop.user.service.service.UserAddressService;
-import smr.shop.libs.common.helper.UserHelper;
 
 import java.util.List;
 import java.util.UUID;

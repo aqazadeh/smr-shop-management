@@ -2,8 +2,8 @@ package smr.shop.gateway.service.configuration;
 
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.route.RouteDefinition;
+import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

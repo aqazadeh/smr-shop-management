@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8100
 
 management:
   endpoints:
@@ -19,14 +19,12 @@ management:
 
 spring:
 
-  application:
-    name: cart-service
-
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8180/realms/master
+          jwk-set-uri: http://localhost:8180/realms/master/protocol/openid-connect/certs
 
   jpa:
     show-sql: true
@@ -72,8 +70,8 @@ grpc:
 
   client:
 
-    upload-service:
-      address: 'discovery:///upload-service'
+    category-brand-service:
+      address: 'discovery:///category-brand-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
@@ -84,8 +82,8 @@ grpc:
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
-    product-service:
-      address: 'discovery:///product-service'
+    discount-service:
+      address: 'discovery:///discount-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
@@ -96,12 +94,28 @@ grpc:
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
+    shop-service:
+      address: 'discovery:///shop-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-service:
+      address: 'discovery:///product-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    upload-service:
+      address: 'discovery:///upload-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
 
 springdoc:
-
   api-docs:
     enabled: true
-
   swagger-ui:
     operations-sorter: method
     tags-sorter: alpha

@@ -1,5 +1,5 @@
 server:
-  port: 8110
+  port: 8108
 
 management:
   endpoints:
@@ -18,14 +18,13 @@ management:
       show-details: always
 
 spring:
-  application:
-    name: shop-service
 
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8180/realms/master
+          jwk-set-uri: http://localhost:8180/realms/master/protocol/openid-connect/certs
 
   jpa:
     show-sql: true
@@ -63,15 +62,60 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 grpc:
   server:
-    port: 7110
+    port: 7108
 
   client:
+
+    category-brand-service:
+      address: 'discovery:///category-brand-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    coupon-service:
+      address: 'discovery:///coupon-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    discount-service:
+      address: 'discovery:///discount-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-stock-service:
+      address: 'discovery:///product-stock-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    shop-service:
+      address: 'discovery:///shop-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    product-service:
+      address: 'discovery:///product-service'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
     upload-service:
       address: 'discovery:///upload-service'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha

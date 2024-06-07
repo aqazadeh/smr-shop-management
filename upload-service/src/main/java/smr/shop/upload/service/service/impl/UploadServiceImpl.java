@@ -1,6 +1,9 @@
 package smr.shop.upload.service.service.impl;
 
-import io.minio.*;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
+import io.minio.ObjectWriteResponse;
+import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
@@ -92,7 +95,10 @@ public class UploadServiceImpl implements UploadService {
     @Override
     @Transactional
     public void delete(UploadMessageModel message) {
-        UploadEntity uploadEntity = findImageById(message.getImageUrl());
+        String imageUrl = message.getImageUrl();
+        String[] split = imageUrl.split("/");
+        String object = split[split.length - 1];
+        UploadEntity uploadEntity = findImageById(object);
         uploadEntity.setStatus(UploadStatus.DELETED);
         uploadRepository.save(uploadEntity);
     }

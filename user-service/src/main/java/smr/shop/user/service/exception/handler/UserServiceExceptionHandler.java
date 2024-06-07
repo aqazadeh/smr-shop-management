@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import smr.shop.user.service.exception.UserServiceException;
 import smr.shop.libs.common.dto.response.ErrorResponse;
 import smr.shop.libs.common.exception.handler.GlobalExceptionHandler;
+import smr.shop.user.service.exception.UserServiceException;
 
 @RestControllerAdvice
 @Slf4j

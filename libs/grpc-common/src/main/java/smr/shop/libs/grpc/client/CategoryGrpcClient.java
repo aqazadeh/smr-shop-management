@@ -9,7 +9,7 @@ import smr.shop.libs.grpc.object.CategoryGrpcId;
 @Component
 public class CategoryGrpcClient {
 
-    @GrpcClient("category-service")
+    @GrpcClient("category-brand-service")
     public CategoryServiceGrpc.CategoryServiceBlockingStub categoryServiceBlockingStub;
 
     public CategoryGrpcResponse getCategoryById(Long categoryId){

@@ -6,8 +6,8 @@ import smr.shop.coupon.service.dto.request.CouponUpdateRequest;
 import smr.shop.coupon.service.dto.response.CouponResponse;
 import smr.shop.coupon.service.model.CouponEntity;
 import smr.shop.coupon.service.model.CouponUsageEntity;
-import smr.shop.libs.common.model.valueobject.CouponDiscountType;
 import smr.shop.libs.common.dto.message.UseCouponMessageModel;
+import smr.shop.libs.common.model.valueobject.CouponDiscountType;
 import smr.shop.libs.grpc.coupon.CouponGrpcResponse;
 
 import java.util.UUID;

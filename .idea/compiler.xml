@@ -20,14 +20,12 @@
         <module name="discovery-service" />
         <module name="grpc-common" />
         <module name="ticket-service" />
-        <module name="payment-service" />
         <module name="common" />
         <module name="outbox-common" />
         <module name="discount-service" />
         <module name="gateway-service" />
         <module name="product-review-service" />
         <module name="upload-service" />
-        <module name="order-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -38,6 +36,8 @@
       <module name="infrastructure" target="17" />
       <module name="kafka" target="17" />
       <module name="notification-service" target="17" />
+      <module name="order-service" target="17" />
+      <module name="payment-service" target="17" />
       <module name="rpc" target="17" />
     </bytecodeTargetLevel>
   </component>

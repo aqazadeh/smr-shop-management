@@ -14,7 +14,6 @@ import smr.shop.libs.grpc.category.CategoryGrpcResponse;
 import smr.shop.libs.grpc.client.*;
 import smr.shop.libs.grpc.object.ProductGrpcId;
 import smr.shop.libs.grpc.product.ProductGrpcResponse;
-import smr.shop.libs.grpc.product.ShopProductGrpcId;
 import smr.shop.libs.grpc.product.shop.ShopGrpcResponse;
 import smr.shop.libs.grpc.product.stock.ProductStockGrpcResponse;
 import smr.shop.libs.grpc.upload.UploadGrpcResponse;
@@ -203,17 +202,6 @@ public class ProductServiceImpl implements ProductService {
         return productServiceMapper.productEntityToProductGrpcResponse(productEntity, discountGrpcResponse);
     }
 
-    @Override
-    public ProductGrpcResponse getProductInformation(ShopProductGrpcId request) {
-        ProductEntity productEntity = productRepository.findByIdAndShopId(request.getProduct().getId(), request.getShop().getId())
-                .orElseThrow(() ->
-                        new ProductServiceException("product not found with productId: %s and shopId: %s".formatted(request.getProduct().getId(), request.getShop().getId()), HttpStatus.NOT_FOUND));
-        DiscountGrpcResponse discountGrpcResponse = null;
-        if (productEntity.getDiscountId() != null) {
-            discountGrpcResponse = discountGrpcClient.getDiscountById(productEntity.getDiscountId().toString());
-        }
-        return productServiceMapper.productEntityToProductGrpcResponse(productEntity, discountGrpcResponse);
-    }
 
     @Override
     @Transactional

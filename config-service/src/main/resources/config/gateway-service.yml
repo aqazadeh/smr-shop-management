@@ -21,6 +21,9 @@ spring:
   application:
     name: gateway-service
 
+  http2:
+    enabled: true
+
   cloud:
 
     discovery:
@@ -42,7 +45,7 @@ spring:
         - id: coupon-service
           uri: lb://coupon-service
           predicates:
-            - Path=/api/1.0/coupon/**, /v3/api-docs/coupon
+            - Path=/api/1.0/coupons/**, /v3/api-docs/coupon
 
         - id: discount-service
           uri: lb://discount-service
@@ -54,30 +57,20 @@ spring:
           predicates:
             - Path=/api/1.0/flash/**, /v3/api-docs/flash
 
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=/api/1.0/orders/**, /v3/api-docs/order
-
-        - id: payment-service
-          uri: lb://payment-service
-          predicates:
-            - Path=/api/1.0/payments/**, /v3/api-docs/payment
-
         - id: product-review-service
           uri: lb://product-review-service
           predicates:
-            - Path=/api/1.0/product/review/**, /v3/api-docs/product-review
+            - Path=/api/1.0/review/**, /api/1.0/question/**, /v3/api-docs/product-review
 
-        - id: products-service
-          uri: lb://products-service
+        - id: product-service
+          uri: lb://product-service
           predicates:
             - Path=/api/1.0/products/**, /v3/api-docs/product
 
         - id: product-stock-service
           uri: lb://product-stock-service
           predicates:
-            - Path=/api/1.0/product/stock/**, /v3/api-docs/product-stock
+            - Path=/api/1.0/stocks/**, /v3/api-docs/stock
 
         - id: shop-service
           uri: lb://shop-service
@@ -89,20 +82,20 @@ spring:
           predicates:
             - Path=/api/1.0/tickets/**, /v3/api-docs/ticket
 
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/1.0/user/**, /v3/api-docs/user
+
         - id: upload-service
           uri: lb://upload-service
           predicates:
             - Path=/api/1.0/uploads/**, /v3/api-docs/upload
 
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/1.0/users/**, /v3/api-docs/user
-
         - id: wishlist-service
           uri: lb://wishlist-service
           predicates:
-            - Path=/api/1.0/wishlists/**, /v3/api-docs/wishlist
+            - Path=/api/1.0/wishlist/**, /v3/api-docs/wishlist
 
 eureka:
   instance:
@@ -113,3 +106,15 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      default:
+        registerHealthIndicator: true
+        ringBufferSizeInClosedState: 5
+        ringBufferSizeInHalfOpenState: 3
+        waitDurationInOpenState: 10000
+        failureRateThreshold: 50
+        recordFailurePredicate: smr.shop.gateway.service.CircuitPredicate
+
