@@ -67,6 +67,10 @@ public class GlobalExceptionHandler {
         switch (exception.getStatus().getCode()) {
             case NOT_FOUND -> status = HttpStatus.NOT_FOUND;
             case INVALID_ARGUMENT -> status = HttpStatus.BAD_REQUEST;
+            case UNAVAILABLE -> {
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+                message = "Can not to connect grpc server!";
+            }
             default -> status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         ErrorResponse errorResponse = ErrorResponse.builder()
