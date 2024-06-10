@@ -68,7 +68,9 @@ public class ProductStockServiceImpl implements ProductStockService {
         List<ProductStockEntity> productStockEntities = productStockMessageModel.stream()
                 .map(request -> {
                     ProductStockEntity productStockEntity = productStockServiceMapper.productStockMessageModelToProductStockEntity(request);
+                    productStockEntity.setId(UUID.randomUUID());
                     productStockEntity.setCreatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
+                    productStockEntity.setUpdatedAt(ZonedDateTime.now(ServiceConstants.ZONE_ID));
                     return productStockEntity;
                 }).toList();
         productStockRepository.saveAll(productStockEntities);

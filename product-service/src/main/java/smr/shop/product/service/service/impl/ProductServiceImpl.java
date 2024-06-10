@@ -94,9 +94,9 @@ public class ProductServiceImpl implements ProductService {
         product.setBrandId(brandGrpcResponse.getId());
         product.setThumbnail(uploadGrpcResponse.getId());
 
-        productRepository.save(product);
+        ProductEntity productEntity = productRepository.save(product);
 
-        StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStocks());
+        StockCreateMessageModel model = productServiceMapper.productStockRequestToStockCreateMessageModel(request.getStocks(), productEntity.getId());
         productStockCreateMessagePublisher.publish(model);
     }
 

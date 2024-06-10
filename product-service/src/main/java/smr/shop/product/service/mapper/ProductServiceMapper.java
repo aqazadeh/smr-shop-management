@@ -49,8 +49,9 @@ public class ProductServiceMapper {
 
     }
 
-    public StockCreateMessageModel productStockRequestToStockCreateMessageModel(List<ProductStockRequest> stocks) {
+    public StockCreateMessageModel productStockRequestToStockCreateMessageModel(List<ProductStockRequest> stocks, Long id) {
         List<ProductStockMessageModel> productStockMessageModelList = stocks.stream().map(stock -> ProductStockMessageModel.builder()
+                .productId(id)
                 .attributeName(stock.getAttributeName())
                 .quantity(stock.getQuantity())
                 .build()).toList();

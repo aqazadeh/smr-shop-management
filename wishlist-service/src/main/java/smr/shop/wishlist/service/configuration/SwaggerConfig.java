@@ -13,7 +13,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("wishlist-service")
+                .group("wishlist")
                 .packagesToScan("smr.shop.wishlist.service.controller")
                 .build();
     }

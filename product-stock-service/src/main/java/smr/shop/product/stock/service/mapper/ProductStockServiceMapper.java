@@ -51,7 +51,7 @@ public class ProductStockServiceMapper {
 
     public ProductStockGrpcResponse productStockEntityToProductStockGrpcResponse(ProductStockEntity productStockEntity) {
         return ProductStockGrpcResponse.newBuilder()
-                .setId(productStockEntity.getProductId().toString())
+                .setId(productStockEntity.getId().toString())
                 .setProductId(productStockEntity.getProductId())
                 .setName(productStockEntity.getAttributeName())
                 .setQuantity(productStockEntity.getQuantity())

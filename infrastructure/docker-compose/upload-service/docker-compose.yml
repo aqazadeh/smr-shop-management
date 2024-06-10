@@ -10,7 +10,7 @@ services:
     networks:
       - minio-network
     volumes:
-      - 'minio-data:/bitnami/minio/data'
+      - minio-data:/bitnami/minio/data
     environment:
       - MINIO_ROOT_USER=minio-admin
       - MINIO_ROOT_PASSWORD=minio-admin
@@ -21,7 +21,6 @@ networks:
     driver: bridge
 
 volumes:
-  upload-volume:
-    driver: local
+#  upload-volume:
+#    driver: local
   minio-data:
-    driver: local
