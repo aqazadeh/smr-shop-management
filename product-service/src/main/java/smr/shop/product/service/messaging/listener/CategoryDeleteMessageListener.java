@@ -1,5 +1,6 @@
 package smr.shop.product.service.messaging.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -11,7 +12,9 @@ import smr.shop.libs.common.messaging.listener.MessageListener;
 import smr.shop.product.service.service.ProductService;
 
 @Component
+@Slf4j
 public class CategoryDeleteMessageListener implements MessageListener<CategoryMessageModel> {
+
     private final ProductService productService;
 
     public CategoryDeleteMessageListener(ProductService productService) {
@@ -19,11 +22,18 @@ public class CategoryDeleteMessageListener implements MessageListener<CategoryMe
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.CATEGORY_DELETE_TOPIC, groupId = MessagingConstants.PRODUCT_SERVICE_CATEGORY_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.CATEGORY_DELETE_TOPIC, groupId = MessagingConstants.PRODUCT_SERVICE_GROUP)
     public void receive(@Payload CategoryMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {
+
+        log.info("{} number of BrandMessageModel response received with key:{}, partition:{} and offset: {}",
+                message.toString(),
+                key,
+                partition.toString(),
+                offset.toString());
+
         productService.deleteProductsByCategory(message);
     }
 }

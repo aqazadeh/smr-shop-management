@@ -22,7 +22,7 @@ public class ProductDeleteMessageListener implements MessageListener<ProductMess
     }
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC}, groupId = MessagingConstants.WISHLIST_PRODUCT_DELETE_GROUP)
+    @KafkaListener(topics = {MessagingConstants.PRODUCT_DELETE_TOPIC}, groupId = MessagingConstants.WISHLIST_SERVICE_GROUP)
     public void receive(@Payload ProductMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

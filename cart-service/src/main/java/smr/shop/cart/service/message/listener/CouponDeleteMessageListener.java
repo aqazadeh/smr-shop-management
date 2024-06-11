@@ -22,11 +22,17 @@ public class CouponDeleteMessageListener implements MessageListener<CouponMessag
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.PRODUCT_DELETE_TOPIC, groupId = MessagingConstants.CART_SERVICE_COUPON_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.COUPON_DELETE_TOPIC, groupId = MessagingConstants.CART_SERVICE_GROUP)
     public void receive(@Payload CouponMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {
+
+        log.info("{} number of ProductStockMessageModel response received with key:{}, partition:{} and offset: {}",
+                message.toString(),
+                key,
+                partition.toString(),
+                offset.toString());
 
         cartService.removeCouponInItems(message);
     }

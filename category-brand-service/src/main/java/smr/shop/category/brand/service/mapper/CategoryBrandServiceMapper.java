@@ -100,7 +100,7 @@ public class CategoryBrandServiceMapper {
                 .name(categoryEntity.getName())
                 .description(categoryEntity.getDescription())
                 .slug(categoryEntity.getSlug() + "-" + categoryEntity.getId())
-                .parentId(categoryEntity.getParent().getId())
+                .parentId(categoryEntity.getParent() ==null ? null: categoryEntity.getParent().getId())
                 .build();
     }
 

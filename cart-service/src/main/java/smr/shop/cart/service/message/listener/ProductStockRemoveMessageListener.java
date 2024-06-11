@@ -1,5 +1,6 @@
 package smr.shop.cart.service.message.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -11,6 +12,7 @@ import smr.shop.libs.common.dto.message.ProductStockMessageModel;
 import smr.shop.libs.common.messaging.listener.MessageListener;
 
 @Component
+@Slf4j
 public class ProductStockRemoveMessageListener implements MessageListener<ProductStockMessageModel> {
 
     private final CartService cartService;
@@ -20,11 +22,17 @@ public class ProductStockRemoveMessageListener implements MessageListener<Produc
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.PRODUCT_STOCK_DELETE_TOPIC, groupId = MessagingConstants.CART_SERVICE_PRODUCT_STOCK_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.PRODUCT_STOCK_DELETE_TOPIC, groupId = MessagingConstants.CART_SERVICE_GROUP)
     public void receive(@Payload ProductStockMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {
+
+        log.info("{} number of ProductStockMessageModel response received with key:{}, partition:{} and offset: {}",
+                message.toString(),
+                key,
+                partition.toString(),
+                offset.toString());
 
         cartService.removeItemByStock(message);
     }
