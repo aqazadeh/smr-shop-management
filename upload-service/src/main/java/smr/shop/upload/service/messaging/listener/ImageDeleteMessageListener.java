@@ -22,8 +22,7 @@ public class ImageDeleteMessageListener implements MessageListener<UploadMessage
     }
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.IMAGE_DELETE_TOPIC},
-            groupId = MessagingConstants.UPLOAD_SERVICE_IMAGE_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.IMAGE_DELETE_TOPIC, groupId = MessagingConstants.UPLOAD_SERVICE_GROUP)
     public void receive(@Payload UploadMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

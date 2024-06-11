@@ -24,14 +24,13 @@ public class BrandDeleteMessageListener implements MessageListener<BrandMessageM
 
 
     @Override
-    @KafkaListener(topics = {MessagingConstants.BRAND_DELETE_TOPIC},
-            groupId = MessagingConstants.PRODUCT_SERVICE_BRAND_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.BRAND_DELETE_TOPIC, groupId = MessagingConstants.PRODUCT_SERVICE_GROUP)
     public void receive(@Payload BrandMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) {
 
-        log.info("{} number of brandMessageModel response received with key:{}, partition:{} and offset: {}",
+        log.info("{} number of BrandMessageModel response received with key:{}, partition:{} and offset: {}",
                 message.toString(),
                 key,
                 partition.toString(),

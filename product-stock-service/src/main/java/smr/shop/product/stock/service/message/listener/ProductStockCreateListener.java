@@ -24,7 +24,7 @@ public class ProductStockCreateListener implements MessageListener<StockCreateMe
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.CREATE_STOCK_TOPIC, groupId = "stock-service-group")
+    @KafkaListener(topics = MessagingConstants.CREATE_STOCK_TOPIC, groupId = MessagingConstants.PRODUCT_STOCK_SERVICE_GROUP)
     public void receive(@Payload StockCreateMessageModel message,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,

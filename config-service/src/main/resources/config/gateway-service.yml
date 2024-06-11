@@ -70,7 +70,7 @@ spring:
         - id: product-stock-service
           uri: lb://product-stock-service
           predicates:
-            - Path=/api/1.0/stocks/**, /v3/api-docs/stock
+            - Path=/api/1.0/stocks/**, /v3/api-docs/product-stock
 
         - id: shop-service
           uri: lb://shop-service

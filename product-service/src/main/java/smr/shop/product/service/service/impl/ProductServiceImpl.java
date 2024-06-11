@@ -9,6 +9,7 @@ import smr.discount.libs.grpc.product.discount.DiscountGrpcResponse;
 import smr.shop.libs.common.constant.ServiceConstants;
 import smr.shop.libs.common.dto.message.*;
 import smr.shop.libs.common.helper.UserHelper;
+import smr.shop.libs.common.model.valueobject.ShopStatus;
 import smr.shop.libs.grpc.brand.BrandGrpcResponse;
 import smr.shop.libs.grpc.category.CategoryGrpcResponse;
 import smr.shop.libs.grpc.client.*;
@@ -162,7 +163,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProductsByShop(ShopMessageModel shopMessageModel) {
-        productRepository.updateStatusByShopId(ProductStatus.DELETED, shopMessageModel.getId());
+        if (shopMessageModel.getStatus() != ShopStatus.CONFIRMED)
+            productRepository.updateStatusByShopId(ProductStatus.DELETED, shopMessageModel.getId());
     }
 
     @Override

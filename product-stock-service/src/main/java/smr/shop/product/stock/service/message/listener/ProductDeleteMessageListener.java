@@ -17,8 +17,8 @@ public class ProductDeleteMessageListener implements MessageListener<ProductMess
     }
 
     @Override
-    @KafkaListener(topics = MessagingConstants.PRODUCT_DELETE_TOPIC, groupId = MessagingConstants.PRODUCT_PRODUCT_STOCK_DELETE_GROUP)
+    @KafkaListener(topics = MessagingConstants.PRODUCT_DELETE_TOPIC, groupId = MessagingConstants.PRODUCT_STOCK_SERVICE_GROUP)
     public void receive(ProductMessageModel message, String key, Integer partition, Long offset) {
-//        productStockService.deleteByProductId(message.getId());
+        productStockService.deleteByProductId(message.getId());
     }
 }
