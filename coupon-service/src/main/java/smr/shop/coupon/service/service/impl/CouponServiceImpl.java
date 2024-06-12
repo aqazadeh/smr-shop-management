@@ -1,8 +1,5 @@
 package smr.shop.coupon.service.service.impl;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -80,9 +77,6 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = CacheConstants.COUPONS, allEntries = true)
-    })
     public void createCoupon(CouponCreateRequest request) {
         UUID userId = UserHelper.getUserId();
         CouponEntity couponEntity = couponMapper.couponCreateResponseToCouponEntity(request);
@@ -107,9 +101,6 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = CacheConstants.COUPONS, allEntries = true)
-    })
     public void updateCoupon(UUID couponId, CouponUpdateRequest request) {
         UUID userId = UserHelper.getUserId();
         ShopGrpcResponse shopGrpcResponse = shopGrpcClient.getShopByUserId(userId.toString());
@@ -167,7 +158,6 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    @Cacheable(value = CacheConstants.COUPON, key = "#couponId.toString()", sync = true)
     public CouponResponse getCoupon(UUID couponId) {
         CouponEntity couponEntity = findById(couponId);
 
@@ -175,7 +165,6 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    @Cacheable(value = CacheConstants.USER_CART, key = "#userId.toString()", sync = true)
     public CouponGrpcResponse getCouponDetail(CouponGrpcCode couponGrpcCode) {
         CouponEntity couponEntity;
         couponEntity = findByCode(couponGrpcCode.getCode());
