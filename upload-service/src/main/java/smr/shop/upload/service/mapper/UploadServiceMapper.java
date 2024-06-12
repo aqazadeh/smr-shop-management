@@ -10,7 +10,7 @@ public class UploadServiceMapper {
     public UploadGrpcResponse uploadEntityToUploadGrpcResponse(UploadEntity uploadEntity) {
         return UploadGrpcResponse.newBuilder()
                 .setId(uploadEntity.getId().toString())
-                .setUrl(uploadEntity.getUrl())
+                .setUrl("/api/1.0/uploads/images/" + uploadEntity.getUrl())
                 .build();
 
     }

@@ -1,6 +1,8 @@
 package smr.shop.upload.service.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
 import smr.shop.upload.service.model.valueobject.UploadStatus;
@@ -20,6 +22,7 @@ public class UploadEntity {
 
     private String url;
 
+    @Enumerated(EnumType.STRING)
     private UploadStatus status;
 
     private ZonedDateTime createdAt;
